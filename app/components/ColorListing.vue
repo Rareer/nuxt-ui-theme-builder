@@ -139,7 +139,7 @@
       title="Farbe löschen"
     >
       <!-- Modal trigger is not needed here as we're controlling it programmatically -->
-      <template #content>
+      <template #body>
         <div class="p-4">
           <p>
             Bist du sicher, dass du die Farbe <strong>{{ colorToDelete }}</strong> löschen möchtest?
