@@ -15,7 +15,9 @@
     "@iconify-json/lucide": "^1.2.58",
     "@iconify-json/simple-icons": "^1.2.44",
     "@nuxt/ui": "^3.3.0",
-    "nuxt": "^4.0.1"
+    "@pinia/nuxt": "^0.11.2",
+    "nuxt": "^4.0.1",
+    "pinia": "^3.0.3"
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.7.1",
