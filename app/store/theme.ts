@@ -31,13 +31,13 @@ export const useThemeStore = defineStore('theme', {
       Object.entries(this.mappings).forEach(([variable, colorName]) => {
         if (!colorName) return;
         
-        // Setze die Hauptvariable als Referenz auf die Farbvariable
-        result[`--ui-${variable}`] = `var(--color-${colorName})`;
+        // Setze die Hauptvariable als Referenz auf die 500er Farbvariable
+        result[`--ui-${variable}`] = `var(--ui-color-${colorName}-500)`;
         
         // Generiere die CSS-Variablen für jede Abstufung
         const shades = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950'];
         shades.forEach(shade => {
-          result[`--ui-${variable}-${shade}`] = `var(--color-${colorName}-${shade})`;
+          result[`--ui-${variable}-${shade}`] = `var(--ui-color-${colorName}-${shade})`;
         });
       });
       

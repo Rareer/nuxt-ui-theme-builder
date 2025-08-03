@@ -1,7 +1,7 @@
 <template>
   <header class="h-16 px-6 flex items-center justify-between">
     <div class="flex items-center">
-      <h1 class="text-lg font-semibold">Nuxt UI Theme Builder</h1>
+      <h1 class="text-lg font-semibold bg-primary">Nuxt UI Theme Builder</h1>
     </div>
     <div class="flex items-center gap-4">
       <UButton

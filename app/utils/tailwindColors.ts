@@ -295,7 +295,7 @@ export const tailwindColors: Record<string, Record<string, string>> = {
 export function getTailwindColorsAsColorObjects(): Color[] {
   return Object.entries(tailwindColors).map(([name, values]) => {
     return {
-      name: `Tailwind ${name}`,
+      name: name, // Verwende den Namen ohne 'Tailwind ' Präfix
       values: values as Color['values']
     };
   });
@@ -303,11 +303,11 @@ export function getTailwindColorsAsColorObjects(): Color[] {
 
 // Hole eine bestimmte Tailwind-Farbe als Color-Objekt
 export function getTailwindColorByName(name: string): Color | null {
-  const colorName = name.replace('Tailwind ', '');
-  if (tailwindColors[colorName]) {
+  // Der Name ist bereits ohne Präfix
+  if (tailwindColors[name]) {
     return {
       name,
-      values: tailwindColors[colorName] as Color['values']
+      values: tailwindColors[name] as Color['values']
     };
   }
   return null;
@@ -315,5 +315,6 @@ export function getTailwindColorByName(name: string): Color | null {
 
 // Prüfe, ob ein Farbname eine Tailwind-Farbe ist
 export function isTailwindColor(name: string): boolean {
-  return name.startsWith('Tailwind ');
+  // Prüfe, ob der Name in den Tailwind-Farben existiert
+  return Object.keys(tailwindColors).includes(name);
 }
