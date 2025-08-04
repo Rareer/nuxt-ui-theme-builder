@@ -3,7 +3,7 @@
     <!-- Sidebar Header -->
     <div class="h-16 px-4 flex items-center border-b border-gray-200 dark:border-gray-800">
       <UIcon name="i-heroicons-swatch-20-solid" class="text-primary-500 mr-2 text-xl" />
-      <h2 class="font-bold text-lg">Theme Builder</h2>
+      <h2 class="font-bold text-lg">V4</h2>
     </div>
     
     <!-- Navigation Menu -->
@@ -29,19 +29,29 @@ const items = ref<NavigationMenuItem[][]>([
     },
     {
       label: 'Components',
-      type: 'label'
-    },
-    {
-      label: 'Accordion',
-      to: '/components/UAccordion'
-    },
-    {
-      label: 'Alert',
-      to: '/components/UAlert'
-    },
-    {
-      label: 'Button',
-      to: '/components/UButton'
+      icon: 'i-lucide-square-code',
+      children: [
+        {
+          label: 'Accordion',
+          to: '/components/UAccordion'
+        },
+        {
+          label: 'Alert',
+          to: '/components/UAlert'
+        },
+        {
+          label: 'Badge',
+          to: '/components/UBadge'
+        },
+        {
+          label: 'Button',
+          to: '/components/UButton'
+        },
+        {
+          label: 'Card',
+          to: '/components/UCard'
+        },
+      ]
     },
   ],
   [

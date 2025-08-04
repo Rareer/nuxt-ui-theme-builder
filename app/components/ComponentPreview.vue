@@ -5,7 +5,15 @@
                 :is="props.component" 
                 ref="dynamicComponent" 
                 v-bind="componentConfigs[props.component]"
-            />
+            >
+                <template #header>
+                    <span class="h-8">Header</span>
+                </template>
+                <span class="h-32">Content</span>
+                <template #footer>
+                    <span class="h-8">Footer</span>
+                </template>
+            </component>
         </ThemePreview>
         <div class="flex grow gap-2">
             <UFormField v-if="componentConfigs[props.component].variant" label="Variant">
@@ -43,7 +51,18 @@ const colors = computed(() => {
     })
 })
 
+
+const props = defineProps({
+  component: {
+    type: String,
+    required: true
+  }
+})
 const sizes = ref([
+{
+        label: 'XSmall',
+        value: 'xs'
+    },
     {
         label: 'Small',
         value: 'sm'
@@ -55,25 +74,31 @@ const sizes = ref([
     {
         label: 'Large',
         value: 'lg'
+    },
+    {
+        label: 'XLarge',
+        value: 'xl'
     }
 ])
-const props = defineProps({
-  component: {
-    type: String,
-    required: true
-  }
-})
 const variantsSet01 = [{
         label: 'Solid',
         value: 'solid'
     },
     {
-        label: 'Ghost',
-        value: 'ghost'
+        label: 'Outline',
+        value: 'outline'
     },
     {
         label: 'Soft',
         value: 'soft'
+    },
+    {
+        label: 'Subtle',
+        value: 'subtle'
+    },
+    {
+        label: 'Ghost',
+        value: 'ghost'
     },
     {
         label: 'Link',
@@ -126,12 +151,27 @@ const componentConfigs = computed<any>(() => ({
         description: 'Alert Description',
         icon: 'i-lucide-smile',
     },
+    UBadge: {
+        variant: variant.value,
+        variants: variantsSet01,
+        color: color.value,
+        size: size.value,
+        label: 'Badge',
+    },
     UButton: {
         variant: variant.value,
         variants: variantsSet01,
         color: color.value,
         size: size.value,
         label: 'Button',
+    },
+    UCard: {
+        variant: variant.value,
+        variants: variantsSet02,
+        label: 'Card',
+        ui: {
+            root: 'w-1/2'
+        }
     }
 }));
 </script>
