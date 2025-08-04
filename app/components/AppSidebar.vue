@@ -33,6 +33,11 @@ const items = ref<NavigationMenuItem[][]>([
       to: '/'
     },
     {
+      label: 'Preview',
+      icon: 'i-lucide-eye',
+      to: '/preview'
+    },
+    {
       label: 'Components',
       icon: 'i-lucide-square-code',
       children: [
