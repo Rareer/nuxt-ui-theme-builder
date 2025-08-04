@@ -32,8 +32,16 @@ const items = ref<NavigationMenuItem[][]>([
       type: 'label'
     },
     {
+      label: 'Accordion',
+      to: '/components/UAccordion'
+    },
+    {
+      label: 'Alert',
+      to: '/components/UAlert'
+    },
+    {
       label: 'Button',
-      to: '/components/button'
+      to: '/components/UButton'
     },
   ],
   [

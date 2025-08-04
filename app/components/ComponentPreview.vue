@@ -1,16 +1,20 @@
 <template>
     <div class="w-full flex flex-col gap-6 items-center">
         <ThemePreview>
-            <component :is="componentToRender" :variant="variant" :color="color" :size="size" />
+            <component 
+                :is="props.component" 
+                ref="dynamicComponent" 
+                v-bind="componentConfigs[props.component]"
+            />
         </ThemePreview>
         <div class="flex grow gap-2">
-            <UFormField label="Variant">
-                <USelect v-model="variant" :items="variants" />
+            <UFormField v-if="componentConfigs[props.component].variant" label="Variant">
+                <USelect v-model="variant" :items="componentConfigs[props.component].variants" />
             </UFormField>
-            <UFormField label="Color">
+            <UFormField v-if="componentConfigs[props.component].color" label="Color">
                 <USelect v-model="color" :items="colors" />
             </UFormField>
-            <UFormField label="Size">
+            <UFormField v-if="componentConfigs[props.component].size" label="Size">
                 <USelect v-model="size" :items="sizes" />
             </UFormField>
         </div>
@@ -18,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent, reactive } from 'vue'
 import { useThemeStore, type ThemeVariable } from '~/store/theme'
 
 const themeStore = useThemeStore()
@@ -26,24 +30,9 @@ const themeStore = useThemeStore()
 const variant = ref('solid')
 const color = ref<ThemeVariable>('primary')
 const size = ref('md')
-
+const dynamicComponent = ref(null);
 const variants = ref([
-    {
-        label: 'Solid',
-        value: 'solid'
-    },
-    {
-        label: 'Ghost',
-        value: 'ghost'
-    },
-    {
-        label: 'Soft',
-        value: 'soft'
-    },
-    {
-        label: 'Link',
-        value: 'link'
-    }
+    
 ])
 const colors = computed(() => {
     return Object.entries(themeStore.getThemeVariables).map(([key, value]) => {
@@ -74,28 +63,75 @@ const props = defineProps({
     required: true
   }
 })
-
-// Mapping from route names to component names
-const componentMapping: { [key: string]: string } = {
-  'button': 'UButton',
-  // Add more mappings as needed
-  // 'alert': 'UAlert',
-  // 'badge': 'UBadge',
-  // etc.
-}
-
-// Get the component name from the mapping or use the provided name directly
-const componentName = computed(() => {
-  return componentMapping[props.component] || props.component
-})
-
-// Dynamically import the component from the previews directory
-const componentToRender = defineAsyncComponent(() => {
-  try {
-    return import(`~/components/previews/${componentName.value}.vue`)
-  } catch (error) {
-    console.error(`Failed to load component: ${componentName.value}`, error)
-    return import('~/components/previews/UButton.vue') // Fallback component
-  }
-})
+const variantsSet01 = [{
+        label: 'Solid',
+        value: 'solid'
+    },
+    {
+        label: 'Ghost',
+        value: 'ghost'
+    },
+    {
+        label: 'Soft',
+        value: 'soft'
+    },
+    {
+        label: 'Link',
+        value: 'link'
+    }]
+const variantsSet02 = [
+{
+        label: 'Solid',
+        value: 'solid'
+    },
+    {
+        label: 'Outline',
+        value: 'outline'
+    },
+    {
+        label: 'Soft',
+        value: 'soft'
+    },
+    {
+        label: 'Subtle',
+        value: 'subtle'
+    }
+]
+const componentConfigs = computed<any>(() => ({
+    UAccordion: {
+        items: [
+            {
+                label: 'Icons',
+                icon: 'i-lucide-smile',
+                content: 'You have nothing to do, @nuxt/icon will handle it automatically.'
+            },
+            {
+                label: 'Colors',
+                icon: 'i-lucide-swatch-book',
+                slot: 'colors' as const,
+                content: 'Choose a primary and a neutral color from your Tailwind CSS theme.'
+            },
+            {
+                label: 'Components',
+                icon: 'i-lucide-box',
+                content: 'You can customize components by using the `class` / `ui` props or in your app.config.ts.'
+            }
+        ]
+    },
+    UAlert: {
+        color: color.value,
+        variant: variant.value,
+        variants: variantsSet02,
+        title: 'Alert Title',
+        description: 'Alert Description',
+        icon: 'i-lucide-smile',
+    },
+    UButton: {
+        variant: variant.value,
+        variants: variantsSet01,
+        color: color.value,
+        size: size.value,
+        label: 'Button',
+    }
+}));
 </script>
