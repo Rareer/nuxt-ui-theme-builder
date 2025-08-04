@@ -25,12 +25,10 @@ const colorCssVariablesStyle = computed(() => {
       const colorName = color.name.toLowerCase().replace(/\s+/g, '-');
       // Add base color variable (using 500 as default)
       styleObj[`--ui-color-${colorName}`] = color.values['500'];
-      styleObj[`--color-${colorName}`] = color.values['500']; // Keep original for backward compatibility
       
       // Add all shade variants
       Object.entries(color.values).forEach(([shade, value]) => {
         styleObj[`--ui-color-${colorName}-${shade}`] = value;
-        styleObj[`--color-${colorName}-${shade}`] = value; // Keep original for backward compatibility
       });
     });
   }
@@ -40,14 +38,12 @@ const colorCssVariablesStyle = computed(() => {
     // Add base color variable (using 500 as default)
     if (shades['500']) {
       styleObj[`--ui-color-${colorName}`] = shades['500'];
-      styleObj[`--color-${colorName}`] = shades['500']; // Keep original for backward compatibility
     }
     
     // Add all shade variants
     Object.entries(shades).forEach(([shade, value]) => {
       if (value) {
         styleObj[`--ui-color-${colorName}-${shade}`] = value;
-        styleObj[`--color-${colorName}-${shade}`] = value; // Keep original for backward compatibility
       }
     });
   });

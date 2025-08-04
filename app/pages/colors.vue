@@ -51,7 +51,7 @@ const colorsStore = useColorsStore();
                         class="w-8 h-8 rounded border" 
                         :style="{ backgroundColor: value }"
                       ></div>
-                      <code class="text-xs">var(--color-{{ color.name.toLowerCase().replace(/\s+/g, '-') }}-{{ shade }})</code>
+                      <code class="text-xs">var(--ui-color-{{ color.name.toLowerCase().replace(/\s+/g, '-') }}-{{ shade }})</code>
                     </div>
                   </div>
                 </div>

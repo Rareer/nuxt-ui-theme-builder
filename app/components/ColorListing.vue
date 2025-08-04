@@ -74,29 +74,21 @@
       <template #body>
         <div class="space-y-4 p-4">
           <!-- Color Name -->
-          <UFormGroup label="Name" required>
+          <UFormField label="Name" required>
             <UInput
               v-model="newColor.name"
               placeholder="z.B. Blau, Rot, Grün"
               :disabled="isEditing"
             />
-          </UFormGroup>
-
-          <!-- Base Color Picker -->
-          <UFormGroup label="Hauptfarbe (500)" required>
-            <div class="flex gap-2 items-center">
-              <div
-                class="w-10 h-10 rounded border"
-                :style="{ backgroundColor: baseColorHex }"
-              ></div>
-              <UInput
+          </UFormField>
+          <div class="flex flex-col gap-2">
+            <UColorPicker v-model="baseColorHex" />
+            <UInput
                 v-model="baseColorHex"
                 placeholder="#000000"
                 class="flex-1"
               />
-            </div>
-          </UFormGroup>
-
+          </div>
           <!-- Preview Generated Colors -->
           <div v-if="baseColorHex" class="mt-4">
             <p class="text-sm font-medium mb-2">Vorschau der Farbpalette:</p>
