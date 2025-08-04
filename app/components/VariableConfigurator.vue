@@ -57,13 +57,13 @@
           }))"
         >
           <template #default="{ item }">
-            <div class="p-3">
+            <div class="py-3">
               <div class="font-medium text-lg">{{ item.label }}</div>
             </div>
           </template>
           
           <template v-for="category in Object.keys(cssVariablesByCategory)" :key="category" #[category]>
-            <div class="grid grid-cols-1 gap-4 p-4">
+            <div class="grid grid-cols-1 gap-4 py-4 px-1">
               <div 
                 v-for="variable in cssVariablesByCategory[category]" 
                 :key="variable.name"
@@ -211,14 +211,30 @@ const cssVariablesByCategory = computed(() => {
 
 // Farboptionen für die Dropdown-Menüs
 const colorOptions = computed(() => {
-  const options: Array<{ label: string; value: string }> = [];
+  const options: Array<{ label: string; value: string; disabled?: boolean }> = [];
   
-  // Füge benutzerdefinierte Farben hinzu
-  colorStore.colors.forEach(color => {
+  // Eigene Farben Header
+  if (colorStore.colors.length > 0) {
     options.push({
-      label: color.name,
-      value: color.name
+      label: '--- Eigene Farben ---',
+      value: 'separator-custom',
+      disabled: true
     });
+    
+    // Füge benutzerdefinierte Farben hinzu
+    colorStore.colors.forEach(color => {
+      options.push({
+        label: color.name,
+        value: color.name
+      });
+    });
+  }
+  
+  // Tailwind Farben Header
+  options.push({
+    label: '--- Tailwind Farben ---',
+    value: 'separator-tailwind',
+    disabled: true
   });
   
   // Füge Tailwind-Farben hinzu
@@ -227,20 +243,6 @@ const colorOptions = computed(() => {
     options.push({
       label: color.name,
       value: color.name
-    });
-  });
-  
-  // Füge auch Optionen für spezifische Shades hinzu (für CSS-Variablen)
-  colorStore.colors.forEach(color => {
-    shades.forEach(shade => {
-      // Behandle color.values als ColorValues mit String-Index
-      const values = color.values as ColorValues;
-      if (values && shade in values) { // Nur wenn dieser Shade existiert
-        options.push({
-          label: `${color.name} (${shade})`,
-          value: `${color.name.toLowerCase()}-${shade}`
-        });
-      }
     });
   });
   

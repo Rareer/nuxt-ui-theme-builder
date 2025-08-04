@@ -1,5 +1,5 @@
 <template>
-  <header class="h-16 px-6 flex items-center justify-between">
+  <header class="h-16 px-6 flex items-center justify-between border-b border-gray-200">
     <div class="flex items-center">
       <h1 class="text-xl font-bold">NuxtUI Theme Builder</h1>
     </div>

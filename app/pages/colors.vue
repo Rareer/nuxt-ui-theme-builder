@@ -8,7 +8,7 @@ const colorsStore = useColorsStore();
 
 <template>
   <div>
-    <h1 class="text-2xl font-bold">Colors</h1>
+    <h1 class="text-2xl font-bold">Custom Colors</h1>
     
     <!-- Tabs für verschiedene Ansichten -->
     <div class="mt-6">

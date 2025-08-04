@@ -1,11 +1,24 @@
 <template>
-    <div class="w-full flex flex-col gap-6 items-center">
+    <div>
+        <div class="flex grow gap-2">
+            <UFormField v-if="componentConfigs[props.component].color" label="Color">
+                <USelect v-model="color" :items="colors" />
+            </UFormField>
+            <UFormField v-if="componentConfigs[props.component].size" label="Size">
+                <USelect v-model="size" :items="sizes" />
+            </UFormField>
+        </div>
+        <USeparator class="my-6"/>
         <ThemePreview>
-            <component 
-                :is="props.component" 
-                ref="dynamicComponent" 
-                v-bind="componentConfigs[props.component]"
-            >
+            <div class="space-y-6">
+                <div class="space-y-2 flex flex-col items-start" v-for="variant in componentConfigs[props.component].variants" :key="variant.value">
+                    <label class="text-sm font-medium">{{ variant.label }}</label>
+                    <component
+                        :is="props.component" 
+                        ref="dynamicComponent" 
+                        v-bind="componentConfigs[props.component]"
+                        :variant="variant.value"
+                    >
                 <template v-if="componentConfigs[props.component].hasHeader" #header>
                     <span class="h-8">Header</span>
                 </template>
@@ -14,18 +27,9 @@
                     <span class="h-8">Footer</span>
                 </template>
             </component>
+            </div>
+            </div>
         </ThemePreview>
-        <div class="flex grow gap-2">
-            <UFormField v-if="componentConfigs[props.component].variant" label="Variant">
-                <USelect v-model="variant" :items="componentConfigs[props.component].variants" />
-            </UFormField>
-            <UFormField v-if="componentConfigs[props.component].color" label="Color">
-                <USelect v-model="color" :items="colors" />
-            </UFormField>
-            <UFormField v-if="componentConfigs[props.component].size" label="Size">
-                <USelect v-model="size" :items="sizes" />
-            </UFormField>
-        </div>
     </div>
 </template>
 

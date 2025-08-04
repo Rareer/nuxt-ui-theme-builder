@@ -1,5 +1,5 @@
 <template>
-  <div class="p-6 flex items-center justify-center">
+  <div class="p-6">
     <ComponentPreview :component="name as string" />
   </div>
 </template>
