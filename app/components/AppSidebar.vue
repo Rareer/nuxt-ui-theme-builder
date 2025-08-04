@@ -3,7 +3,7 @@
     <!-- Sidebar Header -->
     <div class="h-16 px-4 flex items-center border-b border-gray-200 dark:border-gray-800">
       <UIcon name="i-heroicons-swatch-20-solid" class="text-primary-500 mr-2 text-xl" />
-      <h2 class="font-bold text-lg">V4</h2>
+      <h2 class="font-bold text-lg">V4</h2> <UBadge class="ml-2" color="warning" size="xs">Alpha</UBadge>
     </div>
     
     <!-- Navigation Menu -->

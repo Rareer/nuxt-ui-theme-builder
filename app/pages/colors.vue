@@ -11,10 +11,8 @@ const colorsStore = useColorsStore();
     <h1 class="text-2xl font-bold">Custom Colors</h1>
     
     <!-- Tabs für verschiedene Ansichten -->
-    <div class="mt-6">
-      <div class="py-4">
-        <ColorListing />
-      </div>
+    <div class="mt-6 py-4">
+      <ColorListing />
     </div>
   </div>
 </template>

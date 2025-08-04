@@ -1,7 +1,6 @@
 <template>
   <div class="color-listing">
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-xl font-semibold">Farben</h2>
+    <div class="flex justify-end items-center mb-6">
       <UButton
         icon="i-heroicons-plus"
         color="primary"
@@ -16,7 +15,7 @@
       <div
         v-for="color in colorStore.getColors"
         :key="color.name"
-        class="color-item flex items-center justify-between p-4 border rounded-lg shadow-sm"
+        class="color-item flex items-center justify-between p-4 ring ring-gray-200 rounded-lg shadow-sm"
       >
         <div class="flex items-center gap-4">
           <!-- Color Preview -->
@@ -56,9 +55,9 @@
     </div>
 
     <!-- Empty State -->
-    <div v-else class="text-center py-10 border rounded-lg">
+    <div v-else class="text-center py-10 ring ring-gray-200 rounded-lg">
       <UIcon name="i-heroicons-swatch" class="text-4xl text-gray-400 mx-auto mb-2" />
-      <p class="text-gray-500">Keine Farben vorhanden</p>
+      <p class="text-gray-500">Keine Custom Farben vorhanden</p>
       <UButton class="mt-4" color="primary" @click="isAddModalOpen = true">
         Erste Farbe hinzufügen
       </UButton>
