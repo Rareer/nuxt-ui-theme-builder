@@ -11,7 +11,7 @@
       <div 
         v-for="variable in themeVariables" 
         :key="variable"
-        class="border rounded-lg p-4 space-y-3 flex flex-col gap-2"
+        class="ring ring-gray-200 rounded-lg p-4 space-y-3 flex flex-col gap-2"
       >
         <div class="flex items-center justify-between">
           <h3 class="font-medium">{{ getVariableLabel(variable) }}</h3>
@@ -54,7 +54,7 @@
             <div 
               v-for="variable in variables" 
               :key="variable.name"
-              class="border rounded-lg p-4 space-y-3"
+              class="ring ring-gray-200 rounded-lg p-4 space-y-3"
             >
               <div class="flex items-center justify-between">
                 <h4 class="font-medium">{{ variable.label }}</h4>
@@ -76,6 +76,7 @@
                       v-model="variable.selectedColor"
                       :items="colorOptions"
                       placeholder="Farbe auswählen"
+                      class="w-full"
                       @update:model-value="updateSelectedColor(variable)"
                     />
                   </UFormField>
@@ -111,6 +112,7 @@
                     <UInput
                       v-model="variable.value"
                       type="text"
+                      class="w-full"
                       placeholder="CSS-Wert eingeben (z.B. #ffffff)"
                       @update:model-value="updateCssVariable(variable)"
                     >

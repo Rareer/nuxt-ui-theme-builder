@@ -6,11 +6,11 @@
                 ref="dynamicComponent" 
                 v-bind="componentConfigs[props.component]"
             >
-                <template #header>
+                <template v-if="componentConfigs[props.component].hasHeader" #header>
                     <span class="h-8">Header</span>
                 </template>
-                <span class="h-32">Content</span>
-                <template #footer>
+                <span v-if="componentConfigs[props.component].hasContent" class="h-32">Content</span>
+                <template v-if="componentConfigs[props.component].hasFooter" #footer>
                     <span class="h-8">Footer</span>
                 </template>
             </component>
@@ -169,6 +169,9 @@ const componentConfigs = computed<any>(() => ({
         variant: variant.value,
         variants: variantsSet02,
         label: 'Card',
+        hasHeader: true,
+        hasContent: true,
+        hasFooter: true,
         ui: {
             root: 'w-1/2'
         }
