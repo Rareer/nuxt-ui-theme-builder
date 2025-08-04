@@ -28,6 +28,11 @@ const items = ref<NavigationMenuItem[][]>([
       to: '/colors'
     },
     {
+      label: 'Theme',
+      icon: 'i-lucide-palette',
+      to: '/'
+    },
+    {
       label: 'Components',
       icon: 'i-lucide-square-code',
       children: [
