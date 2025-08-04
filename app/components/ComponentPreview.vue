@@ -10,8 +10,13 @@
         </div>
         <USeparator class="my-6"/>
         <ThemePreview>
-            <div class="space-y-6">
-                <div class="space-y-2 flex flex-col items-start" v-for="variant in componentConfigs[props.component].variants" :key="variant.value">
+            <div class="space-y-6 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div 
+                    v-if="componentConfigs[props.component].variants" 
+                    class="space-y-2 flex flex-col items-start" 
+                    v-for="variant in componentConfigs[props.component].variants" 
+                    :key="variant.value"
+                >
                     <label class="text-sm font-medium">{{ variant.label }}</label>
                     <component
                         :is="props.component" 
@@ -19,14 +24,29 @@
                         v-bind="componentConfigs[props.component]"
                         :variant="variant.value"
                     >
-                <template v-if="componentConfigs[props.component].hasHeader" #header>
-                    <span class="h-8">Header</span>
-                </template>
-                <span v-if="componentConfigs[props.component].hasContent" class="h-32">Content</span>
-                <template v-if="componentConfigs[props.component].hasFooter" #footer>
-                    <span class="h-8">Footer</span>
-                </template>
-            </component>
+                    <template v-if="componentConfigs[props.component].hasHeader" #header>
+                        <span class="h-8">Header</span>
+                    </template>
+                    <span v-if="componentConfigs[props.component].hasContent" class="h-32">Content</span>
+                    <template v-if="componentConfigs[props.component].hasFooter" #footer>
+                        <span class="h-8">Footer</span>
+                    </template>
+                </component>
+            </div>
+            <div v-else>
+                <component
+                        :is="props.component" 
+                        ref="dynamicComponent" 
+                        v-bind="componentConfigs[props.component]"
+                    >
+                    <template v-if="componentConfigs[props.component].hasHeader" #header>
+                        <span class="h-8">Header</span>
+                    </template>
+                    <span v-if="componentConfigs[props.component].hasContent" class="h-32">Content</span>
+                    <template v-if="componentConfigs[props.component].hasFooter" #footer>
+                        <span class="h-8">Footer</span>
+                    </template>
+                </component>
             </div>
             </div>
         </ThemePreview>
@@ -43,9 +63,6 @@ const variant = ref('solid')
 const color = ref<ThemeVariable>('primary')
 const size = ref('md')
 const dynamicComponent = ref(null);
-const variants = ref([
-    
-])
 const colors = computed(() => {
     return Object.entries(themeStore.getThemeVariables).map(([key, value]) => {
         return {
