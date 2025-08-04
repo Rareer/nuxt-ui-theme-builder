@@ -1,9 +1,7 @@
 <template>
-  <UCard>
-    <div class="p-6 flex items-center justify-center">
-      <ComponentPreview :component="name as string" />
-    </div>
-  </UCard>
+  <div class="p-6 flex items-center justify-center">
+    <ComponentPreview :component="name as string" />
+  </div>
 </template>
 <script setup lang="ts">
 const route = useRoute()

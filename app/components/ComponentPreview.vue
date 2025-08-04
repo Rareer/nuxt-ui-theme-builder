@@ -1,12 +1,73 @@
 <template>
-  <ThemePreview>
-    <component :is="componentToRender" />
-  </ThemePreview>
+    <div class="w-full flex flex-col gap-6 items-center">
+        <ThemePreview>
+            <component :is="componentToRender" :variant="variant" :color="color" :size="size" />
+        </ThemePreview>
+        <div class="flex grow gap-2">
+            <UFormField label="Variant">
+                <USelect v-model="variant" :items="variants" />
+            </UFormField>
+            <UFormField label="Color">
+                <USelect v-model="color" :items="colors" />
+            </UFormField>
+            <UFormField label="Size">
+                <USelect v-model="size" :items="sizes" />
+            </UFormField>
+        </div>
+    </div>
 </template>
 
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue'
+import { useThemeStore, type ThemeVariable } from '~/store/theme'
 
+const themeStore = useThemeStore()
+
+const variant = ref('solid')
+const color = ref<ThemeVariable>('primary')
+const size = ref('md')
+
+const variants = ref([
+    {
+        label: 'Solid',
+        value: 'solid'
+    },
+    {
+        label: 'Ghost',
+        value: 'ghost'
+    },
+    {
+        label: 'Soft',
+        value: 'soft'
+    },
+    {
+        label: 'Link',
+        value: 'link'
+    }
+])
+const colors = computed(() => {
+    return Object.entries(themeStore.getThemeVariables).map(([key, value]) => {
+        return {
+            label: value,
+            value: value
+        }
+    })
+})
+
+const sizes = ref([
+    {
+        label: 'Small',
+        value: 'sm'
+    },
+    {
+        label: 'Medium',
+        value: 'md'
+    },
+    {
+        label: 'Large',
+        value: 'lg'
+    }
+])
 const props = defineProps({
   component: {
     type: String,
@@ -15,7 +76,7 @@ const props = defineProps({
 })
 
 // Mapping from route names to component names
-const componentMapping = {
+const componentMapping: { [key: string]: string } = {
   'button': 'UButton',
   // Add more mappings as needed
   // 'alert': 'UAlert',
