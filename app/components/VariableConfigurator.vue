@@ -47,9 +47,9 @@
       <p class="text-sm text-neutral-500">
         Passe die zusätzlichen CSS-Variablen an, die für spezielle UI-Elemente verwendet werden.
       </p>
-      
       <div class="space-y-4">
         <UAccordion
+          v-if="Object.keys(cssVariablesByCategory).length > 0"
           :items="Object.keys(cssVariablesByCategory).map(category => ({
             label: category,
             slot: category,

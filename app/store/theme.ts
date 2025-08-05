@@ -109,13 +109,16 @@ export const useThemeStore = defineStore('theme', {
       Object.entries(this.mappings).forEach(([variable, colorName]) => {
         if (!colorName) return;
         
+        // Normalize color name to ensure consistency with CSS variable naming in ThemePreview.vue
+        const normalizedColorName = colorName.toLowerCase().replace(/\s+/g, '-');
+        
         // Setze die Hauptvariable als Referenz auf die 500er Farbvariable
-        result[`--ui-${variable}`] = `var(--ui-color-${colorName}-500)`;
+        result[`--ui-${variable}`] = `var(--ui-color-${normalizedColorName}-500)`;
         
         // Generiere die CSS-Variablen für jede Abstufung
         const shades = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950'];
         shades.forEach(shade => {
-          result[`--ui-${variable}-${shade}`] = `var(--ui-color-${colorName}-${shade})`;
+          result[`--ui-${variable}-${shade}`] = `var(--ui-color-${normalizedColorName}-${shade})`;
         });
       });
       
@@ -125,6 +128,8 @@ export const useThemeStore = defineStore('theme', {
           // Format: 'neutral-500' -> split into colorName and shade
           const [colorName, shade] = variable.value.split('-');
           if (colorName && shade) {
+            // Ensure color name is already normalized in the reference
+            // No need to normalize here as it should be normalized when set in ThemeMapping.vue
             result[`--${variable.name}`] = `var(--ui-color-${colorName}-${shade})`;
           }
         } else if (variable && variable.type === 'direct-value') {
@@ -140,7 +145,9 @@ export const useThemeStore = defineStore('theme', {
   actions: {
     // Setzt die Zuordnung für eine Theme-Variable
     setMapping(variable: ThemeVariable, colorName: string | null) {
-      this.mappings[variable] = colorName;
+      // Normalize color name to ensure consistency with CSS variable naming
+      // This matches the normalization in ThemePreview.vue
+      this.mappings[variable] = colorName ? colorName : null;
     },
 
     // Löscht die Zuordnung für eine Theme-Variable

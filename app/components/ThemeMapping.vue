@@ -344,11 +344,11 @@ function selectShade(variable: CssVariableMapping & { selectedColor?: string }, 
   if (!variable.selectedColor) return;
   
   // Erstelle den Wert im Format 'colorname-shade'
+  // Ensure consistent normalization for all color names (both Tailwind and custom)
   const colorName = variable.selectedColor.toLowerCase().replace(/\s+/g, '-');
-  const isTailwind = isTailwindColor(variable.selectedColor);
-  const value = isTailwind ? 
-    `${colorName.toLowerCase()}-${shade}` : 
-    `${colorName.toLowerCase().replace(/\s+/g, '-')}-${shade}`;
+  
+  // Create the value in the format 'colorname-shade'
+  const value = `${colorName}-${shade}`;
   
   // Setze den Wert und aktualisiere die Variable
   variable.value = value;
