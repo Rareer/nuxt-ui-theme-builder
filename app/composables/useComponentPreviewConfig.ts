@@ -25,7 +25,7 @@ export const useComponentPreviewConfig = () => {
             },
             previewProp: 'variants',
             variants: ['default'],
-            ui: ['base', 'label', 'leadingIcon', 'leadingAvatar', 'leadingAvatarSize', 'trailingIcon']
+            ui: ['root', 'label', 'leadingIcon', 'leadingAvatar', 'leadingAvatarSize', 'trailingIcon']
         },
         'UAlert': {
             name: 'Alert',

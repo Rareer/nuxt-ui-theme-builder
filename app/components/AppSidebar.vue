@@ -1,10 +1,10 @@
 <template>
   <aside class="h-full flex flex-col">
     <!-- Sidebar Header -->
-    <div class="h-16 px-4 flex items-center border-b border-gray-200 dark:border-gray-800">
+    <NuxtLink to="/" class="h-16 px-4 flex items-center border-b border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors cursor-pointer">
       <UIcon name="i-heroicons-swatch-20-solid" class="text-primary-500 mr-2 text-xl" />
-      <h2 class="font-bold text-lg">V4</h2> <UBadge class="ml-2" color="warning" size="xs">Alpha</UBadge>
-    </div>
+      <h2 class="font-bold text-lg">Theme Builder</h2> <UBadge class="ml-2" color="warning" size="xs">Beta</UBadge>
+    </NuxtLink>
     
     <!-- Navigation Menu -->
     <div class="flex-1 p-2">
@@ -20,18 +20,22 @@ const { availableComponents } = useComponentPreviewConfig()
 const items = ref<NavigationMenuItem[][]>([
   [
     {
+      label: 'Navigation',
+      type: 'label'
+    },
+    {
+      label: 'Startseite',
+      icon: 'i-lucide-home',
+      to: '/'
+    },
+    {
       label: 'Globals',
       type: 'label'
     },
     {
       label: 'Colors',
-      icon: 'i-lucide-book-open',
-      to: '/colors'
-    },
-    {
-      label: 'Theme',
       icon: 'i-lucide-palette',
-      to: '/'
+      to: '/colors'
     },
     {
       label: 'Preview',
