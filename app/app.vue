@@ -17,3 +17,10 @@
     </div>
   </UApp>
 </template>
+
+<script setup lang="ts">
+import { useThemeCss } from './composables/useThemeCss';
+
+// Initialize global CSS variables
+useThemeCss();
+</script>
