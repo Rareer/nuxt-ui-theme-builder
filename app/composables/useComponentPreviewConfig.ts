@@ -37,7 +37,7 @@ export const useComponentPreviewConfig = () => {
             previewProp: 'variants',
             variants: ['solid', 'outline', 'soft', 'subtle', 'ghost', 'link'],
             hasColors: true,
-            ui: ['base', 'label', 'leadingIcon', 'leadingAvatar', 'leadingAvatarSize', 'trailingIcon']
+            ui: ['root', 'wrapper', 'title', 'description', 'icon', 'avatar', 'avatarSize', 'actions']
         },
         'UButton': {
             name: 'Button',

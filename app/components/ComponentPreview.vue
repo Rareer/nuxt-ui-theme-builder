@@ -40,7 +40,7 @@
                         :loading="isLoading"
                         :trailingIcon="trailingIcon"
                         :variant="variant.value"
-                        :ui="{base: variantClasses[variant.value]}"
+                        :ui="{[uiRootName]: variantClasses[variant.value]}"
                         v-bind="config?.staticProps"
                     >
                         <template v-if="config?.hasHeader" #header>
@@ -80,6 +80,7 @@ const props = defineProps({
 })
 const sizes = ['xs', 'sm', 'md', 'lg', 'xl'];
 const config = computed(() => componentConfigs.componentConfigs[props.component])
+const uiRootName = computed(() => config?.value?.ui?.[0] || 'base');
 const variant = ref('solid')
 const color = ref<ThemeVariable>('primary')
 const size = ref('md')
