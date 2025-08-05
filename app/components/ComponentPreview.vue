@@ -4,69 +4,64 @@
             <h2 class="text-xl font-bold mb-6">Preview Options</h2>
         </div>
         <div class="flex grow gap-4">
-            <UFormField v-if="componentConfigs[props.component].color" label="Color">
+            <UFormField v-if="config?.hasColors" label="Color">
                 <USelect v-model="color" :items="colors" />
             </UFormField>
-            <UFormField v-if="componentConfigs[props.component].size" label="Size">
+            <UFormField v-if="config?.hasSizes" label="Size">
                 <USelect v-model="size" :items="sizes" />
             </UFormField>
-            <UFormField v-if="Object.hasOwn(componentConfigs[props.component], 'loading')" label="Loading">
+            <UFormField v-if="config?.hasLoading" label="Loading">
                 <USwitch v-model="isLoading" />
             </UFormField>
-            <UFormField v-if="Object.hasOwn(componentConfigs[props.component], 'trailingIcon')" label="Trailing Icon">
-                <USelect class="w-full" v-model="trailingIcon" :items="icons" />
+            <UFormField v-if="config?.hasTrailingIcon" label="Trailing Icon">
+                <USelect placeholder="None" class="w-full" v-model="trailingIcon" :items="icons" />
             </UFormField>
         </div>
         <USeparator class="my-6"/>
+        <div>
+            <h2 class="text-xl font-bold mb-6">Preview Variants</h2>
+        </div>
         <ThemePreview>
             <div class="space-y-6 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div 
-                    v-if="componentConfigs[props.component].variants" 
+                    v-if="config?.variants" 
                     class="space-y-2 flex flex-col items-start" 
-                    v-for="variant in componentConfigs[props.component].variants" 
+                    v-for="variant in config.variants.map((variant) => ({
+                        value: variant,
+                        label: variant
+                    }))" 
                     :key="variant.value"
                 >
                     <label class="text-sm font-medium">{{ variant.label }}</label>
                     <component
                         :is="props.component" 
                         ref="dynamicComponent" 
-                        v-bind="componentConfigs[props.component]"
+                        :color="color"
+                        :size="size"
+                        :loading="isLoading"
+                        :trailingIcon="trailingIcon"
                         :variant="variant.value"
                         :ui="{base: variantClasses[variant.value]}"
+                        v-bind="config?.staticProps"
                     >
-                    <template v-if="componentConfigs[props.component].hasHeader" #header>
-                        <span class="h-8">Header</span>
-                    </template>
-                    <span v-if="componentConfigs[props.component].hasContent" class="h-32">Content</span>
-                    <template v-if="componentConfigs[props.component].hasFooter" #footer>
-                        <span class="h-8">Footer</span>
-                    </template>
-                </component>
-            </div>
-            <div v-else>
-                <component
-                        :is="props.component" 
-                        ref="dynamicComponent" 
-                        v-bind="componentConfigs[props.component]"
-                    >
-                    <template v-if="componentConfigs[props.component].hasHeader" #header>
-                        <span class="h-8">Header</span>
-                    </template>
-                    <span v-if="componentConfigs[props.component].hasContent" class="h-32">Content</span>
-                    <template v-if="componentConfigs[props.component].hasFooter" #footer>
-                        <span class="h-8">Footer</span>
-                    </template>
-                </component>
-            </div>
+                        <template v-if="config?.hasHeader" #header>
+                            <span class="h-8">Header</span>
+                        </template>
+                        <span v-if="config?.hasContent" class="h-32">Content</span>
+                        <template v-if="config?.hasFooter" #footer>
+                            <span class="h-8">Footer</span>
+                        </template>
+                    </component>
+                </div>
             </div>
         </ThemePreview>
         <USeparator class="my-6"/>
         <div>
             <h2 class="text-xl font-bold mb-6">Customization</h2>
-            <div v-for="variant in componentConfigs[props.component].variants" 
-            :key="variant.value">
-                <UFormField :label="variant.label">
-                    <UInput v-model="variantClasses[variant.value]" />
+            <div v-for="variant in config?.variants" 
+            :key="variant">
+                <UFormField :label="variant">
+                    <UInput class="w-full" v-model="variantClasses[variant]" />
                 </UFormField>
             </div>
         </div>
@@ -77,7 +72,15 @@
 import { useThemeStore, type ThemeVariable } from '~/store/theme'
 
 const themeStore = useThemeStore()
-
+const componentConfigs = useComponentPreviewConfig()
+const props = defineProps({
+  component: {
+    type: String,
+    required: true
+  }
+})
+const sizes = ['xs', 'sm', 'md', 'lg', 'xl'];
+const config = computed(() => componentConfigs.componentConfigs[props.component])
 const variant = ref('solid')
 const color = ref<ThemeVariable>('primary')
 const size = ref('md')
@@ -95,130 +98,5 @@ const trailingIcon = ref('')
 const variantClasses = ref<Record<string, string>>({})
 const icons = useTailwindIcons()
 
-const props = defineProps({
-  component: {
-    type: String,
-    required: true
-  }
-})
-const sizes = ref([
-{
-        label: 'XSmall',
-        value: 'xs'
-    },
-    {
-        label: 'Small',
-        value: 'sm'
-    },
-    {
-        label: 'Medium',
-        value: 'md'
-    },
-    {
-        label: 'Large',
-        value: 'lg'
-    },
-    {
-        label: 'XLarge',
-        value: 'xl'
-    }
-])
-const variantsSet01 = [{
-        label: 'Solid',
-        value: 'solid'
-    },
-    {
-        label: 'Outline',
-        value: 'outline'
-    },
-    {
-        label: 'Soft',
-        value: 'soft'
-    },
-    {
-        label: 'Subtle',
-        value: 'subtle'
-    },
-    {
-        label: 'Ghost',
-        value: 'ghost'
-    },
-    {
-        label: 'Link',
-        value: 'link'
-    }]
-const variantsSet02 = [
-{
-        label: 'Solid',
-        value: 'solid'
-    },
-    {
-        label: 'Outline',
-        value: 'outline'
-    },
-    {
-        label: 'Soft',
-        value: 'soft'
-    },
-    {
-        label: 'Subtle',
-        value: 'subtle'
-    }
-]
-const componentConfigs = computed<any>(() => ({
-    UAccordion: {
-        items: [
-            {
-                label: 'Icons',
-                icon: 'i-lucide-smile',
-                content: 'You have nothing to do, @nuxt/icon will handle it automatically.'
-            },
-            {
-                label: 'Colors',
-                icon: 'i-lucide-swatch-book',
-                slot: 'colors' as const,
-                content: 'Choose a primary and a neutral color from your Tailwind CSS theme.'
-            },
-            {
-                label: 'Components',
-                icon: 'i-lucide-box',
-                content: 'You can customize components by using the `class` / `ui` props or in your app.config.ts.'
-            }
-        ]
-    },
-    UAlert: {
-        color: color.value,
-        variant: variant.value,
-        variants: variantsSet02, // TODO: remove variants for v-binding
-        title: 'Alert Title',
-        description: 'Alert Description',
-        icon: 'i-lucide-smile',
-    },
-    UBadge: {
-        variant: variant.value,
-        variants: variantsSet01,
-        color: color.value,
-        size: size.value,
-        label: 'Badge',
-    },
-    UButton: {
-        variant: variant.value,
-        variants: variantsSet01,
-        color: color.value,
-        size: size.value,
-        loading: isLoading.value,
-        loadingIcon: 'i-lucide-loader',
-        label: 'Button',
-        trailingIcon: trailingIcon.value,
-        ui: ["base", "label", "leadingIcon", "leadingAvatar", "leadingAvatarSize", "trailingIcon"]
-    },
-    UCard: {
-        variant: variant.value,
-        variants: variantsSet02,
-        label: 'Card',
-        hasHeader: true,
-        hasContent: true,
-        hasFooter: true,
-    }
-}));
+
 </script>

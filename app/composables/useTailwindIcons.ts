@@ -1,5 +1,6 @@
 export const useTailwindIcons = () => {
     const icons = [
+        { label: 'None', value: undefined },
         {value: 'i-lucide-smile', label: 'Smile'},
         {value: 'i-lucide-heart', label: 'Heart'},
         {value: 'i-lucide-star', label: 'Star'},

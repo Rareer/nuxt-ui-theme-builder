@@ -15,6 +15,7 @@
 
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
+const { availableComponents } = useComponentPreviewConfig()
 
 const items = ref<NavigationMenuItem[][]>([
   [
@@ -40,28 +41,10 @@ const items = ref<NavigationMenuItem[][]>([
     {
       label: 'Components',
       icon: 'i-lucide-square-code',
-      children: [
-        {
-          label: 'Accordion',
-          to: '/components/UAccordion'
-        },
-        {
-          label: 'Alert',
-          to: '/components/UAlert'
-        },
-        {
-          label: 'Badge',
-          to: '/components/UBadge'
-        },
-        {
-          label: 'Button',
-          to: '/components/UButton'
-        },
-        {
-          label: 'Card',
-          to: '/components/UCard'
-        },
-      ]
+      children: availableComponents.map((component) => ({
+        label: component.label,
+        to: `/components/${component.value}`
+      }))
     },
   ],
   [
