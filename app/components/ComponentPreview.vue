@@ -35,7 +35,6 @@
                     <label class="text-sm font-medium">{{ variant.label }}</label>
                     <component
                         :is="props.component" 
-                        ref="dynamicComponent" 
                         :color="color"
                         :size="size"
                         :loading="isLoading"
@@ -84,7 +83,6 @@ const config = computed(() => componentConfigs.componentConfigs[props.component]
 const variant = ref('solid')
 const color = ref<ThemeVariable>('primary')
 const size = ref('md')
-const dynamicComponent = ref(null);
 const colors = computed(() => {
     return Object.entries(themeStore.getThemeVariables).map(([key, value]) => {
         return {

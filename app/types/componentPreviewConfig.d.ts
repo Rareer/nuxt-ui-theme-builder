@@ -1,4 +1,4 @@
-type Variants = 'solid' | 'outline' | 'soft' | 'subtle' | 'ghost' | 'link'
+type Variants = 'default' | 'solid' | 'outline' | 'soft' | 'subtle' | 'ghost' | 'link'
 type Sizes = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
 export interface ComponentPreviewConfig {
@@ -14,5 +14,11 @@ export interface ComponentPreviewConfig {
     ui?: string[];
     hasColors?: boolean;
     hasSizes?: boolean;
-    staticProps?: Record<string, string>;
+    staticProps?: {
+        label?: string;
+        title?: string;
+        description?: string;
+        icon?: string;
+        items?: Record<string, string>[]
+    };
 }
