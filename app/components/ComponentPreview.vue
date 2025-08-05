@@ -1,11 +1,20 @@
 <template>
     <div>
-        <div class="flex grow gap-2">
+        <div>
+            <h2 class="text-xl font-bold mb-6">Preview Options</h2>
+        </div>
+        <div class="flex grow gap-4">
             <UFormField v-if="componentConfigs[props.component].color" label="Color">
                 <USelect v-model="color" :items="colors" />
             </UFormField>
             <UFormField v-if="componentConfigs[props.component].size" label="Size">
                 <USelect v-model="size" :items="sizes" />
+            </UFormField>
+            <UFormField v-if="Object.hasOwn(componentConfigs[props.component], 'loading')" label="Loading">
+                <USwitch v-model="isLoading" />
+            </UFormField>
+            <UFormField v-if="Object.hasOwn(componentConfigs[props.component], 'trailingIcon')" label="Trailing Icon">
+                <USelect class="w-full" v-model="trailingIcon" :items="icons" />
             </UFormField>
         </div>
         <USeparator class="my-6"/>
@@ -23,6 +32,7 @@
                         ref="dynamicComponent" 
                         v-bind="componentConfigs[props.component]"
                         :variant="variant.value"
+                        :ui="{base: variantClasses[variant.value]}"
                     >
                     <template v-if="componentConfigs[props.component].hasHeader" #header>
                         <span class="h-8">Header</span>
@@ -50,11 +60,20 @@
             </div>
             </div>
         </ThemePreview>
+        <USeparator class="my-6"/>
+        <div>
+            <h2 class="text-xl font-bold mb-6">Customization</h2>
+            <div v-for="variant in componentConfigs[props.component].variants" 
+            :key="variant.value">
+                <UFormField :label="variant.label">
+                    <UInput v-model="variantClasses[variant.value]" />
+                </UFormField>
+            </div>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, reactive } from 'vue'
 import { useThemeStore, type ThemeVariable } from '~/store/theme'
 
 const themeStore = useThemeStore()
@@ -71,7 +90,10 @@ const colors = computed(() => {
         }
     })
 })
-
+const isLoading = ref(false)
+const trailingIcon = ref('')
+const variantClasses = ref<Record<string, string>>({})
+const icons = useTailwindIcons()
 
 const props = defineProps({
   component: {
@@ -167,7 +189,7 @@ const componentConfigs = computed<any>(() => ({
     UAlert: {
         color: color.value,
         variant: variant.value,
-        variants: variantsSet02,
+        variants: variantsSet02, // TODO: remove variants for v-binding
         title: 'Alert Title',
         description: 'Alert Description',
         icon: 'i-lucide-smile',
@@ -184,7 +206,11 @@ const componentConfigs = computed<any>(() => ({
         variants: variantsSet01,
         color: color.value,
         size: size.value,
+        loading: isLoading.value,
+        loadingIcon: 'i-lucide-loader',
         label: 'Button',
+        trailingIcon: trailingIcon.value,
+        ui: ["base", "label", "leadingIcon", "leadingAvatar", "leadingAvatarSize", "trailingIcon"]
     },
     UCard: {
         variant: variant.value,
@@ -193,9 +219,6 @@ const componentConfigs = computed<any>(() => ({
         hasHeader: true,
         hasContent: true,
         hasFooter: true,
-        ui: {
-            root: 'w-1/2'
-        }
     }
 }));
 </script>
