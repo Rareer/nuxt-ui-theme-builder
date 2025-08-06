@@ -60,7 +60,7 @@
             <div v-for="variant in config?.variants" 
             :key="variant">
                 <UFormField :label="variant">
-                    <UInput class="w-full" v-model="variantClasses[variant]" />
+                    <Combobox v-model="variantClasses[variant]" />
                 </UFormField>
             </div>
         </div>
