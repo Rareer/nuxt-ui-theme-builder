@@ -40,7 +40,7 @@
                         :loading="isLoading"
                         :trailingIcon="trailingIcon"
                         :variant="variant.value"
-                        :ui="{[uiRootName]: variantClasses[variant.value]}"
+                        :ui="{[uiRootName]: getMergedClasses(variant.value)}"
                         v-bind="config?.staticProps"
                     >
                         <template v-if="config?.hasHeader" #header>
@@ -51,6 +51,8 @@
                             <span class="h-8">Footer</span>
                         </template>
                     </component>
+
+                    {{  }}
                 </div>
             </div>
         </ThemePreview>
@@ -72,6 +74,7 @@
 
 <script setup lang="ts">
 import { useThemeStore, type ThemeVariable } from '~/store/theme'
+import { twMerge } from 'tailwind-merge'
 
 const themeStore = useThemeStore()
 const componentConfigs = useComponentPreviewConfig()
@@ -100,5 +103,9 @@ const trailingIcon = ref('')
 const variantClasses = ref<Record<string, string>>({})
 const icons = useTailwindIcons()
 
-
+const getMergedClasses = (variant: string) => {
+    return twMerge(
+        variantClasses.value[variant],
+    )
+}
 </script>

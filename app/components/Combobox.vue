@@ -51,7 +51,6 @@ const removeItem = (s: string) => {
       class="w-full rounded"
       @keyup.enter="selectSuggestion(currentInput)"
       @keydown.space="selectSuggestion(currentInput)"
-      @blur="currentInput = ''"
     />
 
     <ul
