@@ -98,9 +98,11 @@
 
 <script setup lang="ts">
 import { useThemeStore, type ThemeVariable } from '~/store/theme'
+import { useComponentConfigStore } from '~/store/componentConfig'
 import { twMerge } from 'tailwind-merge'
 
 const themeStore = useThemeStore()
+const componentConfigStore = useComponentConfigStore()
 const componentConfigs = useComponentPreviewConfig()
 const props = defineProps({
   component: {
@@ -137,6 +139,100 @@ const customizableTabs = computed(() => {
             slot: customizable
         }
     })
+})
+
+// Save classes to the store whenever they change
+watch(variantClasses, (newValue) => {
+    Object.entries(newValue).forEach(([variant, classes]) => {
+        if (classes) {
+            componentConfigStore.setClasses(
+                props.component,
+                'variants',
+                variant,
+                uiRootName.value,
+                typeof classes === 'string' ? classes.split(' ') : Array.isArray(classes) ? classes : []
+            )
+        }
+    })
+}, { deep: true })
+
+watch(colorClasses, (newValue) => {
+    Object.entries(newValue).forEach(([color, classes]) => {
+        if (classes) {
+            componentConfigStore.setClasses(
+                props.component,
+                'colors',
+                color,
+                uiRootName.value,
+                typeof classes === 'string' ? classes.split(' ') : Array.isArray(classes) ? classes : []
+            )
+        }
+    })
+}, { deep: true })
+
+watch(sizeClasses, (newValue) => {
+    Object.entries(newValue).forEach(([size, classes]) => {
+        if (classes) {
+            componentConfigStore.setClasses(
+                props.component,
+                'sizes',
+                size,
+                uiRootName.value,
+                typeof classes === 'string' ? classes.split(' ') : Array.isArray(classes) ? classes : []
+            )
+        }
+    })
+}, { deep: true })
+
+// Initialize component configuration and load classes from the store on component mount
+onMounted(() => {
+    // Initialize default configurations for this component
+    componentConfigStore.initComponentDefaults(props.component)
+    
+    // Load variant classes
+    if (config.value?.variants) {
+        config.value.variants.forEach((variant) => {
+            const classes = componentConfigStore.getClasses(
+                props.component,
+                'variants',
+                variant,
+                uiRootName.value
+            )
+            if (classes.length > 0) {
+                variantClasses.value[variant] = classes.join(' ')
+            }
+        })
+    }
+    
+    // Load color classes
+    if (config.value?.hasColors) {
+        colors.value.forEach((colorObj) => {
+            const classes = componentConfigStore.getClasses(
+                props.component,
+                'colors',
+                colorObj.value,
+                uiRootName.value
+            )
+            if (classes.length > 0) {
+                colorClasses.value[colorObj.value] = classes.join(' ')
+            }
+        })
+    }
+    
+    // Load size classes
+    if (config.value?.hasSizes) {
+        sizes.forEach((size) => {
+            const classes = componentConfigStore.getClasses(
+                props.component,
+                'sizes',
+                size,
+                uiRootName.value
+            )
+            if (classes.length > 0) {
+                sizeClasses.value[size] = classes.join(' ')
+            }
+        })
+    }
 })
 
 const getMergedClasses = (variant: string, color: string, size: string) => {
