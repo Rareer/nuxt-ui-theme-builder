@@ -40,7 +40,7 @@
                         :loading="isLoading"
                         :trailingIcon="trailingIcon"
                         :variant="variant.value"
-                        :ui="{[uiRootName]: getMergedClasses(variant.value)}"
+                        :ui="{[uiRootName]: getMergedClasses(variant.value, color, size)}"
                         v-bind="config?.staticProps"
                     >
                         <template v-if="config?.hasHeader" #header>
@@ -51,23 +51,47 @@
                             <span class="h-8">Footer</span>
                         </template>
                     </component>
-
-                    {{  }}
                 </div>
             </div>
         </ThemePreview>
         <USeparator class="my-6"/>
         <div>
             <h2 class="text-xl font-bold mb-6">Customization</h2>
-            <div 
-                v-for="variant in config?.variants" 
-                :key="variant"
-                class="mb-4"
-            >
-                <UFormField :label="variant">
-                    <Combobox v-model="variantClasses[variant]" />
-                </UFormField>
-            </div>
+            <UTabs :items="customizableTabs">
+                <template #variants="{ item }">
+                    <div 
+                        v-for="variant in config?.variants" 
+                        :key="variant"
+                        class="mb-4"
+                    >
+                        <UFormField :label="variant">
+                            <Combobox v-model="variantClasses[variant]" />
+                        </UFormField>
+                    </div>
+                </template>
+                <template #colors="{ item }">
+                    <div 
+                        v-for="color in colors" 
+                        :key="color.value"
+                        class="mb-4"
+                    >
+                        <UFormField :label="color.value">
+                            <Combobox v-model="colorClasses[color.value]" />
+                        </UFormField>
+                    </div>
+                </template>
+                <template #sizes="{ item }">
+                    <div 
+                        v-for="size in sizes" 
+                        :key="size"
+                        class="mb-4"
+                    >
+                        <UFormField :label="size">
+                            <Combobox v-model="sizeClasses[size]" />
+                        </UFormField>
+                    </div>
+                </template>
+            </UTabs>
         </div>
     </div>
 </template>
@@ -101,10 +125,24 @@ const colors = computed(() => {
 const isLoading = ref(false)
 const trailingIcon = ref('')
 const variantClasses = ref<Record<string, string>>({})
+const colorClasses = ref<Record<string, string>>({})
+const sizeClasses = ref<Record<string, string>>({})
 const icons = useTailwindIcons()
 
-const getMergedClasses = (variant: string) => {
+const customizableTabs = computed(() => {
+    return config.value?.customizable.map((customizable) => {
+        return {
+            label: customizable.charAt(0).toUpperCase() + customizable.slice(1),
+            value: customizable,
+            slot: customizable
+        }
+    })
+})
+
+const getMergedClasses = (variant: string, color: string, size: string) => {
     return twMerge(
+        sizeClasses.value[size],
+        colorClasses.value[color],
         variantClasses.value[variant],
     )
 }

@@ -24,6 +24,7 @@ export const useComponentPreviewConfig = () => {
                 ]
             },
             previewProp: 'variants',
+            customizable: ['variants'],
             variants: ['default'],
             ui: ['root', 'label', 'leadingIcon', 'leadingAvatar', 'leadingAvatarSize', 'trailingIcon']
         },
@@ -35,6 +36,7 @@ export const useComponentPreviewConfig = () => {
                 icon: 'i-heroicons-exclamation-triangle',
             },
             previewProp: 'variants',
+            customizable: ['variants', 'colors'],
             variants: ['solid', 'outline', 'soft', 'subtle', 'ghost', 'link'],
             hasColors: true,
             ui: ['root', 'wrapper', 'title', 'description', 'icon', 'avatar', 'avatarSize', 'actions']
@@ -45,6 +47,7 @@ export const useComponentPreviewConfig = () => {
                 label: 'Button'
             },
             previewProp: 'variants',
+            customizable: ['variants', 'colors', 'sizes'],
             variants: ['solid', 'outline', 'soft', 'subtle', 'ghost', 'link'],
             hasColors: true,
             hasSizes: true,

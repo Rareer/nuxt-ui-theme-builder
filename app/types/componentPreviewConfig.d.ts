@@ -4,7 +4,8 @@ type Sizes = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 export interface ComponentPreviewConfig {
     name: string;
     sizes?: Sizes[];
-    variants?: Variants[];
+    variants: Variants[];
+    customizable: string[];
     previewProp: 'variants',
     hasLoading?: boolean;
     hasTrailingIcon?: boolean;
