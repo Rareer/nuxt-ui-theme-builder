@@ -18,8 +18,10 @@ const filtered = computed(() =>
 )
 
 const selectSuggestion = (s: string) => {
-  emit('update:modelValue', [...props.modelValue || [], s])
-  currentInput.value = ''
+    const input = s.trim()
+    if (!input) return
+    emit('update:modelValue', [...props.modelValue || [], input])
+    currentInput.value = ''
 }
 
 const removeItem = (s: string) => {
@@ -48,6 +50,7 @@ const removeItem = (s: string) => {
       placeholder="Type a tailwind class ..."
       class="w-full rounded"
       @keyup.enter="selectSuggestion(currentInput)"
+      @keydown.space="selectSuggestion(currentInput)"
       @blur="currentInput = ''"
     />
 
