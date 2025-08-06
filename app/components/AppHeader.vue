@@ -1,7 +1,9 @@
 <template>
   <header class="h-16 px-6 flex items-center justify-between border-b border-gray-200 dark:border-gray-800">
     <div class="flex items-center">
-      <h1 class="text-xl font-bold">NuxtUI Theme Builder</h1>
+    </div>
+    <div class="flex items-center">
+      <UNavigationMenu :items="items" orientation="horizontal" variant="subtle" />
     </div>
     <div class="flex items-center gap-4">
       <!-- Theme Configuration Button -->
@@ -47,6 +49,25 @@ import VariableConfigurator from './VariableConfigurator.vue';
 const colorMode = useColorMode();
 const isThemeConfigOpen = ref(false);
 
+const items = ref([
+    {
+        label: 'Startseite',
+        to: '/'
+    },
+    {
+        label: 'Pricing',
+        to: '/pricing'
+    },
+    {
+        label: 'How to',
+        to: '/how-to'
+    },
+    {
+        label: 'Pro',
+        to: '/profeatures',
+        icon: 'i-heroicons-star-20-solid'
+    },
+])
 function toggleDark() {
   colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark';
 }

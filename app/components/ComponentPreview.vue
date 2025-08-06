@@ -57,7 +57,7 @@
         <USeparator class="my-6"/>
         <div>
             <h2 class="text-xl font-bold mb-6">Customization</h2>
-            <UTabs :items="customizableTabs">
+            <UTabs :items="customizableTabs" color="neutral">
                 <template #variants="{ item }">
                     <div 
                         v-for="variant in config?.variants" 
