@@ -57,8 +57,11 @@
         <USeparator class="my-6"/>
         <div>
             <h2 class="text-xl font-bold mb-6">Customization</h2>
-            <div v-for="variant in config?.variants" 
-            :key="variant">
+            <div 
+                v-for="variant in config?.variants" 
+                :key="variant"
+                class="mb-4"
+            >
                 <UFormField :label="variant">
                     <Combobox v-model="variantClasses[variant]" />
                 </UFormField>

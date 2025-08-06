@@ -48,11 +48,12 @@ const removeItem = (s: string) => {
       placeholder="Type a tailwind class ..."
       class="w-full rounded"
       @keyup.enter="selectSuggestion(currentInput)"
+      @blur="currentInput = ''"
     />
 
     <ul
       v-if="currentInput && filtered.length"
-      class="absolute bg-white border border-gray-200 dark:border-gray-800 w-full mt-1 rounded-md shadow-lg max-h-64 overflow-y-scroll"
+      class="absolute z-10 bg-white border border-gray-200 dark:border-gray-800 w-full mt-1 rounded-md shadow-lg max-h-64 overflow-y-scroll"
     >
       <li
         v-for="s in filtered"
