@@ -3,9 +3,18 @@
     <div class="flex items-center">
     </div>
     <div class="flex items-center">
-      <UNavigationMenu :items="items" orientation="horizontal" variant="subtle" />
+      <UNavigationMenu :items="items" orientation="horizontal" />
     </div>
     <div class="flex items-center gap-4">
+      <!-- Export Theme Button -->
+      <UButton
+        icon="i-heroicons-arrow-down-tray"
+        color="success"
+        variant="soft"
+        aria-label="Export Theme"
+        @click="exportTheme"
+        :loading="isExporting"
+      />
       <!-- Theme Configuration Button -->
       <UButton
         icon="i-lucide-palette"
@@ -45,9 +54,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import VariableConfigurator from './VariableConfigurator.vue';
+import { useThemeExport } from '../composables/useThemeExport';
 
 const colorMode = useColorMode();
 const isThemeConfigOpen = ref(false);
+const { exportTheme, isExporting } = useThemeExport();
 
 const items = ref([
     {

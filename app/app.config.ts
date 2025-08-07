@@ -6,10 +6,9 @@ export default defineAppConfig({
       neutral: 'slate',
     },
     button: {
-      defaultVariants: {
-        // Set default button color to neutral
-        // color: 'neutral'
-      }
+      slots: {
+        base: 'hover:cursor-pointer',
+      },
     }
   }
 })

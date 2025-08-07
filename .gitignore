@@ -5,6 +5,7 @@
 .nitro
 .cache
 dist
+/tmp
 
 # Node dependencies
 node_modules
@@ -22,3 +23,5 @@ logs
 .env
 .env.*
 !.env.example
+
+.vercel

@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.7.1",
+    "@types/archiver": "^6.0.3",
     "eslint": "^9.32.0",
     "typescript": "^5.8.3"
   }
