@@ -41,7 +41,7 @@ const removeItem = (s: string) => {
             variant="soft"
             class="cursor-pointer"
             title="Remove"
-            color="neutral" 
+            color="secondary" 
         />
     </div>
     <UInput

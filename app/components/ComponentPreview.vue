@@ -1,66 +1,63 @@
 <template>
-    <div>
-        <div>
-            <h2 class="text-xl font-bold mb-6">Preview Options</h2>
-        </div>
-        <div class="flex grow gap-4">
-            <UFormField v-if="config?.hasColors" label="Color">
-                <USelect v-model="color" :items="colors" />
-            </UFormField>
-            <UFormField v-if="config?.hasSizes" label="Size">
-                <USelect v-model="size" :items="sizes" />
-            </UFormField>
-            <UFormField v-if="config?.hasLoading" label="Loading">
-                <USwitch v-model="isLoading" />
-            </UFormField>
-            <UFormField v-if="config?.hasIcon" label="Icon">
-                <USwitch v-model="showIcon" />
-            </UFormField>
-            <UFormField v-if="config?.hasTrailingIcon && showIcon" label="Trailing Icon">
-                <USwitch v-model="trailingIcon" />
-            </UFormField>
-        </div>
-        <USeparator class="my-6"/>
-        <div>
-            <h2 class="text-xl font-bold mb-6">Preview Variants</h2>
-        </div>
-        <ThemePreview>
-            <div class="space-y-6 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div 
-                    v-if="config?.variants" 
-                    class="space-y-2 flex flex-col items-start" 
-                    v-for="variant in config.variants.map((variant) => ({
-                        value: variant,
-                        label: variant
-                    }))" 
-                    :key="variant.value"
-                >
-                    <label class="text-sm font-medium">{{ variant.label }}</label>
-                    <component
-                        v-bind="config?.staticProps"
-                        :is="props.component" 
-                        :color="color"
-                        :size="size"
-                        :icon="showIcon ? 'i-heroicons-exclamation-triangle' : undefined"
-                        :trailing="trailingIcon"
-                        :loading="isLoading"
-                        :variant="variant.value"
-                        :ui="getMergedUiObject(variant.value, color, size)"
-                    >
-                        <template v-if="config?.hasHeader" #header>
-                            <span class="h-8">Header</span>
-                        </template>
-                        <span v-if="config?.hasContent" class="h-32">Content</span>
-                        <template v-if="config?.hasFooter" #footer>
-                            <span class="h-8">Footer</span>
-                        </template>
-                    </component>
-                </div>
+    <div class="flex gap-6">
+        <div class="flex-1">
+            <div>
+                <h2 class="text-xl font-bold mb-6">{{ config?.name }}</h2>
             </div>
-        </ThemePreview>
-        <USeparator class="my-6"/>
-        <div>
-            <h2 class="text-xl font-bold mb-6">Customization</h2>
+            <ThemePreview>
+                <div class="space-y-6 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div 
+                        v-if="config?.variants" 
+                        class="space-y-2 flex flex-col items-start" 
+                        v-for="variant in config.variants.map((variant) => ({
+                            value: variant,
+                            label: variant
+                        }))" 
+                        :key="variant.value"
+                    >
+                        <label class="text-sm font-medium">{{ variant.label }}</label>
+                        <component
+                            v-bind="config?.staticProps"
+                            :is="props.component" 
+                            :color="color"
+                            :size="size"
+                            :icon="showIcon ? 'i-heroicons-exclamation-triangle' : undefined"
+                            :trailing="trailingIcon"
+                            :loading="isLoading"
+                            :variant="variant.value"
+                            :ui="getMergedUiObject(variant.value, color, size)"
+                        >
+                            <template v-if="config?.hasHeader" #header>
+                                <span class="h-8">Header</span>
+                            </template>
+                            <span v-if="config?.hasContent" class="h-32">Content</span>
+                            <template v-if="config?.hasFooter" #footer>
+                                <span class="h-8">Footer</span>
+                            </template>
+                        </component>
+                    </div>
+                </div>
+            </ThemePreview>
+        </div>
+        <div class="flex-1 pl-6 border-l border-gray-200 dark:border-gray-800">
+            <div class="flex grow gap-4">
+                <UFormField v-if="config?.hasColors" label="Color">
+                    <USelect v-model="color" :items="colors" />
+                </UFormField>
+                <UFormField v-if="config?.hasSizes" label="Size">
+                    <USelect v-model="size" :items="sizes" />
+                </UFormField>
+                <UFormField v-if="config?.hasLoading" label="Loading">
+                    <USwitch v-model="isLoading" />
+                </UFormField>
+                <UFormField v-if="config?.hasIcon" label="Icon">
+                    <USwitch v-model="showIcon" />
+                </UFormField>
+                <UFormField v-if="config?.hasTrailingIcon && showIcon" label="Trailing Icon">
+                    <USwitch v-model="trailingIcon" />
+                </UFormField>
+            </div>
+            <USeparator class="my-6"/>
             <UTabs :items="customizableTabs" color="neutral">
                 <template #variants="{ item }">
                     <div 

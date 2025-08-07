@@ -33,7 +33,7 @@ const items = ref<NavigationMenuItem[][]>([
       type: 'label'
     },
     {
-      label: 'Colors',
+      label: 'Custom Colors',
       icon: 'i-lucide-palette',
       to: '/colors'
     },
