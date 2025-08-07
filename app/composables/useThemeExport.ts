@@ -1,7 +1,9 @@
 import { useThemeStore } from '../store/theme'
+import { useColorsStore } from '../store/colors'
 
 export function useThemeExport() {
   const themeStore = useThemeStore()
+  const colorsStore = useColorsStore()
   const isExporting = ref(false)
   const exportError = ref<string | null>(null)
 
@@ -15,6 +17,12 @@ export function useThemeExport() {
 
       // Get all theme CSS variables
       const themeVariables = themeStore.getThemeCssVariables
+      
+      // Get all custom colors
+      const customColors = colorsStore.getColors
+      
+      // Get theme mappings (for app.config.ts)
+      const themeMappings = themeStore.mappings
 
       // Call the server API to generate the ZIP file
       const response = await $fetch<{
@@ -25,7 +33,9 @@ export function useThemeExport() {
       }>('/api/export-theme', {
         method: 'POST',
         body: {
-          themeVariables
+          themeVariables,
+          customColors,
+          themeMappings
         }
       })
 
