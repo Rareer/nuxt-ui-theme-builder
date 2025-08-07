@@ -13,8 +13,11 @@
             <UFormField v-if="config?.hasLoading" label="Loading">
                 <USwitch v-model="isLoading" />
             </UFormField>
-            <UFormField v-if="config?.hasTrailingIcon" label="Trailing Icon">
-                <USelect placeholder="None" class="w-full" v-model="trailingIcon" :items="icons" />
+            <UFormField v-if="config?.hasIcon" label="Icon">
+                <USwitch v-model="showIcon" />
+            </UFormField>
+            <UFormField v-if="config?.hasTrailingIcon && showIcon" label="Trailing Icon">
+                <USwitch v-model="trailingIcon" />
             </UFormField>
         </div>
         <USeparator class="my-6"/>
@@ -34,14 +37,15 @@
                 >
                     <label class="text-sm font-medium">{{ variant.label }}</label>
                     <component
+                        v-bind="config?.staticProps"
                         :is="props.component" 
                         :color="color"
                         :size="size"
+                        :icon="showIcon ? 'i-heroicons-exclamation-triangle' : undefined"
+                        :trailing="trailingIcon"
                         :loading="isLoading"
-                        :trailingIcon="trailingIcon"
                         :variant="variant.value"
                         :ui="{[uiRootName]: getMergedClasses(variant.value, color, size)}"
-                        v-bind="config?.staticProps"
                     >
                         <template v-if="config?.hasHeader" #header>
                             <span class="h-8">Header</span>
@@ -125,11 +129,11 @@ const colors = computed(() => {
     })
 })
 const isLoading = ref(false)
-const trailingIcon = ref('')
+const trailingIcon = ref(false)
+const showIcon = ref(false)
 const variantClasses = ref<Record<string, string>>({})
 const colorClasses = ref<Record<string, string>>({})
 const sizeClasses = ref<Record<string, string>>({})
-const icons = useTailwindIcons()
 
 const customizableTabs = computed(() => {
     return config.value?.customizable.map((customizable) => {

@@ -44,7 +44,7 @@ export const useComponentPreviewConfig = () => {
         'UButton': {
             name: 'Button',
             staticProps: {
-                label: 'Button'
+                label: 'Button',
             },
             previewProp: 'variants',
             customizable: ['variants', 'colors', 'sizes'],
@@ -52,6 +52,21 @@ export const useComponentPreviewConfig = () => {
             hasColors: true,
             hasSizes: true,
             hasLoading: true,
+            hasIcon: true,
+            hasTrailingIcon: true,
+            ui: ['base', 'label', 'leadingIcon', 'leadingAvatar', 'leadingAvatarSize', 'trailingIcon']
+        },
+        'UBadge': {
+            name: 'Badge',
+            staticProps: {
+                label: 'Badge',
+            },
+            previewProp: 'variants',
+            customizable: ['variants', 'colors', 'sizes'],
+            variants: ['solid', 'outline', 'soft', 'subtle', 'ghost', 'link'],
+            hasColors: true,
+            hasSizes: true,
+            hasIcon: true,
             hasTrailingIcon: true,
             ui: ['base', 'label', 'leadingIcon', 'leadingAvatar', 'leadingAvatarSize', 'trailingIcon']
         },

@@ -15,11 +15,11 @@ export interface ComponentPreviewConfig {
     ui?: string[];
     hasColors?: boolean;
     hasSizes?: boolean;
+    hasIcon?: boolean;
     staticProps?: {
         label?: string;
         title?: string;
         description?: string;
-        icon?: string;
         items?: Record<string, string>[]
     };
 }
