@@ -1,14 +1,34 @@
 import { useThemeStore } from '../store/theme'
 import { useColorsStore } from '../store/colors'
+import { ref, computed } from 'vue'
+import { useCodeHighlighter } from './useCodeHighlighter'
 
 export function useThemeExport() {
   const themeStore = useThemeStore()
   const colorsStore = useColorsStore()
   const isExporting = ref(false)
   const exportError = ref<string | null>(null)
+  const isExportModalOpen = ref(false)
+  const cssContent = ref('')
+  const appConfigContent = ref('')
+  
+  // Initialize code highlighter
+  const { initHighlighter, highlightCode, isHighlighterReady } = useCodeHighlighter()
+  initHighlighter() // Start loading the highlighter
+  
+  // Highlighted code content
+  const highlightedCssContent = computed(() => {
+    if (!isHighlighterReady.value || !cssContent.value) return ''
+    return highlightCode(cssContent.value, 'css')
+  })
+  
+  const highlightedAppConfigContent = computed(() => {
+    if (!isHighlighterReady.value || !appConfigContent.value) return ''
+    return highlightCode(appConfigContent.value, 'typescript')
+  })
 
   /**
-   * Export the current theme as a ZIP file containing main.css
+   * Export the current theme and show content in a modal
    */
   const exportTheme = async (event?: MouseEvent): Promise<void> => {
     try {
@@ -24,12 +44,12 @@ export function useThemeExport() {
       // Get theme mappings (for app.config.ts)
       const themeMappings = themeStore.mappings
 
-      // Call the server API to generate the ZIP file
+      // Call the server API to get the theme content
       const response = await $fetch<{
         success: boolean;
         error?: string;
-        zipContent?: string;
-        filename?: string;
+        cssContent?: string;
+        appConfigContent?: string;
       }>('/api/export-theme', {
         method: 'POST',
         body: {
@@ -43,9 +63,11 @@ export function useThemeExport() {
         throw new Error(response.error || 'Failed to export theme')
       }
 
-      // Create and download the ZIP file
-      if (response.zipContent && response.filename) {
-        downloadZipFile(response.zipContent, response.filename)
+      // Store the content and open the modal
+      if (response.cssContent && response.appConfigContent) {
+        cssContent.value = response.cssContent
+        appConfigContent.value = response.appConfigContent
+        isExportModalOpen.value = true
       }
       
       return
@@ -59,44 +81,22 @@ export function useThemeExport() {
   }
 
   /**
-   * Download the ZIP file as a blob
+   * Close the export modal
    */
-  const downloadZipFile = (base64Content: string, filename: string) => {
-    // Convert base64 to blob
-    const byteCharacters = atob(base64Content)
-    const byteArrays = []
-    
-    for (let offset = 0; offset < byteCharacters.length; offset += 512) {
-      const slice = byteCharacters.slice(offset, offset + 512)
-      
-      const byteNumbers = new Array(slice.length)
-      for (let i = 0; i < slice.length; i++) {
-        byteNumbers[i] = slice.charCodeAt(i)
-      }
-      
-      const byteArray = new Uint8Array(byteNumbers)
-      byteArrays.push(byteArray)
-    }
-    
-    const blob = new Blob(byteArrays, { type: 'application/zip' })
-    
-    // Create download link and trigger download
-    const link = document.createElement('a')
-    link.href = URL.createObjectURL(blob)
-    link.download = filename
-    document.body.appendChild(link)
-    link.click()
-    
-    // Clean up
-    setTimeout(() => {
-      URL.revokeObjectURL(link.href)
-      document.body.removeChild(link)
-    }, 100)
+  const closeExportModal = () => {
+    isExportModalOpen.value = false
   }
 
   return {
     exportTheme,
     isExporting,
-    exportError
+    exportError,
+    isExportModalOpen,
+    cssContent,
+    appConfigContent,
+    highlightedCssContent,
+    highlightedAppConfigContent,
+    isHighlighterReady,
+    closeExportModal
   }
 }

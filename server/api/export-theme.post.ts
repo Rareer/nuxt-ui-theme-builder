@@ -1,10 +1,4 @@
 import { defineEventHandler, readBody } from 'h3'
-import { createWriteStream } from 'fs'
-import { join } from 'path'
-import { createGzip } from 'zlib'
-import archiver from 'archiver'
-import { randomUUID } from 'crypto'
-import { promises as fs } from 'fs'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -22,34 +16,16 @@ export default defineEventHandler(async (event) => {
       }
     }
     
-    // Create a unique temporary directory for this export
-    const tempDir = join(process.cwd(), 'tmp', randomUUID())
-    await fs.mkdir(tempDir, { recursive: true })
-    
-    // Create main.css file with the theme variables and custom colors
+    // Generate CSS content with the theme variables and custom colors
     const cssContent = generateCssContent(themeVariables, customColors)
-    const cssFilePath = join(tempDir, 'main.css')
-    await fs.writeFile(cssFilePath, cssContent)
     
     // Generate app.config.ts content
     const appConfigContent = generateAppConfigContent(themeMappings)
-    const appConfigFilePath = join(tempDir, 'app.config.ts')
-    await fs.writeFile(appConfigFilePath, appConfigContent)
-    
-    // Create a ZIP file
-    const zipFilePath = join(tempDir, 'theme-export.zip')
-    await createZipFile(tempDir, zipFilePath, cssFilePath, appConfigFilePath)
-    
-    // Read the ZIP file as base64
-    const zipContent = await fs.readFile(zipFilePath, { encoding: 'base64' })
-    
-    // Clean up temporary files
-    await cleanupTempFiles(tempDir)
     
     return {
       success: true,
-      zipContent,
-      filename: 'theme-export.zip'
+      cssContent,
+      appConfigContent
     }
   } catch (error: unknown) {
     console.error('Error exporting theme:', error)
@@ -117,41 +93,4 @@ function generateCssContent(themeVariables: Record<string, string>, customColors
   return cssContent
 }
 
-async function createZipFile(tempDir: string, zipFilePath: string, cssFilePath: string, appConfigFilePath: string): Promise<void> {
-  return new Promise<void>((resolve, reject) => {
-    const output = createWriteStream(zipFilePath)
-    const archive = archiver('zip', {
-      zlib: { level: 9 } // Maximum compression
-    })
-    
-    output.on('close', () => {
-      resolve()
-    })
-    
-    archive.on('error', (err: Error) => {
-      reject(err)
-    })
-    
-    archive.pipe(output)
-    
-    // Add the CSS file to the ZIP
-    archive.file(cssFilePath, { name: 'main.css' })
-    
-    // Add the app.config.ts file to the ZIP
-    archive.file(appConfigFilePath, { name: 'app.config.ts' })
-    
-    // Add a README file
-    archive.append('# Theme Export\n\nThis ZIP file contains the exported theme variables for your Nuxt UI application.\n\n## Usage\n\n1. Place the `main.css` file in your project and import it in your main CSS file.\n2. Copy the `app.config.ts` file to your project root to configure the Nuxt UI color scheme.', 
-      { name: 'README.md' })
-    
-    archive.finalize()
-  })
-}
 
-async function cleanupTempFiles(tempDir: string): Promise<void> {
-  try {
-    await fs.rm(tempDir, { recursive: true, force: true })
-  } catch (error) {
-    console.error('Error cleaning up temporary files:', error)
-  }
-}
