@@ -45,7 +45,7 @@
                         :trailing="trailingIcon"
                         :loading="isLoading"
                         :variant="variant.value"
-                        :ui="{[uiRootName]: getMergedClasses(variant.value, color, size)}"
+                        :ui="getMergedUiObject(variant.value, color, size)"
                     >
                         <template v-if="config?.hasHeader" #header>
                             <span class="h-8">Header</span>
@@ -69,8 +69,25 @@
                         class="mb-4"
                     >
                         <UFormField :label="variant">
-                            <Combobox v-model="variantClasses[variant]" />
+                            <Combobox :model-value="variantClasses[variant]" @update:model-value="val => variantClasses[variant] = val" />
+                            <UButton 
+                                size="xs" 
+                                color="neutral" 
+                                variant="ghost" 
+                                icon="i-heroicons-chevron-down" 
+                                :trailing="true" 
+                                class="mt-2" 
+                                @click="toggleUiPropertyAccordion('variants', variant)"
+                                :label="uiPropertyAccordionState.variants[variant] ? 'Hide additional properties' : 'Show additional properties'"
+                            />
                         </UFormField>
+                        <div v-if="uiPropertyAccordionState.variants[variant]" class="pl-4 border-l-2 border-gray-200 mt-2 mb-4 space-y-4">
+                            <div v-for="uiProp in uiProperties" :key="uiProp" v-show="uiProp !== uiRootName">
+                                <UFormField :label="uiProp">
+                                    <Combobox :model-value="getUiPropertyClassesRef('variants', variant, uiProp)" @update:model-value="val => updateUiPropertyClass(uiProp, 'variants', variant, val)" />
+                                </UFormField>
+                            </div>
+                        </div>
                     </div>
                 </template>
                 <template #colors="{ item }">
@@ -80,8 +97,25 @@
                         class="mb-4"
                     >
                         <UFormField :label="color.value">
-                            <Combobox v-model="colorClasses[color.value]" />
+                            <Combobox :model-value="colorClasses[color.value]" @update:model-value="val => colorClasses[color.value] = val" />
+                            <UButton 
+                                size="xs" 
+                                color="neutral" 
+                                variant="ghost" 
+                                icon="i-heroicons-chevron-down" 
+                                :trailing="true" 
+                                class="mt-2" 
+                                @click="toggleUiPropertyAccordion('colors', color.value)"
+                                :label="uiPropertyAccordionState.colors[color.value] ? 'Hide additional properties' : 'Show additional properties'"
+                            />
                         </UFormField>
+                        <div v-if="uiPropertyAccordionState.colors[color.value]" class="pl-4 border-l-2 border-gray-200 mt-2 mb-4 space-y-4">
+                            <div v-for="uiProp in uiProperties" :key="uiProp" v-show="uiProp !== uiRootName">
+                                <UFormField :label="uiProp">
+                                    <Combobox :model-value="getUiPropertyClassesRef('colors', color.value, uiProp)" @update:model-value="val => updateUiPropertyClass(uiProp, 'colors', color.value, val)" />
+                                </UFormField>
+                            </div>
+                        </div>
                     </div>
                 </template>
                 <template #sizes="{ item }">
@@ -91,8 +125,25 @@
                         class="mb-4"
                     >
                         <UFormField :label="size">
-                            <Combobox v-model="sizeClasses[size]" />
+                            <Combobox :model-value="sizeClasses[size]" @update:model-value="val => sizeClasses[size] = val" />
+                            <UButton 
+                                size="xs" 
+                                color="neutral" 
+                                variant="ghost" 
+                                icon="i-heroicons-chevron-down" 
+                                :trailing="true" 
+                                class="mt-2" 
+                                @click="toggleUiPropertyAccordion('sizes', size)"
+                                :label="uiPropertyAccordionState.sizes[size] ? 'Hide additional properties' : 'Show additional properties'"
+                            />
                         </UFormField>
+                        <div v-if="uiPropertyAccordionState.sizes[size]" class="pl-4 border-l-2 border-gray-200 mt-2 mb-4 space-y-4">
+                            <div v-for="uiProp in uiProperties" :key="uiProp" v-show="uiProp !== uiRootName">
+                                <UFormField :label="uiProp">
+                                    <Combobox :model-value="getUiPropertyClassesRef('sizes', size, uiProp)" @update:model-value="val => updateUiPropertyClass(uiProp, 'sizes', size, val)" />
+                                </UFormField>
+                            </div>
+                        </div>
                     </div>
                 </template>
             </UTabs>
@@ -107,6 +158,9 @@ import { twMerge } from 'tailwind-merge'
 
 const themeStore = useThemeStore()
 const componentConfigStore = useComponentConfigStore()
+
+// Type for component config store methods
+type ConfigType = 'variants' | 'colors' | 'sizes'
 const componentConfigs = useComponentPreviewConfig()
 const props = defineProps({
   component: {
@@ -114,9 +168,9 @@ const props = defineProps({
     required: true
   }
 })
-const sizes = ['xs', 'sm', 'md', 'lg', 'xl'];
+const sizes: string[] = ['xs', 'sm', 'md', 'lg', 'xl'];
 const config = computed(() => componentConfigs.componentConfigs[props.component])
-const uiRootName = computed(() => config?.value?.ui?.[0] || 'base');
+const uiRootName = computed<string>(() => config.value?.ui?.[0] || 'base');
 const variant = ref('solid')
 const color = ref<ThemeVariable>('primary')
 const size = ref('md')
@@ -134,6 +188,9 @@ const showIcon = ref(false)
 const variantClasses = ref<Record<string, string>>({})
 const colorClasses = ref<Record<string, string>>({})
 const sizeClasses = ref<Record<string, string>>({})
+
+// Store for additional UI properties classes
+const uiPropertiesClasses = ref<Record<string, Record<string, string>>>({})  // { property: { variant/color/size: classes } }
 
 const customizableTabs = computed(() => {
     return config.value?.customizable.map((customizable) => {
@@ -154,9 +211,27 @@ watch(variantClasses, (newValue) => {
                 'variants',
                 variant,
                 uiRootName.value,
-                typeof classes === 'string' ? classes.split(' ') : Array.isArray(classes) ? classes : []
+                typeof classes === 'string' ? classes.split(' ').filter(Boolean) : Array.isArray(classes) ? classes : []
             )
         }
+    })
+}, { deep: true })
+
+// Watch for changes in UI properties classes and save to store
+watch(uiPropertiesClasses, (newValue) => {
+    Object.entries(newValue).forEach(([uiProp, propClasses]) => {
+        Object.entries(propClasses).forEach(([typeAndKey, classes]) => {
+            if (classes) {
+                const [type, key] = typeAndKey.split(':') as [ConfigType, string]
+                componentConfigStore.setClasses(
+                    props.component,
+                    type as ConfigType,
+                    key,
+                    uiProp,
+                    typeof classes === 'string' ? classes.split(' ').filter(Boolean) : Array.isArray(classes) ? classes : []
+                )
+            }
+        })
     })
 }, { deep: true })
 
@@ -168,7 +243,7 @@ watch(colorClasses, (newValue) => {
                 'colors',
                 color,
                 uiRootName.value,
-                typeof classes === 'string' ? classes.split(' ') : Array.isArray(classes) ? classes : []
+                typeof classes === 'string' ? classes.split(' ').filter(Boolean) : Array.isArray(classes) ? classes : []
             )
         }
     })
@@ -182,7 +257,7 @@ watch(sizeClasses, (newValue) => {
                 'sizes',
                 size,
                 uiRootName.value,
-                typeof classes === 'string' ? classes.split(' ') : Array.isArray(classes) ? classes : []
+                typeof classes === 'string' ? classes.split(' ').filter(Boolean) : Array.isArray(classes) ? classes : []
             )
         }
     })
@@ -205,6 +280,26 @@ onMounted(() => {
             if (classes.length > 0) {
                 variantClasses.value[variant] = classes.join(' ')
             }
+            
+            // Load additional UI properties for variants
+            if (config.value?.ui) {
+                config.value.ui.forEach(uiProp => {
+                    if (uiProp !== uiRootName.value) {
+                        const propClasses = componentConfigStore.getClasses(
+                            props.component,
+                            'variants',
+                            variant,
+                            uiProp
+                        )
+                        if (propClasses.length > 0) {
+                            if (!uiPropertiesClasses.value[uiProp]) {
+                                uiPropertiesClasses.value[uiProp] = {}
+                            }
+                            uiPropertiesClasses.value[uiProp][`variants:${variant}`] = propClasses.join(' ')
+                        }
+                    }
+                })
+            }
         })
     }
     
@@ -219,6 +314,26 @@ onMounted(() => {
             )
             if (classes.length > 0) {
                 colorClasses.value[colorObj.value] = classes.join(' ')
+            }
+            
+            // Load additional UI properties for colors
+            if (config.value?.ui) {
+                config.value.ui.forEach(uiProp => {
+                    if (uiProp !== uiRootName.value) {
+                        const propClasses = componentConfigStore.getClasses(
+                            props.component,
+                            'colors',
+                            colorObj.value,
+                            uiProp
+                        )
+                        if (propClasses.length > 0) {
+                            if (!uiPropertiesClasses.value[uiProp]) {
+                                uiPropertiesClasses.value[uiProp] = {}
+                            }
+                            uiPropertiesClasses.value[uiProp][`colors:${colorObj.value}`] = propClasses.join(' ')
+                        }
+                    }
+                })
             }
         })
     }
@@ -235,15 +350,120 @@ onMounted(() => {
             if (classes.length > 0) {
                 sizeClasses.value[size] = classes.join(' ')
             }
+            
+            // Load additional UI properties for sizes
+            if (config.value?.ui) {
+                config.value.ui.forEach(uiProp => {
+                    if (uiProp !== uiRootName.value) {
+                        const propClasses = componentConfigStore.getClasses(
+                            props.component,
+                            'sizes',
+                            size,
+                            uiProp
+                        )
+                        if (propClasses.length > 0) {
+                            if (!uiPropertiesClasses.value[uiProp]) {
+                                uiPropertiesClasses.value[uiProp] = {}
+                            }
+                            uiPropertiesClasses.value[uiProp][`sizes:${size}`] = propClasses.join(' ')
+                        }
+                    }
+                })
+            }
         })
     }
 })
 
-const getMergedClasses = (variant: string, color: string, size: string) => {
-    return twMerge(
-        sizeClasses.value[size],
-        colorClasses.value[color],
-        variantClasses.value[variant],
-    )
+// Helper function to get or create a reference to a UI property class
+const getUiPropertyClassesRef = (type: ConfigType, key: string, uiProp: string): string[] => {
+    if (!uiPropertiesClasses.value[uiProp]) {
+        uiPropertiesClasses.value[uiProp] = {}
+    }
+    
+    const typeKey = `${type}:${key}`
+    if (!uiPropertiesClasses.value[uiProp][typeKey]) {
+        uiPropertiesClasses.value[uiProp][typeKey] = ''
+    }
+    
+    return stringToArray(uiPropertiesClasses.value[uiProp][typeKey])
+}
+
+// Helper function to update a UI property class
+const updateUiPropertyClass = (uiProp: string, type: ConfigType, key: string, value: string | string[]): void => {
+    if (!uiPropertiesClasses.value[uiProp]) {
+        uiPropertiesClasses.value[uiProp] = {}
+    }
+    
+    uiPropertiesClasses.value[uiProp][`${type}:${key}`] = Array.isArray(value) ? value.join(' ') : value
+}
+
+// Accordion state for UI properties
+const uiPropertyAccordionState = ref({
+    variants: {} as Record<string, boolean>,
+    colors: {} as Record<string, boolean>,
+    sizes: {} as Record<string, boolean>
+})
+
+// Toggle accordion state for UI properties
+const toggleUiPropertyAccordion = (type: ConfigType, key: string): void => {
+    if (!uiPropertyAccordionState.value[type][key]) {
+        uiPropertyAccordionState.value[type][key] = true
+    } else {
+        uiPropertyAccordionState.value[type][key] = !uiPropertyAccordionState.value[type][key]
+    }
+}
+
+// Get all UI properties from config
+const uiProperties = computed<string[]>(() => {
+    return config.value?.ui || []
+})
+
+// Helper function to convert string to string array
+const stringToArray = (value: string | string[] | undefined): string[] => {
+    if (!value) return [];
+    if (Array.isArray(value)) return value;
+    return value.split(' ').filter(Boolean);
+}
+
+// Get merged classes for a specific UI property
+const getMergedClassesForProperty = (property: string, variant: string, color: string, size: string): string => {
+    const variantKey = `variants:${variant}`
+    const colorKey = `colors:${color}`
+    const sizeKey = `sizes:${size}`
+    
+    // If this is the root property (base/root), use the main classes
+    if (property === uiRootName.value) {
+        return twMerge(
+            sizeClasses.value[size],
+            colorClasses.value[color],
+            variantClasses.value[variant],
+        )
+    }
+    
+    // Otherwise use the property-specific classes
+    if (uiPropertiesClasses.value[property]) {
+        return twMerge(
+            uiPropertiesClasses.value[property][sizeKey] || '',
+            uiPropertiesClasses.value[property][colorKey] || '',
+            uiPropertiesClasses.value[property][variantKey] || '',
+        )
+    }
+    
+    return ''
+}
+
+// Create the complete UI object with all properties
+const getMergedUiObject = (variant: string, color: string, size: string): Record<string, string> => {
+    const result: Record<string, string> = {}
+    
+    // Add all UI properties to the result object
+    uiProperties.value.forEach(property => {
+        const classes = getMergedClassesForProperty(property, variant, color, size)
+        if (classes) {
+            result[property] = classes
+        }
+    })
+    
+    return result
 }
 </script>
