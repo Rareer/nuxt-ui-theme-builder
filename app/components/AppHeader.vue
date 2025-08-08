@@ -15,6 +15,14 @@
         @click="exportTheme"
         :loading="isExporting"
       />
+      <!-- Generate Theme with AI Button -->
+      <UButton
+        icon="i-lucide-sparkles"
+        color="primary"
+        variant="soft"
+        aria-label="Generate theme with AI"
+        @click="openAIModal"
+      />
       <!-- Theme Configuration Button -->
       <UButton
         icon="i-lucide-palette"
@@ -125,11 +133,15 @@
       </div>
     </template>
   </UModal>
+  
+  <!-- AI Generate Theme Modal -->
+  <AIGenerateThemeModal ref="aiModal" />
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import VariableConfigurator from './VariableConfigurator.vue';
+import AIGenerateThemeModal from './AIGenerateThemeModal.vue';
 import { useThemeExport } from '../composables/useThemeExport';
 
 const colorMode = useColorMode();
@@ -145,6 +157,8 @@ const {
   isHighlighterReady,
   closeExportModal 
 } = useThemeExport();
+
+const aiModal = ref<InstanceType<typeof AIGenerateThemeModal> | null>(null)
 
 const items = ref([
     {
@@ -167,6 +181,10 @@ const items = ref([
 ])
 function toggleDark() {
   colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark';
+}
+
+function openAIModal() {
+  aiModal.value?.show()
 }
 
 // Copy text to clipboard
