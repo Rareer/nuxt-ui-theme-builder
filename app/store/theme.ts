@@ -37,7 +37,10 @@ export const predefinedCssVariables: CssVariableMapping[] = [
   { name: 'ui-border', type: 'color-reference', value: 'neutral-200', label: 'Border', category: 'Border' },
   { name: 'ui-border-muted', type: 'color-reference', value: 'neutral-200', label: 'Border Muted', category: 'Border' },
   { name: 'ui-border-accented', type: 'color-reference', value: 'neutral-300', label: 'Border Accented', category: 'Border' },
-  { name: 'ui-border-inverted', type: 'color-reference', value: 'neutral-900', label: 'Border Inverted', category: 'Border' }
+  { name: 'ui-border-inverted', type: 'color-reference', value: 'neutral-900', label: 'Border Inverted', category: 'Border' },
+
+    // Radius-Variablen
+    { name: 'ui-radius', type: 'direct-value', value: '0.25rem', label: 'Radius', category: 'Radius' },
 ];
 
 export const useThemeStore = defineStore('theme', {
