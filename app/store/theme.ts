@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
-import { useColorsStore } from './colors';
-
-// Definiere die Theme-Variablen, die wir zuweisen können
-export type ThemeVariable = 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'error';
+import { THEME_VARIABLES } from '../constants/theme';
+import type { ThemeVariable } from '../constants/theme';
+import { buildThemeCssVariables } from '../utils/themeCss';
+import { normalizeColorName } from '../utils/colors';
 
 // Definiere die zusätzlichen CSS-Variablen
 export type CssVariableType = 'color-reference' | 'direct-value';
@@ -64,7 +64,7 @@ export const useThemeStore = defineStore('theme', {
   getters: {
     // Gibt alle Theme-Variablen zurück
     getThemeVariables(): ThemeVariable[] {
-      return ['primary', 'secondary', 'success', 'info', 'warning', 'error'];
+      return THEME_VARIABLES;
     },
     
     // Gibt alle CSS-Variablen zurück
@@ -105,52 +105,16 @@ export const useThemeStore = defineStore('theme', {
 
     // Gibt alle CSS-Variablen für die Theme-Vorschau zurück
     getThemeCssVariables(): Record<string, string> {
-      const colorStore = useColorsStore();
-      const result: Record<string, string> = {};
-      
-      // Für jede Theme-Variable
-      Object.entries(this.mappings).forEach(([variable, colorName]) => {
-        if (!colorName) return;
-        
-        // Normalize color name to ensure consistency with CSS variable naming in ThemePreview.vue
-        const normalizedColorName = colorName.toLowerCase().replace(/\s+/g, '-');
-        
-        // Setze die Hauptvariable als Referenz auf die 500er Farbvariable
-        result[`--ui-${variable}`] = `var(--ui-color-${normalizedColorName}-500)`;
-        
-        // Generiere die CSS-Variablen für jede Abstufung
-        const shades = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950'];
-        shades.forEach(shade => {
-          result[`--ui-${variable}-${shade}`] = `var(--ui-color-${normalizedColorName}-${shade})`;
-        });
-      });
-      
-      // Für jede zusätzliche CSS-Variable
-      Object.values(this.cssVariableMappings).forEach(variable => {
-        if (variable && variable.type === 'color-reference') {
-          // Format: 'neutral-500' -> split into colorName and shade
-          const [colorName, shade] = variable.value.split('-');
-          if (colorName && shade) {
-            // Ensure color name is already normalized in the reference
-            // No need to normalize here as it should be normalized when set in ThemeMapping.vue
-            result[`--${variable.name}`] = `var(--ui-color-${colorName}-${shade})`;
-          }
-        } else if (variable && variable.type === 'direct-value') {
-          // Direkter Wert (z.B. #ffffff)
-          result[`--${variable.name}`] = variable.value || '';
-        }
-      });
-      
-      return result;
+      // build from mappings and additional css variables
+      return buildThemeCssVariables(this.mappings as Record<ThemeVariable, string | null>, this.cssVariableMappings);
     }
   },
 
   actions: {
     // Setzt die Zuordnung für eine Theme-Variable
     setMapping(variable: ThemeVariable, colorName: string | null) {
-      // Normalize color name to ensure consistency with CSS variable naming
-      // This matches the normalization in ThemePreview.vue
-      this.mappings[variable] = colorName ? colorName : null;
+      // Normalize color name to ensure consistency across the app
+      this.mappings[variable] = colorName ? normalizeColorName(colorName) : null;
     },
 
     // Löscht die Zuordnung für eine Theme-Variable

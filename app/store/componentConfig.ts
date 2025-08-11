@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 // Import the component preview config to access UI element names
 import { useComponentPreviewConfig } from '~/composables/useComponentPreviewConfig';
+import { THEME_VARIABLES, SIZES, type PropertyType } from '../constants/theme';
 
 // Define the structure for component configuration
 export interface ComponentClassConfig {
@@ -48,7 +49,7 @@ export const useComponentConfigStore = defineStore('componentConfig', {
     /**
      * Initialize a property configuration (variants, colors, sizes) if it doesn't exist
      */
-    initPropertyConfig(componentName: string, propertyType: string) {
+    initPropertyConfig(componentName: string, propertyType: PropertyType) {
       this.initComponentConfig(componentName);
       
       if (this.componentsConfig[componentName]) {
@@ -64,7 +65,7 @@ export const useComponentConfigStore = defineStore('componentConfig', {
      */
     setClasses(
       componentName: string, 
-      propertyType: string, 
+      propertyType: PropertyType, 
       propertyValue: string, 
       uiElement: string, 
       classes: string[]
@@ -91,7 +92,7 @@ export const useComponentConfigStore = defineStore('componentConfig', {
      */
     getClasses(
       componentName: string, 
-      propertyType: string, 
+      propertyType: PropertyType, 
       propertyValue: string, 
       uiElement: string
     ): string[] {
@@ -184,8 +185,7 @@ export const useComponentConfigStore = defineStore('componentConfig', {
         
         // Initialize colors
         if (Array.isArray(config.customizable) && config.customizable.includes('colors') && config.hasColors) {
-          const themeVariables = ['primary', 'secondary', 'success', 'info', 'warning', 'error'];
-          themeVariables.forEach((color: string) => {
+          THEME_VARIABLES.forEach((color: string) => {
             // Only initialize if no classes are set yet
             const existingClasses = this.getClasses(componentName, 'colors', color, baseElement || 'base');
             if (existingClasses.length === 0) {
@@ -196,8 +196,7 @@ export const useComponentConfigStore = defineStore('componentConfig', {
         
         // Initialize sizes
         if (Array.isArray(config.customizable) && config.customizable.includes('sizes') && config.hasSizes) {
-          const sizes = ['xs', 'sm', 'md', 'lg', 'xl'];
-          sizes.forEach((size: string) => {
+          SIZES.forEach((size: string) => {
             // Only initialize if no classes are set yet
             const existingClasses = this.getClasses(componentName, 'sizes', size, baseElement || 'base');
             if (existingClasses.length === 0) {

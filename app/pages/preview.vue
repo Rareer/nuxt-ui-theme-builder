@@ -13,15 +13,15 @@
 
 <!-- Hero Section -->
 <section class="text-center space-y-6">
-  <h1 class="text-4xl font-bold">Willkommen bei Nuxtify <UBadge color="green">Beta</UBadge></h1>
+  <h1 class="text-4xl font-bold">Willkommen bei Nuxtlify <UBadge color="primary">Beta</UBadge></h1>
   <p class="text-gray-500 text-lg max-w-2xl mx-auto">
     Die moderne Lösung für deine Webprojekte – schnell, schön und modular dank Nuxt UI.
   </p>
   <div class="flex justify-center gap-4">
-    <UButton color="primary" size="lg" icon="i-heroicons-play-circle">
+    <UButton color="primary" variant="solid" size="lg" icon="i-heroicons-play-circle">
       Jetzt starten
     </UButton>
-    <UButton color="gray" size="lg" variant="outline">Mehr erfahren</UButton>
+    <UButton color="neutral" size="lg" variant="soft">Mehr erfahren</UButton>
   </div>
 </section>
 
