@@ -95,6 +95,42 @@ export const useColorsStore = defineStore('colors', {
           950: '#0a0a0a',
         }
       };
+    },
+
+    // Persist the current store state to LocalStorage
+    saveToLocalStorage() {
+      if (typeof window === 'undefined') return;
+      const key = `store:${this.$id}`;
+      try {
+        localStorage.setItem(key, JSON.stringify(this.$state));
+      } catch (e) {
+        console.warn(`[colors] Failed to save state:`, e);
+      }
+    },
+
+    // Load the store state from LocalStorage
+    loadFromLocalStorage() {
+      if (typeof window === 'undefined') return;
+      const key = `store:${this.$id}`;
+      try {
+        const raw = localStorage.getItem(key);
+        if (raw) {
+          this.$patch(JSON.parse(raw));
+        }
+      } catch (e) {
+        console.warn(`[colors] Failed to load state:`, e);
+      }
+    },
+
+    // Remove any persisted state for this store
+    clearLocalStorage() {
+      if (typeof window === 'undefined') return;
+      const key = `store:${this.$id}`;
+      try {
+        localStorage.removeItem(key);
+      } catch (e) {
+        console.warn(`[colors] Failed to clear persisted state:`, e);
+      }
     }
   }
 });

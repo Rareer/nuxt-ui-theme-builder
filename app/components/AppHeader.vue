@@ -1,20 +1,11 @@
 <template>
-  <header class="h-16 px-6 flex items-center justify-between border-b border-gray-200 dark:border-gray-800">
+  <header class="h-16 px-6 flex items-center justify-between border-b border-gray-200 dark:border-gray-800 relative z-40">
     <div class="flex items-center">
     </div>
     <div class="flex items-center">
       <UNavigationMenu :items="items" orientation="horizontal" />
     </div>
-    <div class="flex items-center gap-4">
-      <!-- Export Theme Button -->
-      <UButton
-        icon="i-heroicons-arrow-down-tray"
-        color="success"
-        variant="soft"
-        aria-label="Export Theme"
-        @click="exportTheme"
-        :loading="isExporting"
-      />
+    <div class="flex items-center gap-4 ml-auto relative z-40">
       <!-- Generate Theme with AI Button -->
       <UButton
         icon="i-lucide-sparkles"
@@ -39,6 +30,21 @@
         aria-label="Toggle dark mode"
         @click="toggleDark"
       />
+            <!-- Actions Dropdown: Export, Speichern, Laden -->
+      <UDropdownMenu
+        :items="actionItems"
+        :popper="{ placement: 'bottom-end', strategy: 'fixed' }"
+        :teleport="true"
+        @select="onActionSelect"
+      >
+        <UButton
+          class="z-50"
+          icon="i-heroicons-ellipsis-vertical"
+          color="neutral"
+          variant="soft"
+          aria-label="Aktionen"
+        />
+      </UDropdownMenu>
     </div>
   </header>
   
@@ -133,6 +139,61 @@
       </div>
     </template>
   </UModal>
+
+  <!-- Save Theme Modal -->
+  <UModal v-model:open="isSaveModalOpen" size="md">
+    <template #header>
+      <div class="flex items-center justify-between w-full">
+        <h3 class="text-xl font-medium">Theme speichern</h3>
+        <UButton color="neutral" variant="ghost" icon="i-lucide-x" @click="isSaveModalOpen = false" />
+      </div>
+    </template>
+    <template #body>
+      <div class="space-y-4 p-2">
+        <UFormGroup label="Name" help="Gib einen eindeutigen Namen für das Theme ein">
+          <UInput v-model="saveName" placeholder="z.B. Meine Marke" />
+        </UFormGroup>
+      </div>
+    </template>
+    <template #footer>
+      <div class="flex justify-end gap-2">
+        <UButton color="neutral" variant="soft" @click="isSaveModalOpen = false">Abbrechen</UButton>
+        <UButton color="primary" :disabled="!saveName.trim()" @click="handleSaveTheme">Speichern</UButton>
+      </div>
+    </template>
+  </UModal>
+
+  <!-- Load Theme Modal -->
+  <UModal v-model:open="isLoadModalOpen" size="md">
+    <template #header>
+      <div class="flex items-center justify-between w-full">
+        <h3 class="text-xl font-medium">Theme laden</h3>
+        <UButton color="neutral" variant="ghost" icon="i-lucide-x" @click="isLoadModalOpen = false" />
+      </div>
+    </template>
+    <template #body>
+      <div class="p-2">
+        <div v-if="savedNames.length === 0" class="text-sm text-gray-500">Keine gespeicherten Themes vorhanden.</div>
+        <ul v-else class="divide-y divide-gray-200 dark:divide-gray-800">
+          <li v-for="name in savedNames" :key="name" class="flex items-center justify-between py-2">
+            <div class="flex flex-col">
+              <span class="font-medium">{{ name }}</span>
+              <span class="text-xs text-gray-500">{{ savedThemesStore.themes[name]?.updatedAt }}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <UButton size="sm" color="primary" variant="soft" icon="i-heroicons-arrow-down-tray" @click="handleLoadTheme(name)">Laden</UButton>
+              <UButton size="sm" color="error" variant="ghost" icon="i-heroicons-trash" @click="handleDeleteTheme(name)" />
+            </div>
+          </li>
+        </ul>
+      </div>
+    </template>
+    <template #footer>
+      <div class="flex justify-end">
+        <UButton color="neutral" @click="isLoadModalOpen = false">Schließen</UButton>
+      </div>
+    </template>
+  </UModal>
   
   <!-- AI Generate Theme Modal -->
   <AIGenerateThemeModal ref="aiModal" />
@@ -143,6 +204,7 @@ import { ref, computed } from 'vue';
 import VariableConfigurator from './VariableConfigurator.vue';
 import AIGenerateThemeModal from './AIGenerateThemeModal.vue';
 import { useThemeExport } from '../composables/useThemeExport';
+import { useSavedThemesStore } from '../store/savedThemes';
 
 const colorMode = useColorMode();
 const isThemeConfigOpen = ref(false);
@@ -159,6 +221,40 @@ const {
 } = useThemeExport();
 
 const aiModal = ref<InstanceType<typeof AIGenerateThemeModal> | null>(null)
+
+// Save/Load state
+const isSaveModalOpen = ref(false)
+const isLoadModalOpen = ref(false)
+const saveName = ref('')
+const savedThemesStore = useSavedThemesStore()
+const savedNames = computed(() => savedThemesStore.listNames)
+
+// Dropdown items with onSelect handlers and keys
+const actionItems = computed(() => ([
+  [
+    { label: 'Speichern', icon: 'i-heroicons-bookmark', key: 'save', onSelect: () => { isSaveModalOpen.value = true } },
+    { label: 'Laden', icon: 'i-heroicons-folder-open', key: 'load', onSelect: () => { isLoadModalOpen.value = true } },
+    { label: 'Exportieren', icon: 'i-heroicons-arrow-down-tray', key: 'export', onSelect: () => { exportTheme() } },
+  ]
+]))
+
+function onActionSelect(item: any) {
+  if (item?.onSelect && typeof item.onSelect === 'function') {
+    item.onSelect()
+    return
+  }
+  switch (item?.key) {
+    case 'save':
+      isSaveModalOpen.value = true
+      break
+    case 'load':
+      isLoadModalOpen.value = true
+      break
+    case 'export':
+      exportTheme()
+      break
+  }
+}
 
 const items = ref([
     {
@@ -181,6 +277,27 @@ function toggleDark() {
 
 function openAIModal() {
   aiModal.value?.show()
+}
+
+function handleSaveTheme() {
+  const name = saveName.value.trim()
+  if (!name) return
+  if (savedThemesStore.themes[name]) {
+    if (!confirm(`Theme "${name}" existiert bereits. Überschreiben?`)) return
+  }
+  savedThemesStore.saveTheme(name)
+  saveName.value = ''
+  isSaveModalOpen.value = false
+}
+
+async function handleLoadTheme(name: string) {
+  await savedThemesStore.loadTheme(name)
+  isLoadModalOpen.value = false
+}
+
+function handleDeleteTheme(name: string) {
+  if (!confirm(`Theme "${name}" löschen?`)) return
+  savedThemesStore.deleteTheme(name)
 }
 
 // Copy text to clipboard

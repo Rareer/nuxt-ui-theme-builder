@@ -15,11 +15,14 @@
         </main>
       </div>
     </div>
+    <!-- Global Loading Overlay -->
+    <GlobalLoadingOverlay />
   </UApp>
 </template>
 
 <script setup lang="ts">
 import { useThemeCss } from './composables/useThemeCss';
+import GlobalLoadingOverlay from './components/GlobalLoadingOverlay.vue';
 
 // Initialize global CSS variables
 useThemeCss();
