@@ -166,10 +166,6 @@ const items = ref([
         to: '/'
     },
     {
-        label: 'Pricing',
-        to: '/pricing'
-    },
-    {
         label: 'How to',
         to: '/how-to'
     },
