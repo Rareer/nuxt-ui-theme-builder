@@ -90,12 +90,30 @@ export function useUiClasses(params: {
     sizes: {} as Record<string, boolean>
   })
 
+  // Unified expanded state for generic UI keyed by `${type}:${key}`
+  const expandedKeys = ref<Set<string>>(new Set())
+
+  const makeCompositeKey = (type: ConfigType, key: string) => `${type}:${key}`
+
+  const isExpanded = (type: ConfigType, key: string) => {
+    return expandedKeys.value.has(makeCompositeKey(type, key))
+  }
+
+  const toggleExpanded = (type: ConfigType, key: string) => {
+    const k = makeCompositeKey(type, key)
+    if (expandedKeys.value.has(k)) expandedKeys.value.delete(k)
+    else expandedKeys.value.add(k)
+  }
+
+  // Backwards compatible toggler used by current template
   const toggleUiPropertyAccordion = (type: ConfigType, key: string) => {
     if (!uiPropertyAccordionState.value[type][key]) {
       uiPropertyAccordionState.value[type][key] = true
     } else {
       uiPropertyAccordionState.value[type][key] = !uiPropertyAccordionState.value[type][key]
     }
+    // keep unified state in sync
+    toggleExpanded(type, key)
   }
 
   // Initialization: load classes from store
@@ -230,6 +248,7 @@ export function useUiClasses(params: {
     uiPropertiesClasses,
     uiProperties,
     uiPropertyAccordionState,
+    expandedKeys,
     // helpers
     stringToArray,
     getUiPropertyClassesRef,
@@ -237,6 +256,26 @@ export function useUiClasses(params: {
     getMergedClassesForProperty,
     getMergedUiObject,
     toggleUiPropertyAccordion,
+    // generic helpers
+    isExpanded,
+    toggleExpanded,
+    getKeyClasses: (type: ConfigType, key: string): string[] => {
+      if (type === 'variants') return variantClasses.value[key] || []
+      if (type === 'colors') return colorClasses.value[key] || []
+      return sizeClasses.value[key] || []
+    },
+    setKeyClasses: (type: ConfigType, key: string, classes: string[] | string) => {
+      const arr = Array.isArray(classes) ? classes : classes.split(' ').filter(Boolean)
+      if (type === 'variants') variantClasses.value[key] = arr
+      else if (type === 'colors') colorClasses.value[key] = arr
+      else sizeClasses.value[key] = arr
+    },
+    getUiSlotClasses: (type: ConfigType, key: string, uiProp: string): string[] => {
+      return getUiPropertyClassesRef(type, key, uiProp)
+    },
+    setUiSlotClasses: (type: ConfigType, key: string, uiProp: string, value: string[] | string) => {
+      updateUiPropertyClass(uiProp, type, key, value)
+    },
     // lifecycle helpers
     initialize,
     setupWatchers,

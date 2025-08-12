@@ -66,7 +66,7 @@
                         class="mb-4"
                     >
                         <UFormField :label="variant">
-                            <Combobox :model-value="variantClasses[variant] || []" @update:model-value="val => variantClasses[variant] = val" />
+                            <Combobox :model-value="getKeyClasses('variants', variant)" @update:model-value="val => setKeyClasses('variants', variant, val)" />
                             <UButton 
                                 size="xs" 
                                 color="neutral" 
@@ -74,14 +74,14 @@
                                 icon="i-heroicons-chevron-down" 
                                 :trailing="true" 
                                 class="mt-2" 
-                                @click="toggleUiPropertyAccordion('variants', variant)"
-                                :label="uiPropertyAccordionState.variants[variant] ? 'Hide additional properties' : 'Show additional properties'"
+                                @click="toggleExpanded('variants', variant)"
+                                :label="isExpanded('variants', variant) ? 'Hide additional properties' : 'Show additional properties'"
                             />
                         </UFormField>
-                        <div v-if="uiPropertyAccordionState.variants[variant]" class="pl-4 border-l-2 border-gray-200 mt-2 mb-4 space-y-4">
+                        <div v-if="isExpanded('variants', variant)" class="pl-4 border-l-2 border-gray-200 mt-2 mb-4 space-y-4">
                             <div v-for="uiProp in uiProperties" :key="uiProp" v-show="uiProp !== uiRootName">
                                 <UFormField :label="uiProp">
-                                    <Combobox :model-value="getUiPropertyClassesRef('variants', variant, uiProp)" @update:model-value="val => updateUiPropertyClass(uiProp, 'variants', variant, val)" />
+                                    <Combobox :model-value="getUiSlotClasses('variants', variant, uiProp)" @update:model-value="val => setUiSlotClasses('variants', variant, uiProp, val)" />
                                 </UFormField>
                             </div>
                         </div>
@@ -94,7 +94,7 @@
                         class="mb-4"
                     >
                         <UFormField :label="color.value">
-                            <Combobox :model-value="colorClasses[color.value] || []" @update:model-value="val => colorClasses[color.value] = val" />
+                            <Combobox :model-value="getKeyClasses('colors', color.value)" @update:model-value="val => setKeyClasses('colors', color.value, val)" />
                             <UButton 
                                 size="xs" 
                                 color="neutral" 
@@ -102,14 +102,14 @@
                                 icon="i-heroicons-chevron-down" 
                                 :trailing="true" 
                                 class="mt-2" 
-                                @click="toggleUiPropertyAccordion('colors', color.value)"
-                                :label="uiPropertyAccordionState.colors[color.value] ? 'Hide additional properties' : 'Show additional properties'"
+                                @click="toggleExpanded('colors', color.value)"
+                                :label="isExpanded('colors', color.value) ? 'Hide additional properties' : 'Show additional properties'"
                             />
                         </UFormField>
-                        <div v-if="uiPropertyAccordionState.colors[color.value]" class="pl-4 border-l-2 border-gray-200 mt-2 mb-4 space-y-4">
+                        <div v-if="isExpanded('colors', color.value)" class="pl-4 border-l-2 border-gray-200 mt-2 mb-4 space-y-4">
                             <div v-for="uiProp in uiProperties" :key="uiProp" v-show="uiProp !== uiRootName">
                                 <UFormField :label="uiProp">
-                                    <Combobox :model-value="getUiPropertyClassesRef('colors', color.value, uiProp)" @update:model-value="val => updateUiPropertyClass(uiProp, 'colors', color.value, val)" />
+                                    <Combobox :model-value="getUiSlotClasses('colors', color.value, uiProp)" @update:model-value="val => setUiSlotClasses('colors', color.value, uiProp, val)" />
                                 </UFormField>
                             </div>
                         </div>
@@ -122,7 +122,7 @@
                         class="mb-4"
                     >
                         <UFormField :label="size">
-                            <Combobox :model-value="sizeClasses[size] || []" @update:model-value="val => sizeClasses[size] = val" />
+                            <Combobox :model-value="getKeyClasses('sizes', size)" @update:model-value="val => setKeyClasses('sizes', size, val)" />
                             <UButton 
                                 size="xs" 
                                 color="neutral" 
@@ -130,14 +130,14 @@
                                 icon="i-heroicons-chevron-down" 
                                 :trailing="true" 
                                 class="mt-2" 
-                                @click="toggleUiPropertyAccordion('sizes', size)"
-                                :label="uiPropertyAccordionState.sizes[size] ? 'Hide additional properties' : 'Show additional properties'"
+                                @click="toggleExpanded('sizes', size)"
+                                :label="isExpanded('sizes', size) ? 'Hide additional properties' : 'Show additional properties'"
                             />
                         </UFormField>
-                        <div v-if="uiPropertyAccordionState.sizes[size]" class="pl-4 border-l-2 border-gray-200 mt-2 mb-4 space-y-4">
+                        <div v-if="isExpanded('sizes', size)" class="pl-4 border-l-2 border-gray-200 mt-2 mb-4 space-y-4">
                             <div v-for="uiProp in uiProperties" :key="uiProp" v-show="uiProp !== uiRootName">
                                 <UFormField :label="uiProp">
-                                    <Combobox :model-value="getUiPropertyClassesRef('sizes', size, uiProp)" @update:model-value="val => updateUiPropertyClass(uiProp, 'sizes', size, val)" />
+                                    <Combobox :model-value="getUiSlotClasses('sizes', size, uiProp)" @update:model-value="val => setUiSlotClasses('sizes', size, uiProp, val)" />
                                 </UFormField>
                             </div>
                         </div>
@@ -149,7 +149,7 @@
 </template>
 
 <script setup lang="ts">
-import { useThemeStore, type ThemeVariable } from '~/store/theme'
+import { useThemeStore } from '~/store/theme'
 import { useComponentConfigStore } from '~/store/componentConfig'
 import { useUiClasses } from '~/composables/useUiClasses'
 
@@ -171,7 +171,7 @@ const config = computed(() => componentConfigs.componentConfigs[props.component]
 const uiRootName = computed<string>(() => config.value?.ui?.[0] || 'base');
 
 const variant = ref('solid')
-const color = ref<ThemeVariable>('primary')
+const color = ref<any>('primary')
 const size = ref('md')
 
 const colors = computed(() => {
@@ -199,6 +199,13 @@ const {
   getMergedClassesForProperty,
   getMergedUiObject,
   toggleUiPropertyAccordion,
+  // new generic helpers
+  getKeyClasses,
+  setKeyClasses,
+  isExpanded,
+  toggleExpanded,
+  getUiSlotClasses,
+  setUiSlotClasses,
   initialize,
   setupWatchers,
 } = useUiClasses({
