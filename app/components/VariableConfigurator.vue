@@ -153,7 +153,8 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, watch } from 'vue';
 import { useColorsStore } from '../store/colors';
-import { useThemeStore, type ThemeVariable, type CssVariableMapping, type CssVariableType } from '../store/theme';
+import { useThemeStore, type CssVariableMapping, type CssVariableType } from '../store/theme';
+import { type ThemeVariable } from '../constants/theme';
 import { getTailwindColorsAsColorObjects, getTailwindColorByName, isTailwindColor } from '../utils/tailwindColors';
 import type { Color } from '../types/color';
 
@@ -315,6 +316,12 @@ function isSelectedShade(variable: CssVariableMapping & { selectedColor?: string
 // Funktion zum Zurücksetzen aller CSS-Variablen auf Standardwerte
 function resetCssVariables() {
   themeStore.resetCssVariables();
+  // Zusätzlich: Theme-Variablen-Zuweisungen zurücksetzen
+  themeStore.clearAllMappings();
+  // UI zurücksetzen: Auswahl der Farben leeren
+  themeVariables.forEach(variable => {
+    selectedColors.value[variable] = '' as any;
+  });
 }
 
 // Hilfsfunktion für die Anzeige der Variablennamen
