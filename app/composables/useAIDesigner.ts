@@ -6,11 +6,12 @@ export type GenerateThemeResponse = {
 }
 
 export function useAIDesigner() {
-  async function generateThemeFromPrompt(prompt: string, model?: string): Promise<GenerateThemeResponse> {
+  async function generateThemeFromPrompt(prompt: string, model?: string, apiKey?: string): Promise<GenerateThemeResponse> {
     try {
       const { data, error } = await useFetch('/api/generate-theme', {
         method: 'POST',
         body: { prompt, model },
+        headers: apiKey ? { 'x-openai-key': apiKey } : undefined,
       })
 
       // unwrap

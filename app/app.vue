@@ -17,12 +17,14 @@
     </div>
     <!-- Global Loading Overlay -->
     <GlobalLoadingOverlay />
+    <Analytics />
   </UApp>
 </template>
 
 <script setup lang="ts">
 import { useThemeCss } from './composables/useThemeCss';
 import GlobalLoadingOverlay from './components/GlobalLoadingOverlay.vue';
+import { Analytics } from '@vercel/analytics/nuxt'
 
 // Initialize global CSS variables
 useThemeCss();

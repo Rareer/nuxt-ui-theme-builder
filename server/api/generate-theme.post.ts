@@ -1,4 +1,4 @@
-import { defineEventHandler, readBody } from 'h3'
+import { defineEventHandler, readBody, getHeader } from 'h3'
 import { z } from 'zod'
 import { generateObject } from 'ai'
 import { createOpenAI } from '@ai-sdk/openai'
@@ -77,10 +77,11 @@ export default defineEventHandler(async (event) => {
       return { error: 'Missing prompt' }
     }
 
-    // Initialize provider (requires OPENAI_API_KEY)
-    const apiKey = process.env.OPENAI_API_KEY
+    // Initialize provider (use header key if provided, else env)
+    const headerKey = getHeader(event, 'x-openai-key') || ''
+    const apiKey = headerKey || process.env.OPENAI_API_KEY
     if (!apiKey) {
-      return { error: 'Missing OPENAI_API_KEY on server' }
+      return { error: 'Missing OpenAI API key. Provide one in the modal or set OPENAI_API_KEY on the server.' }
     }
     const openai = createOpenAI({ apiKey })
 

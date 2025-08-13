@@ -17,6 +17,7 @@
     "@iconify-json/simple-icons": "^1.2.44",
     "@nuxt/ui": "^3.3.0",
     "@pinia/nuxt": "^0.11.2",
+    "@vercel/analytics": "^1.5.0",
     "ai": "^5.0.8",
     "nuxt": "^4.0.1",
     "pinia": "^3.0.3",
