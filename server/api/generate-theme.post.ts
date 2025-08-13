@@ -61,8 +61,10 @@ Rules:
 - Generate a compact but complete color palette with shades 50..950 for each color.
 - Use accessible contrast and harmonious scales.
 - Colors must be named in kebab-case (e.g., "ocean-blue", "neutral").
+- Note the semantic meaning of the colors for info, warning and error and use appropriate colors here. (e.g. a red color for warning)
 - themeMappings map variables (primary, secondary, success, info, warning, error) to a base color name without shade.
-- cssVariables should be an array of additional UI variables. For color-reference values use "<colorName>-<shade>" (e.g., "neutral-500").
+- IMPORTANT: Only produce theme variables (colors array and themeMappings). Do NOT generate CSS, other CSS variables, or component configs.
+- Set css to an empty string or omit it. Set cssVariables to an empty array []. Omit componentsConfig.
 - Do not include comments or extra fields. Only valid JSON matching the schema.`
 
 export default defineEventHandler(async (event) => {
@@ -110,12 +112,10 @@ export default defineEventHandler(async (event) => {
       ) as any
     }
 
-    const cssVarsArr = Array.isArray(parsed.cssVariables) ? parsed.cssVariables : []
-    parsed.cssVariables = cssVarsArr.map(v => ({
-      ...v,
-      name: normalizeName(v.name),
-      value: v.value.trim(),
-    }))
+    // Enforce: Only return theme variables (colors + themeMappings). Strip other fields.
+    parsed.css = undefined as any
+    parsed.componentsConfig = undefined as any
+    parsed.cssVariables = []
 
     return { data: parsed }
   } catch (e: any) {
