@@ -1,11 +1,8 @@
 {
   "app": {
-    "name": "NuxtUI Theme Builder"
+    "name": "Theme Builder für NuxtUI"
   },
   "nav": {
-    "home": "Startseite",
-    "howto": "Anleitung",
-    "pro": "Pro"
   },
   "actions": {
     "actions": "Aktionen",
@@ -34,6 +31,11 @@
     "appConfig": "app.config.ts",
     "mainCss": "main.css",
     "noThemes": "Keine gespeicherten Themes vorhanden."
+  },
+  "locale": {
+    "language": "Sprache",
+    "en": "Englisch",
+    "de": "Deutsch"
   },
   "ai": {
     "title": "Farben mit KI generieren",

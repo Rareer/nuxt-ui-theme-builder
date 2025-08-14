@@ -230,7 +230,17 @@ const saveName = ref('')
 const savedThemesStore = useSavedThemesStore()
 const savedNames = computed(() => savedThemesStore.listNames)
 
-const { t } = useI18n()
+const { t, availableLocales } = useI18n()
+const route = useRoute()
+const localePath = useLocalePath()
+
+// Locale switch items built with localePath for RouterLink :to
+const localeItems = computed(() => (
+  ((availableLocales as unknown as string[]) || []).map((l) => ({
+    label: t(`locale.${l}` as any),
+    to: localePath(route.fullPath, l as any)
+  }))
+))
 
 // Dropdown items with onSelect handlers and keys
 const actionItems = computed(() => ([
@@ -238,6 +248,10 @@ const actionItems = computed(() => ([
     { label: t('actions.save'), icon: 'i-heroicons-bookmark', key: 'save', onSelect: () => { isSaveModalOpen.value = true } },
     { label: t('actions.load'), icon: 'i-heroicons-folder-open', key: 'load', onSelect: () => { isLoadModalOpen.value = true } },
     { label: t('actions.export'), icon: 'i-heroicons-arrow-down-tray', key: 'export', onSelect: () => { exportTheme() } },
+  ],
+  [
+    { label: t('locale.language'), icon: 'i-heroicons-globe-alt', disabled: true },
+    ...localeItems.value
   ]
 ]))
 
@@ -260,19 +274,6 @@ function onActionSelect(item: any) {
 }
 
 const items = computed(() => ([
-  {
-    label: t('nav.home'),
-    to: '/'
-  },
-  {
-    label: t('nav.howto'),
-    to: '/how-to'
-  },
-  {
-    label: t('nav.pro'),
-    to: '/profeatures',
-    icon: 'i-heroicons-star-20-solid'
-  },
 ]))
 function toggleDark() {
   colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark';

@@ -1,11 +1,8 @@
 {
   "app": {
-    "name": "NuxtUI Theme Builder"
+    "name": "Theme Builder for NuxtUI"
   },
   "nav": {
-    "home": "Home",
-    "howto": "How to",
-    "pro": "Pro"
   },
   "actions": {
     "actions": "Actions",
@@ -34,6 +31,11 @@
     "appConfig": "app.config.ts",
     "mainCss": "main.css",
     "noThemes": "No saved themes found."
+  },
+  "locale": {
+    "language": "Language",
+    "en": "English",
+    "de": "Deutsch"
   },
   "ai": {
     "title": "Generate Colors with AI",
