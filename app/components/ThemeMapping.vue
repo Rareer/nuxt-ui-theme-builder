@@ -2,10 +2,8 @@
   <div class="space-y-10">
     <!-- Theme-Variablen Sektion -->
     <div class="space-y-6">
-      <h2 class="text-xl font-bold">Theme-Variablen zuweisen</h2>
-      <p class="text-sm text-neutral-500">
-        Weise deine erstellten Farben den Nuxt UI Theme-Variablen zu, um das Erscheinungsbild der UI-Komponenten anzupassen.
-      </p>
+      <h2 class="text-xl font-bold">{{ t('themeMapping.assignTitle') }}</h2>
+      <p class="text-sm text-neutral-500">{{ t('themeMapping.assignDesc') }}</p>
     <ThemePreview>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       <div 
@@ -23,7 +21,7 @@
             class="w-full"
             v-model="selectedColors[variable]"
             :items="colorOptions"
-            placeholder="Farbe auswählen"
+            :placeholder="t('themeMapping.selectColor')"
           />
         </UFormField>
 
@@ -43,10 +41,8 @@
     
     <!-- CSS-Variablen Sektion -->
     <div class="space-y-6">
-      <h2 class="text-xl font-bold">CSS-Variablen anpassen</h2>
-      <p class="text-sm text-neutral-500">
-        Passe die zusätzlichen CSS-Variablen an, die für spezielle UI-Elemente verwendet werden.
-      </p>
+      <h2 class="text-xl font-bold">{{ t('themeMapping.cssTitle') }}</h2>
+      <p class="text-sm text-neutral-500">{{ t('themeMapping.cssDesc') }}</p>
         <div v-for="(variables, category) in cssVariablesByCategory" :key="category" class="mb-8">
           <h3 class="font-medium text-lg mb-4">{{ category }}</h3>
           
@@ -61,7 +57,7 @@
         </div>
         
         <div class="mt-4">
-          <UButton color="neutral" @click="resetCssVariables">Auf Standardwerte zurücksetzen</UButton>
+          <UButton color="neutral" @click="resetCssVariables">{{ t('themeMapping.resetAll') }}</UButton>
         </div>
     </div>
   </div>
@@ -75,11 +71,13 @@ import { type ThemeVariable } from '../constants/theme';
 import { getTailwindColorsAsColorObjects } from '../utils/tailwindColors';
 import { useColorUtils } from '../composables/useColorUtils';
 import CssVariableEditor from './CssVariableEditor.vue';
+import { useI18n } from 'vue-i18n';
 
 // Nuxt UI components should be auto-imported
 
 const colorStore = useColorsStore();
 const themeStore = useThemeStore();
+const { t } = useI18n();
 
 // Verfügbare Theme-Variablen
 const themeVariables = themeStore.getThemeVariables;

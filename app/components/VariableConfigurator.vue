@@ -2,10 +2,8 @@
   <div class="space-y-8 p-4">
     <!-- Theme-Variablen Sektion -->
     <div class="space-y-6">
-      <h2 class="text-xl font-bold">Theme-Variablen zuweisen</h2>
-      <p class="text-sm text-neutral-500">
-        Weise deine erstellten Farben den Nuxt UI Theme-Variablen zu, um das Erscheinungsbild der UI-Komponenten anzupassen.
-      </p>
+      <h2 class="text-xl font-bold">{{ t('variableConfigurator.assignTitle') }}</h2>
+      <p class="text-sm text-neutral-500">{{ t('variableConfigurator.assignDesc') }}</p>
       <ThemePreview>
         <div class="grid grid-cols-1 gap-4">
           <div 
@@ -23,7 +21,7 @@
                 class="w-full"
                 v-model="selectedColors[variable]"
                 :items="colorOptions"
-                placeholder="Farbe auswählen"
+                :placeholder="t('variableConfigurator.selectColor')"
               />
             </UFormField>
 
@@ -43,10 +41,8 @@
     
     <!-- CSS-Variablen Sektion -->
     <div class="space-y-6">
-      <h2 class="text-xl font-bold">CSS-Variablen anpassen</h2>
-      <p class="text-sm text-neutral-500">
-        Passe die zusätzlichen CSS-Variablen an, die für spezielle UI-Elemente verwendet werden.
-      </p>
+      <h2 class="text-xl font-bold">{{ t('variableConfigurator.cssTitle') }}</h2>
+      <p class="text-sm text-neutral-500">{{ t('variableConfigurator.cssDesc') }}</p>
       <div class="space-y-4">
         <UAccordion
           v-if="Object.keys(cssVariablesByCategory).length > 0"
@@ -78,7 +74,7 @@
                   <!-- Typ-Auswahl -->
                   <URadioGroup
                     v-model="variable.type"
-                    :items="[{label: 'Farbreferenz', value: 'color-reference'}, {label: 'Direkter Wert', value: 'direct-value'}]"
+                    :items="[{label: t('variableConfigurator.colorRef'), value: 'color-reference'}, {label: t('variableConfigurator.directValue'), value: 'direct-value'}]"
                     @update:model-value="updateCssVariable(variable)"
                   />
                   
@@ -88,7 +84,7 @@
                       <USelect
                         v-model="variable.selectedColor"
                         :items="colorOptions"
-                        placeholder="Farbe auswählen"
+                        :placeholder="t('variableConfigurator.selectColor')"
                         class="w-full"
                         @update:model-value="updateSelectedColor(variable)"
                       />
@@ -96,7 +92,7 @@
                     
                     <!-- Shade-Auswahl durch Klick -->
                     <div v-if="variable.selectedColor" class="mt-3">
-                      <div class="text-xs text-neutral-500 mb-1">Shade auswählen:</div>
+                      <div class="text-xs text-neutral-500 mb-1">{{ t('variableConfigurator.selectShade') }}</div>
                       <div class="flex flex-wrap gap-1">
                         <div 
                           v-for="shade in shades" 
@@ -144,7 +140,7 @@
       </div>
       
       <div class="mt-4">
-        <UButton color="neutral" @click="resetCssVariables">Auf Standardwerte zurücksetzen</UButton>
+        <UButton color="neutral" @click="resetCssVariables">{{ t('variableConfigurator.resetAll') }}</UButton>
       </div>
     </div>
   </div>
@@ -157,6 +153,7 @@ import { useThemeStore, type CssVariableMapping, type CssVariableType } from '..
 import { type ThemeVariable } from '../constants/theme';
 import { getTailwindColorsAsColorObjects, getTailwindColorByName, isTailwindColor } from '../utils/tailwindColors';
 import type { Color } from '../types/color';
+import { useI18n } from 'vue-i18n';
 
 // Type für Farbwerte mit String-Index
 interface ColorValues {
@@ -165,6 +162,7 @@ interface ColorValues {
 
 const colorStore = useColorsStore();
 const themeStore = useThemeStore();
+const { t } = useI18n();
 
 // Verfügbare Theme-Variablen
 const themeVariables = themeStore.getThemeVariables;
@@ -217,7 +215,7 @@ const colorOptions = computed(() => {
   // Eigene Farben Header
   if (colorStore.colors.length > 0) {
     options.push({
-      label: '--- Eigene Farben ---',
+      label: `--- ${t('variableConfigurator.customColorsHeader')} ---`,
       value: 'separator-custom',
       disabled: true
     });
@@ -233,7 +231,7 @@ const colorOptions = computed(() => {
   
   // Tailwind Farben Header
   options.push({
-    label: '--- Tailwind Farben ---',
+    label: `--- ${t('variableConfigurator.tailwindColorsHeader')} ---`,
     value: 'separator-tailwind',
     disabled: true
   });

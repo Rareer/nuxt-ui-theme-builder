@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useAIDesigner } from '~/composables/useAIDesigner'
 import { useThemeImport } from '~/composables/useThemeImport'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps<{ model?: string }>()
 const emit = defineEmits<{ (e: 'close'): void; (e: 'imported'): void }>()
@@ -9,7 +10,8 @@ const emit = defineEmits<{ (e: 'close'): void; (e: 'imported'): void }>()
 const open = ref(false)
 const loading = ref(false)
 const error = ref<string | null>(null)
-const prompt = ref('Design a modern, soft, accessible theme with a calming primary and vibrant accent.')
+const { t } = useI18n()
+const prompt = ref(t('ai.defaultPrompt'))
 const apiKey = ref('')
 
 const { generateThemeFromPrompt } = useAIDesigner()
@@ -43,7 +45,7 @@ async function onGenerate() {
 
     const payload = res.data
     if (!payload) {
-      error.value = 'Empty AI response'
+      error.value = t('ai.errorEmpty')
       return
     }
 
@@ -53,7 +55,7 @@ async function onGenerate() {
       !('themeMappings' in payload) &&
       !('cssVariables' in payload)
     ) {
-      error.value = 'Unexpected AI response format'
+      error.value = t('ai.errorFormat')
       return
     }
 
@@ -62,7 +64,7 @@ async function onGenerate() {
     emit('imported')
     hide()
   } catch (e: any) {
-    error.value = e?.message || 'Unexpected error'
+    error.value = e?.message || t('ai.errorUnexpected')
   } finally {
     loading.value = false
   }
@@ -76,18 +78,18 @@ defineExpose({ show, hide })
   <UModal v-model:open="open">
       <template #header>
         <div class="flex items-center justify-between w-full">
-          <h3 class="text-base font-semibold">Generate Colors with AI</h3>
+          <h3 class="text-base font-semibold">{{ $t('ai.title') }}</h3>
           <UButton icon="i-lucide-x" color="neutral" variant="ghost" @click="hide" />
         </div>
       </template>
       <template #body> 
       <div class="space-y-3">
-        <UFormField label="OpenAI API Key" help="Your key is stored only in your browser and sent with this request.">
-          <UInput :model-value="apiKey" type="password" class="w-full" placeholder="sk-..." @update:model-value="onApiKeyInput" />
+        <UFormField :label="$t('ai.apiKeyLabel')" :help="$t('ai.apiKeyHelp')">
+          <UInput :model-value="apiKey" type="password" class="w-full" :placeholder="$t('ai.apiKeyPlaceholder')" @update:model-value="onApiKeyInput" />
         </UFormField>
 
-        <UFormField label="Prompt" help="Describe the desired style, mood, and constraints.">
-          <UTextarea v-model="prompt" :rows="6" class="w-full" placeholder="e.g., A clean, minimalist theme with soft neutrals and a bold accent..." />
+        <UFormField :label="$t('ai.promptLabel')" :help="$t('ai.promptHelp')">
+          <UTextarea v-model="prompt" :rows="6" class="w-full" :placeholder="$t('ai.promptPlaceholder')" />
         </UFormField>
 
         <div v-if="error" class="text-red-600 text-sm">{{ error }}</div>
@@ -95,9 +97,9 @@ defineExpose({ show, hide })
       </template>
       <template #footer>
         <div class="flex justify-end w-full gap-2">
-          <UButton color="neutral" variant="ghost" @click="hide">Cancel</UButton>
+          <UButton color="neutral" variant="ghost" @click="hide">{{ $t('ai.btnCancel') }}</UButton>
           <UButton :loading="loading" icon="i-lucide-sparkles" @click="onGenerate">
-            Generate & Import
+            {{ $t('ai.btnGenerate') }}
           </UButton>
         </div>
       </template>

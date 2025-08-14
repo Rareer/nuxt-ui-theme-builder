@@ -11,7 +11,7 @@
         icon="i-lucide-sparkles"
         color="primary"
         variant="soft"
-        aria-label="Generate theme with AI"
+        :aria-label="$t('header.generateWithAI')"
         @click="openAIModal"
       />
       <!-- Theme Configuration Button -->
@@ -19,7 +19,7 @@
         icon="i-lucide-palette"
         color="primary"
         variant="soft"
-        aria-label="Theme Configuration"
+        :aria-label="$t('header.themeConfig')"
         @click="isThemeConfigOpen = true"
       />
       <!-- Dark Mode Toggle -->
@@ -27,7 +27,7 @@
         icon="i-heroicons-moon-20-solid"
         color="neutral"
         variant="soft"
-        aria-label="Toggle dark mode"
+        :aria-label="$t('header.toggleDark')"
         @click="toggleDark"
       />
             <!-- Actions Dropdown: Export, Speichern, Laden -->
@@ -42,7 +42,7 @@
           icon="i-heroicons-ellipsis-vertical"
           color="neutral"
           variant="soft"
-          aria-label="Aktionen"
+          :aria-label="$t('actions.actions')"
         />
       </UDropdownMenu>
     </div>
@@ -52,7 +52,7 @@
   <USlideover v-model:open="isThemeConfigOpen" side="right" :width="500">
     <template #header>
       <div class="flex items-center justify-between w-full">
-        <h3 class="text-xl font-medium">Theme-Konfiguration</h3>
+        <h3 class="text-xl font-medium">{{ $t('header.themeConfig') }}</h3>
         <UButton color="neutral" variant="ghost" icon="i-lucide-x" @click="isThemeConfigOpen = false" />
       </div>
     </template>
@@ -68,7 +68,7 @@
   <UModal v-model:open="isExportModalOpen" size="xl" class="max-w-4xl">
     <template #header>
       <div class="flex items-center justify-between w-full">
-        <h3 class="text-xl font-medium">Theme Export</h3>
+        <h3 class="text-xl font-medium">{{ $t('header.exportTitle') }}</h3>
         <UButton color="neutral" variant="ghost" icon="i-lucide-x" @click="closeExportModal" />
       </div>
     </template>
@@ -78,7 +78,7 @@
         <!-- app.config.ts -->
         <div>
           <div class="flex items-center align-center justify-between mb-2">
-            <label for="app-config" class="block text-sm font-medium">app.config.ts</label>
+            <label for="app-config" class="block text-sm font-medium">{{ $t('header.appConfig') }}</label>
             <UButton
               icon="i-heroicons-clipboard"
               color="primary"
@@ -106,7 +106,7 @@
         <!-- main.css -->
         <div>
           <div class="flex items-center align-center justify-between mb-2">
-            <label for="main-css" class="block text-sm font-medium">main.css</label>
+            <label for="main-css" class="block text-sm font-medium">{{ $t('header.mainCss') }}</label>
             <UButton
               icon="i-heroicons-clipboard"
               color="primary"
@@ -135,7 +135,7 @@
     
     <template #footer>
       <div class="flex justify-end">
-        <UButton color="neutral" @click="closeExportModal">Schließen</UButton>
+        <UButton color="neutral" @click="closeExportModal">{{ $t('actions.close') }}</UButton>
       </div>
     </template>
   </UModal>
@@ -144,21 +144,21 @@
   <UModal v-model:open="isSaveModalOpen" size="md">
     <template #header>
       <div class="flex items-center justify-between w-full">
-        <h3 class="text-xl font-medium">Theme speichern</h3>
+        <h3 class="text-xl font-medium">{{ $t('header.saveTitle') }}</h3>
         <UButton color="neutral" variant="ghost" icon="i-lucide-x" @click="isSaveModalOpen = false" />
       </div>
     </template>
     <template #body>
       <div class="space-y-4 p-2">
-        <UFormGroup label="Name" help="Gib einen eindeutigen Namen für das Theme ein">
-          <UInput v-model="saveName" placeholder="z.B. Meine Marke" />
-        </UFormGroup>
+        <UFormField :label="$t('actions.save')">
+          <UInput v-model="saveName" :placeholder="$t('actions.themeName')" />
+        </UFormField>
       </div>
     </template>
     <template #footer>
       <div class="flex justify-end gap-2">
-        <UButton color="neutral" variant="soft" @click="isSaveModalOpen = false">Abbrechen</UButton>
-        <UButton color="primary" :disabled="!saveName.trim()" @click="handleSaveTheme">Speichern</UButton>
+        <UButton color="neutral" variant="soft" @click="isSaveModalOpen = false">{{ $t('actions.close') }}</UButton>
+        <UButton color="primary" :disabled="!saveName.trim()" @click="handleSaveTheme">{{ $t('actions.save') }}</UButton>
       </div>
     </template>
   </UModal>
@@ -167,13 +167,13 @@
   <UModal v-model:open="isLoadModalOpen" size="md">
     <template #header>
       <div class="flex items-center justify-between w-full">
-        <h3 class="text-xl font-medium">Theme laden</h3>
+        <h3 class="text-xl font-medium">{{ $t('header.loadTitle') }}</h3>
         <UButton color="neutral" variant="ghost" icon="i-lucide-x" @click="isLoadModalOpen = false" />
       </div>
     </template>
     <template #body>
       <div class="p-2">
-        <div v-if="savedNames.length === 0" class="text-sm text-gray-500">Keine gespeicherten Themes vorhanden.</div>
+        <div v-if="savedNames.length === 0" class="text-sm text-gray-500">{{ $t('header.noThemes') }}</div>
         <ul v-else class="divide-y divide-gray-200 dark:divide-gray-800">
           <li v-for="name in savedNames" :key="name" class="flex items-center justify-between py-2">
             <div class="flex flex-col">
@@ -181,7 +181,7 @@
               <span class="text-xs text-gray-500">{{ savedThemesStore.themes[name]?.updatedAt }}</span>
             </div>
             <div class="flex items-center gap-2">
-              <UButton size="sm" color="primary" variant="soft" icon="i-heroicons-arrow-down-tray" @click="handleLoadTheme(name)">Laden</UButton>
+              <UButton size="sm" color="primary" variant="soft" icon="i-heroicons-arrow-down-tray" @click="handleLoadTheme(name)">{{ $t('actions.load') }}</UButton>
               <UButton size="sm" color="error" variant="ghost" icon="i-heroicons-trash" @click="handleDeleteTheme(name)" />
             </div>
           </li>
@@ -190,7 +190,7 @@
     </template>
     <template #footer>
       <div class="flex justify-end">
-        <UButton color="neutral" @click="isLoadModalOpen = false">Schließen</UButton>
+        <UButton color="neutral" @click="isLoadModalOpen = false">{{ $t('actions.close') }}</UButton>
       </div>
     </template>
   </UModal>
@@ -205,6 +205,7 @@ import VariableConfigurator from './VariableConfigurator.vue';
 import AIGenerateThemeModal from './AIGenerateThemeModal.vue';
 import { useThemeExport } from '../composables/useThemeExport';
 import { useSavedThemesStore } from '../store/savedThemes';
+import { useI18n } from 'vue-i18n';
 
 const colorMode = useColorMode();
 const isThemeConfigOpen = ref(false);
@@ -229,12 +230,14 @@ const saveName = ref('')
 const savedThemesStore = useSavedThemesStore()
 const savedNames = computed(() => savedThemesStore.listNames)
 
+const { t } = useI18n()
+
 // Dropdown items with onSelect handlers and keys
 const actionItems = computed(() => ([
   [
-    { label: 'Speichern', icon: 'i-heroicons-bookmark', key: 'save', onSelect: () => { isSaveModalOpen.value = true } },
-    { label: 'Laden', icon: 'i-heroicons-folder-open', key: 'load', onSelect: () => { isLoadModalOpen.value = true } },
-    { label: 'Exportieren', icon: 'i-heroicons-arrow-down-tray', key: 'export', onSelect: () => { exportTheme() } },
+    { label: t('actions.save'), icon: 'i-heroicons-bookmark', key: 'save', onSelect: () => { isSaveModalOpen.value = true } },
+    { label: t('actions.load'), icon: 'i-heroicons-folder-open', key: 'load', onSelect: () => { isLoadModalOpen.value = true } },
+    { label: t('actions.export'), icon: 'i-heroicons-arrow-down-tray', key: 'export', onSelect: () => { exportTheme() } },
   ]
 ]))
 
@@ -256,21 +259,21 @@ function onActionSelect(item: any) {
   }
 }
 
-const items = ref([
-    {
-        label: 'Startseite',
-        to: '/'
-    },
-    {
-        label: 'How to',
-        to: '/how-to'
-    },
-    {
-        label: 'Pro',
-        to: '/profeatures',
-        icon: 'i-heroicons-star-20-solid'
-    },
-])
+const items = computed(() => ([
+  {
+    label: t('nav.home'),
+    to: '/'
+  },
+  {
+    label: t('nav.howto'),
+    to: '/how-to'
+  },
+  {
+    label: t('nav.pro'),
+    to: '/profeatures',
+    icon: 'i-heroicons-star-20-solid'
+  },
+]))
 function toggleDark() {
   colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark';
 }
@@ -283,7 +286,7 @@ function handleSaveTheme() {
   const name = saveName.value.trim()
   if (!name) return
   if (savedThemesStore.themes[name]) {
-    if (!confirm(`Theme "${name}" existiert bereits. Überschreiben?`)) return
+    if (!confirm(t('header.overwriteConfirm', { name }))) return
   }
   savedThemesStore.saveTheme(name)
   saveName.value = ''
@@ -296,7 +299,7 @@ async function handleLoadTheme(name: string) {
 }
 
 function handleDeleteTheme(name: string) {
-  if (!confirm(`Theme "${name}" löschen?`)) return
+  if (!confirm(t('header.deleteConfirm', { name }))) return
   savedThemesStore.deleteTheme(name)
 }
 
