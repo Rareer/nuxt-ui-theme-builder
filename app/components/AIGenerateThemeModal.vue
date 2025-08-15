@@ -53,6 +53,7 @@ async function onGenerate() {
     if (
       !('colors' in payload) &&
       !('themeMappings' in payload) &&
+      !('themeMappingsDark' in payload) &&
       !('cssVariables' in payload)
     ) {
       error.value = t('ai.errorFormat')

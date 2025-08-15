@@ -1,5 +1,6 @@
 import { useColorsStore } from '../store/colors'
-import { useThemeStore, type CssVariableMapping, type ThemeVariable } from '../store/theme'
+import { useThemeStore, type CssVariableMapping } from '../store/theme'
+import type { ThemeVariable } from '../constants/theme'
 import { useComponentConfigStore, type ComponentsConfig } from '../store/componentConfig'
 import type { Color } from '../types/color'
 
@@ -10,6 +11,8 @@ export type ThemeImportPayload = {
   colors?: Color[]
   // Theme variable -> color name mapping (e.g., { primary: 'blue' })
   themeMappings?: Partial<Record<ThemeVariable, string | null>>
+  // Dark mode mappings
+  themeMappingsDark?: Partial<Record<ThemeVariable, string | null>>
   // Additional CSS variables (array or record)
   cssVariables?: CssVariableMapping[] | Record<string, CssVariableMapping>
   // Component configuration
@@ -171,7 +174,10 @@ export function useThemeImport() {
       acc[v] = null
       return acc
     }, {} as Record<ThemeVariable, string | null>)
-    themeStore.$patch({ mappings: clearedMappings, cssVariableMappings: {} })
+    themeStore.$patch({
+      mappings: { light: { ...clearedMappings }, dark: { ...clearedMappings } },
+      cssVariableMappings: { light: {}, dark: {} }
+    })
     componentConfigStore.$patch({ componentsConfig: {} as ComponentsConfig })
   }
 
@@ -202,11 +208,11 @@ export function useThemeImport() {
     return added
   }
 
-  function importThemeMappings(mappings: Partial<Record<ThemeVariable, string | null>> | undefined) {
+  function importThemeMappings(mappings: Partial<Record<ThemeVariable, string | null>> | undefined, mode?: 'light' | 'dark') {
     const applied: Array<{ variable: ThemeVariable; color: string | null }> = []
     if (!mappings) return applied
     ;(Object.entries(mappings) as Array<[ThemeVariable, string | null]>).forEach(([variable, color]) => {
-      themeStore.setMapping(variable, color ? normalizeColorName(color) : null)
+      themeStore.setMapping(variable, color ? normalizeColorName(color) : null, mode)
       applied.push({ variable, color: color ? normalizeColorName(color) : null })
     })
     return applied
@@ -279,9 +285,15 @@ export function useThemeImport() {
     }
 
     if (payload.themeMappings) {
-      const applied = importThemeMappings(payload.themeMappings)
+      const applied = importThemeMappings(payload.themeMappings, 'light')
       summary.imported.mappings += applied.length
       summary.details.mappings.push(...applied)
+    }
+
+    if (payload.themeMappingsDark) {
+      const appliedDark = importThemeMappings(payload.themeMappingsDark, 'dark')
+      summary.imported.mappings += appliedDark.length
+      summary.details.mappings.push(...appliedDark)
     }
 
     if (payload.cssVariables) {

@@ -71,7 +71,7 @@
     "errorEmpty": "Leere KI-Antwort",
     "errorFormat": "Unerwartetes KI-Antwortformat",
     "errorUnexpected": "Unerwarteter Fehler",
-    "defaultPrompt": "Entwirf ein modernes, weiches, barrierefreies Theme mit beruhigendem Primär- und lebhaftem Akzent."
+    "defaultPrompt": "Entwirf ein modernes, weiches, barrierefreies Theme mit beruhigendem Primär- und lebhaftem Akzent. Erzeuge Zuordnungen für LIGHT und DARK Mode. Für den DARK Mode wähle Grundfarben, die explizit für dunkle UIs geeignet sind und farbschematisch zum LIGHT-Mode passen (gleiche Familie, für Kontrast angepasst). Liefere nur Theme-Variablen und Mappings."
   },
   "index": {
     "heroTitle": "Theme Builder für NuxtUI",
