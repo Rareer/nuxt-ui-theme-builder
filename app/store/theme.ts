@@ -48,11 +48,11 @@ export const predefinedCssVariables: CssVariableMapping[] = [
 // Dark defaults derived from current darkOverrides in useThemeCss
 const darkDefaultOverrides: Record<string, { type: CssVariableType; value: string }> = {
   // Background
-  'ui-bg': { type: 'color-reference', value: 'neutral-900' },
-  'ui-bg-muted': { type: 'color-reference', value: 'neutral-800' },
-  'ui-bg-elevated': { type: 'color-reference', value: 'neutral-700' },
-  'ui-bg-accented': { type: 'color-reference', value: 'neutral-600' },
-  'ui-bg-inverted': { type: 'color-reference', value: 'neutral-50' },
+  'ui-bg': { type: 'color-reference', value: 'slate-900' },
+  'ui-bg-muted': { type: 'color-reference', value: 'slate-800' },
+  'ui-bg-elevated': { type: 'color-reference', value: 'slate-700' },
+  'ui-bg-accented': { type: 'color-reference', value: 'slate-600' },
+  'ui-bg-inverted': { type: 'color-reference', value: 'slate-500' },
   // Text
   'ui-text': { type: 'direct-value', value: '#ffffff' },
   'ui-text-dimmed': { type: 'color-reference', value: 'neutral-400' },
@@ -63,7 +63,7 @@ const darkDefaultOverrides: Record<string, { type: CssVariableType; value: strin
   'ui-border': { type: 'color-reference', value: 'neutral-800' },
   'ui-border-muted': { type: 'color-reference', value: 'neutral-800' },
   'ui-border-accented': { type: 'color-reference', value: 'neutral-700' },
-  'ui-border-inverted': { type: 'color-reference', value: 'neutral-50' }
+  'ui-border-inverted': { type: 'color-reference', value: 'neutral-800' }
 }
 
 function buildPredefinedForMode(mode: ThemeMode): CssVariableMapping[] {

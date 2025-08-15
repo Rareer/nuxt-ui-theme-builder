@@ -6,7 +6,7 @@
         color="primary"
         @click="isAddModalOpen = true"
       >
-        Neue Farbe
+        {{ $t('colorListing.addColor') }}
       </UButton>
     </div>
 
@@ -57,26 +57,26 @@
     <!-- Empty State -->
     <div v-else class="text-center py-10 ring ring-gray-200 rounded-lg">
       <UIcon name="i-heroicons-swatch" class="text-4xl text-gray-400 mx-auto mb-2" />
-      <p class="text-gray-500">Keine Custom Farben vorhanden</p>
+      <p class="text-gray-500">{{ $t('colorListing.emptyTitle') }}</p>
       <UButton class="mt-4" color="primary" @click="isAddModalOpen = true">
-        Erste Farbe hinzufügen
+        {{ $t('colorListing.emptyCta') }}
       </UButton>
     </div>
 
     <!-- Add/Edit Color Modal -->
     <UModal 
       v-model:open="isAddModalOpen" 
-      :title="isEditing ? 'Farbe bearbeiten' : 'Neue Farbe hinzufügen'" 
+      :title="isEditing ? $t('colorListing.modalEditTitle') : $t('colorListing.modalAddTitle')" 
       class="sm:max-w-md"
     >
       <!-- Modal trigger is not needed here as we're controlling it programmatically -->
       <template #body>
         <div class="space-y-4 p-4">
           <!-- Color Name -->
-          <UFormField label="Name" required>
+          <UFormField :label="$t('colorListing.nameLabel')" required>
             <UInput
               v-model="newColor.name"
-              placeholder="z.B. Blau, Rot, Grün"
+              :placeholder="$t('colorListing.namePlaceholder')"
               :disabled="isEditing"
             />
           </UFormField>
@@ -90,7 +90,7 @@
           </div>
           <!-- Preview Generated Colors -->
           <div v-if="baseColorHex" class="mt-4">
-            <p class="text-sm font-medium mb-2">Vorschau der Farbpalette:</p>
+            <p class="text-sm font-medium mb-2">{{ $t('colorListing.palettePreview') }}</p>
             <div class="flex gap-1 h-10 w-full">
               <div
                 v-for="(color, shade) in previewPalette"
@@ -111,14 +111,14 @@
             variant="soft"
             @click="isAddModalOpen = false"
           >
-            Abbrechen
+            {{ $t('actions.cancel') }}
           </UButton>
           <UButton
             color="primary"
             :disabled="!isFormValid"
             @click="saveColor"
           >
-            {{ isEditing ? 'Aktualisieren' : 'Hinzufügen' }}
+            {{ isEditing ? $t('colorListing.update') : $t('colorListing.add') }}
           </UButton>
         </div>
       </template>
@@ -127,14 +127,13 @@
     <!-- Delete Confirmation Modal -->
     <UModal 
       v-model:open="isDeleteModalOpen"
-      title="Farbe löschen"
+      :title="$t('colorListing.deleteTitle')"
     >
       <!-- Modal trigger is not needed here as we're controlling it programmatically -->
       <template #body>
         <div class="p-4">
           <p>
-            Bist du sicher, dass du die Farbe <strong>{{ colorToDelete }}</strong> löschen möchtest?
-            Diese Aktion kann nicht rückgängig gemacht werden.
+            {{ $t('colorListing.deleteConfirm', { name: colorToDelete }) }}
           </p>
         </div>
       </template>
@@ -146,13 +145,13 @@
             variant="soft"
             @click="isDeleteModalOpen = false"
           >
-            Abbrechen
+            {{ $t('actions.cancel') }}
           </UButton>
           <UButton
             color="error"
             @click="deleteColor"
           >
-            Löschen
+            {{ $t('actions.delete') }}
           </UButton>
         </div>
       </template>
@@ -162,9 +161,13 @@
 
 <script setup lang="ts">
 import { ref, computed, reactive } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useColorsStore } from '../store/colors';
 import { generateColorPalette } from '../utils/colorUtils';
 import type { Color } from '../types/color';
+
+// i18n
+const { t } = useI18n();
 
 // Store
 const colorStore = useColorsStore();
@@ -257,7 +260,7 @@ function saveColor() {
     resetForm();
   } catch (error) {
     // Handle error (e.g., duplicate name)
-    alert(`Fehler: ${(error as Error).message}`);
+    alert(`${t('colorListing.errorPrefix')}: ${(error as Error).message}`);
   }
 }
 
@@ -276,7 +279,7 @@ function deleteColor() {
     isDeleteModalOpen.value = false;
     colorToDelete.value = '';
   } catch (error) {
-    alert(`Fehler: ${(error as Error).message}`);
+    alert(`${t('colorListing.errorPrefix')}: ${(error as Error).message}`);
   }
 }
 </script>

@@ -230,15 +230,14 @@ const saveName = ref('')
 const savedThemesStore = useSavedThemesStore()
 const savedNames = computed(() => savedThemesStore.listNames)
 
-const { t, availableLocales } = useI18n()
-const route = useRoute()
-const localePath = useLocalePath()
+const { t, availableLocales, setLocale } = useI18n()
 
-// Locale switch items built with localePath for RouterLink :to
+// Locale switch items: set the locale directly to ensure immediate update
 const localeItems = computed(() => (
   ((availableLocales as unknown as string[]) || []).map((l) => ({
     label: t(`locale.${l}` as any),
-    to: localePath(route.fullPath, l as any)
+    key: `locale-${l}`,
+    onSelect: () => setLocale(l as any)
   }))
 ))
 

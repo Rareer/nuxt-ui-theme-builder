@@ -1,8 +1,29 @@
 {
   "app": {
-    "name": "Theme Builder for NuxtUI"
+    "name": "Theme Builder"
+  },
+  "colorListing": {
+    "addColor": "Add color",
+    "emptyTitle": "No custom colors yet",
+    "emptyCta": "Add your first color",
+    "modalEditTitle": "Edit color",
+    "modalAddTitle": "Add new color",
+    "nameLabel": "Name",
+    "namePlaceholder": "e.g., Blue, Red, Green",
+    "palettePreview": "Palette preview:",
+    "update": "Update",
+    "add": "Add",
+    "deleteTitle": "Delete color",
+    "deleteConfirm": "Are you sure you want to delete the color \"{name}\"? This action cannot be undone.",
+    "errorPrefix": "Error"
   },
   "nav": {
+    "navigation": "Navigation",
+    "home": "Home",
+    "globals": "Globals",
+    "customColors": "Custom Colors",
+    "preview": "Preview",
+    "components": "Components"
   },
   "actions": {
     "actions": "Actions",

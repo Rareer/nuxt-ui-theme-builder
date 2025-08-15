@@ -28,7 +28,7 @@
           <div 
             v-for="variable in themeVariables" 
             :key="variable"
-            class="ring ring-gray-200 rounded-lg p-4 space-y-3 flex flex-col gap-2"
+            class="border border-1 border-default rounded-lg p-4 space-y-3 flex flex-col gap-2"
           >
             <div class="flex items-center justify-between">
               <h3 class="font-medium">{{ getVariableLabel(variable) }}</h3>
@@ -81,7 +81,7 @@
               <div 
                 v-for="variable in cssVariablesByCategory[category]" 
                 :key="variable.name"
-                class="ring ring-gray-200 rounded-lg p-4 space-y-3"
+                class="border border-1 border-default rounded-lg p-4 space-y-3"
               >
                 <div class="flex items-center justify-between">
                   <h4 class="font-medium">{{ variable.label }}</h4>
