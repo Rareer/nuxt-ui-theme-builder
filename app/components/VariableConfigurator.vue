@@ -185,13 +185,13 @@ const { t } = useI18n();
 // Aktueller Editiermodus aus dem Store
 const currentMode = computed(() => themeStore.getEditMode);
 
+// Nutze Nuxt Color Mode als globale Quelle
+const colorMode = useColorMode();
+
 function setMode(mode: 'light'|'dark') {
   themeStore.setEditMode(mode);
-  if (process.client) {
-    const el = document.documentElement;
-    if (mode === 'dark') el.classList.add('dark');
-    else el.classList.remove('dark');
-  }
+  // Setze globale Color-Preference; Nuxt ColorMode handhabt die .dark-Klasse
+  colorMode.preference = mode;
 }
 
 // Verfügbare Theme-Variablen

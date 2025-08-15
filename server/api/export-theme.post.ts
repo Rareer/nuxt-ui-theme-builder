@@ -3,8 +3,9 @@ import { defineEventHandler, readBody } from 'h3'
 export default defineEventHandler(async (event) => {
   try {
     // Get theme variables, custom colors, and theme mappings from request body
-    const { themeVariables, customColors, themeMappings, exportMode } = await readBody<{ 
-      themeVariables: Record<string, string>,
+    const { themeVariables, themeVariablesByMode, customColors, themeMappings, exportMode } = await readBody<{ 
+      themeVariables?: Record<string, string>,
+      themeVariablesByMode?: { light?: Record<string, string>, dark?: Record<string, string> },
       customColors?: Array<{ name: string, values: Record<string, string> }>,
       // Accept either flat mapping or per-mode mapping coming from the new store
       themeMappings?: Record<string, string | null> | { light?: Record<string, string | null>, dark?: Record<string, string | null> },
@@ -12,7 +13,7 @@ export default defineEventHandler(async (event) => {
       exportMode?: 'light' | 'dark'
     }>(event)
     
-    if (!themeVariables) {
+    if (!themeVariables && !themeVariablesByMode) {
       return {
         success: false,
         error: 'No theme variables provided'
@@ -20,7 +21,7 @@ export default defineEventHandler(async (event) => {
     }
     
     // Generate CSS content with the theme variables and custom colors
-    const cssContent = generateCssContent(themeVariables, customColors)
+    const cssContent = generateCssContent({ themeVariables, themeVariablesByMode, customColors })
     
     // Generate app.config.ts content
     const appConfigContent = generateAppConfigContent(themeMappings, exportMode)
@@ -79,33 +80,43 @@ function generateAppConfigContent(
   return configContent;
 }
 
-function generateCssContent(themeVariables: Record<string, string>, customColors?: Array<{ name: string, values: Record<string, string> }>): string {
-  let cssContent = `@import "tailwindcss";\n@import "@nuxt/ui";\n\n:root {\n`
-  
-  // Add only non-theme CSS variables to the content
-  // Theme variables (--ui-primary, --ui-secondary, etc.) will be handled by Nuxt via app.config.ts
-  Object.entries(themeVariables).forEach(([key, value]) => {
-    // Skip theme variable assignments (primary, secondary, etc.)
-    if (!key.match(/^--ui-(primary|secondary|success|info|warning|error)(-\d+)?$/)) {
-      cssContent += `  ${key}: ${value};\n`
-    }
-  })
-  
-  cssContent += '}\n'
-  
-  // Add custom colors as CSS variables if they exist
+function generateCssContent(params: {
+  themeVariables?: Record<string, string>,
+  themeVariablesByMode?: { light?: Record<string, string>, dark?: Record<string, string> },
+  customColors?: Array<{ name: string, values: Record<string, string> }>
+}): string {
+  const { themeVariables, themeVariablesByMode, customColors } = params
+  let cssContent = `@import "tailwindcss";\n@import "@nuxt/ui";\n\n`
+
+  // Determine per-mode maps
+  const lightVars = themeVariablesByMode?.light || themeVariables || {}
+  const darkVars = themeVariablesByMode?.dark
+
+  // Helper to serialize vars excluding theme color assignments
+  const toLines = (vars: Record<string, string>) => Object.entries(vars)
+    .filter(([key]) => !/^--ui-(primary|secondary|success|info|warning|error)(-\d+)?$/.test(key))
+    .map(([key, value]) => `  ${key}: ${value};`)
+    .join('\n')
+
+  // :root block (light)
+  cssContent += `:root {\n${toLines(lightVars)}\n}\n`
+
+  // .dark block, if provided
+  if (darkVars && Object.keys(darkVars).length) {
+    cssContent += `\n.dark {\n${toLines(darkVars)}\n}\n`
+  }
+
+  // Add custom colors as CSS variables if they exist (on :root)
   if (customColors && customColors.length > 0) {
     cssContent += '\n/* Custom Colors */\n:root {\n'
-    
     customColors.forEach(color => {
       Object.entries(color.values).forEach(([shade, value]) => {
         cssContent += `  --color-${color.name.toLowerCase()}-${shade}: ${value};\n`
       })
     })
-    
     cssContent += '}\n'
   }
-  
+
   return cssContent
 }
 

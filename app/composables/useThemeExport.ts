@@ -35,8 +35,9 @@ export function useThemeExport() {
       isExporting.value = true
       exportError.value = null
 
-      // Get all theme CSS variables
-      const themeVariables = themeStore.getThemeCssVariables
+      // Get theme CSS variables per mode for CSS export
+      const themeVariablesLight = themeStore.getThemeCssVariablesByMode('light')
+      const themeVariablesDark = themeStore.getThemeCssVariablesByMode('dark')
       
       // Get all custom colors
       const customColors = colorsStore.getColors
@@ -53,7 +54,13 @@ export function useThemeExport() {
       }>('/api/export-theme', {
         method: 'POST',
         body: {
-          themeVariables,
+          // Keep single map for backward compatibility (use current mode)
+          themeVariables: themeStore.getThemeCssVariables,
+          // Provide both modes for CSS export
+          themeVariablesByMode: {
+            light: themeVariablesLight,
+            dark: themeVariablesDark
+          },
           customColors,
           themeMappings,
           exportMode: themeStore.getEditMode
