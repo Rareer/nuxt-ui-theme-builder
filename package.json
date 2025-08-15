@@ -14,24 +14,24 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
-    "@ai-sdk/openai": "^2.0.5",
-    "@iconify-json/lucide": "^1.2.58",
-    "@iconify-json/simple-icons": "^1.2.44",
-    "@nuxt/ui": "^3.3.0",
+    "@ai-sdk/openai": "^2.0.15",
+    "@iconify-json/lucide": "^1.2.62",
+    "@iconify-json/simple-icons": "^1.2.47",
+    "@nuxt/ui": "^3.3.2",
     "@nuxtjs/i18n": "^10.0.5",
     "@pinia/nuxt": "^0.11.2",
     "@vercel/analytics": "^1.5.0",
-    "ai": "^5.0.8",
-    "nuxt": "^4.0.1",
+    "ai": "^5.0.15",
+    "nuxt": "^4.0.3",
     "pinia": "^3.0.3",
     "shiki": "^3.9.2",
     "tailwind-merge": "^3.3.1",
     "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@nuxt/eslint": "^1.7.1",
+    "@nuxt/eslint": "^1.8.0",
     "@types/archiver": "^6.0.3",
-    "eslint": "^9.32.0",
+    "eslint": "^9.33.0",
     "typescript": "^5.8.3"
   }
 }

@@ -1,6 +1,7 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { enabled: true },
+  devtools: { 
+    enabled: true 
+  },
 
   modules: [
     '@nuxt/ui',
@@ -22,17 +23,29 @@ export default defineNuxtConfig({
 
   i18n: {
     locales: [
-      { code: 'de', name: 'Deutsch', file: 'de.json' },
-      { code: 'en', name: 'English', file: 'en.json' }
+      { 
+        code: 'de', 
+        name: 'Deutsch', 
+        file: 'de.json',
+      },
+      { 
+        code: 'en', 
+        name: 'English', 
+        file: 'en.json',
+      }
     ],
+
     defaultLocale: 'en',
+
     strategy: 'prefix_except_default',
+
     detectBrowserLanguage: {
       useCookie: true,
       cookieKey: 'i18n_redirected',
       alwaysRedirect: false,
       fallbackLocale: 'de'
     },
+
     langDir: 'locales'
   }
 })
