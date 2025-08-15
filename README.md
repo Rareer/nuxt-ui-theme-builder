@@ -1,7 +1,7 @@
 # Theme Builder for Nuxt UI - **Alpha Version**
 
 > [!NOTE]
-> This is no official contribution with Nuxt. 
+> Not officially affiliated with Nuxt.
 
 Production environment on
 https://nuxtlify.vercel.app

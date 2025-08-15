@@ -1,7 +1,7 @@
 <template>
-  <div class="theme-preview">
-    <slot></slot>
-  </div>
+	<div class="theme-preview">
+		<slot />
+	</div>
 </template>
 
 <style scoped>

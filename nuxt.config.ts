@@ -1,51 +1,62 @@
 export default defineNuxtConfig({
-  devtools: { 
-    enabled: true 
-  },
 
-  modules: [
-    '@nuxt/ui',
-    '@nuxt/eslint',
-    '@pinia/nuxt',
-    '@nuxtjs/i18n'
-  ],
+	modules: [
+		'@nuxt/ui',
+		'@nuxt/eslint',
+		'@pinia/nuxt',
+		'@nuxtjs/i18n',
+	],
 
-  css: ['~/assets/css/main.css'],
+	components: {
+		dirs: [
+			'~/components',
+		],
+		global: true,
+	},
+	devtools: {
+		enabled: true,
+	},
 
-  compatibilityDate: '2025-07-16',
-  
-  components: {
-    dirs: [
-      '~/components'
-    ],
-    global: true
-  },
+	css: ['~/assets/css/main.css'],
 
-  i18n: {
-    locales: [
-      { 
-        code: 'de', 
-        name: 'Deutsch', 
-        file: 'de.json',
-      },
-      { 
-        code: 'en', 
-        name: 'English', 
-        file: 'en.json',
-      }
-    ],
+	compatibilityDate: '2025-07-16',
 
-    defaultLocale: 'en',
+	eslint: {
+		config: {
+			tooling: true,
 
-    strategy: 'prefix_except_default',
+			stylistic: {
+				indent: 'tab',
+				semi: true,
+			},
+		},
+	},
 
-    detectBrowserLanguage: {
-      useCookie: true,
-      cookieKey: 'i18n_redirected',
-      alwaysRedirect: false,
-      fallbackLocale: 'de'
-    },
+	i18n: {
+		locales: [
+			{
+				code: 'de',
+				name: 'Deutsch',
+				file: 'de.json',
+			},
+			{
+				code: 'en',
+				name: 'English',
+				file: 'en.json',
+			},
+		],
 
-    langDir: 'locales'
-  }
-})
+		defaultLocale: 'en',
+
+		strategy: 'prefix_except_default',
+
+		detectBrowserLanguage: {
+			useCookie: true,
+			cookieKey: 'i18n_redirected',
+			alwaysRedirect: false,
+			fallbackLocale: 'de',
+		},
+
+		langDir: 'locales',
+	},
+});
