@@ -55,7 +55,8 @@ export function useThemeExport() {
         body: {
           themeVariables,
           customColors,
-          themeMappings
+          themeMappings,
+          exportMode: themeStore.getEditMode
         }
       })
 

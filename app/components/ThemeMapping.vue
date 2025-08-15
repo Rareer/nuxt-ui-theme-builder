@@ -4,7 +4,6 @@
     <div class="space-y-6">
       <h2 class="text-xl font-bold">{{ t('themeMapping.assignTitle') }}</h2>
       <p class="text-sm text-neutral-500">{{ t('themeMapping.assignDesc') }}</p>
-    <ThemePreview>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       <div 
         v-for="variable in themeVariables" 
@@ -36,7 +35,6 @@
         </div>
       </div>
     </div>
-    </ThemePreview>
     </div>
     
     <!-- CSS-Variablen Sektion -->

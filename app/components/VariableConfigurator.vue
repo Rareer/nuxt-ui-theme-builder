@@ -1,10 +1,29 @@
 <template>
   <div class="space-y-8 p-4">
+    <!-- Mode Toggle -->
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="text-sm text-neutral-500">Mode:</span>
+        <div class="inline-flex rounded-md overflow-hidden ring-1 ring-gray-200">
+          <UButton
+            :color="currentMode === 'light' ? 'primary' : 'neutral'"
+            variant="soft"
+            size="xs"
+            @click="setMode('light')"
+          >Light</UButton>
+          <UButton
+            :color="currentMode === 'dark' ? 'primary' : 'neutral'"
+            variant="soft"
+            size="xs"
+            @click="setMode('dark')"
+          >Dark</UButton>
+        </div>
+      </div>
+    </div>
     <!-- Theme-Variablen Sektion -->
     <div class="space-y-6">
       <h2 class="text-xl font-bold">{{ t('variableConfigurator.assignTitle') }}</h2>
       <p class="text-sm text-neutral-500">{{ t('variableConfigurator.assignDesc') }}</p>
-      <ThemePreview>
         <div class="grid grid-cols-1 gap-4">
           <div 
             v-for="variable in themeVariables" 
@@ -36,7 +55,6 @@
             </div>
           </div>
         </div>
-      </ThemePreview>
     </div>
     
     <!-- CSS-Variablen Sektion -->
@@ -139,8 +157,8 @@
         </UAccordion>
       </div>
       
-      <div class="mt-4">
-        <UButton color="neutral" @click="resetCssVariables">{{ t('variableConfigurator.resetAll') }}</UButton>
+      <div class="mt-4 flex gap-2">
+        <UButton color="neutral" @click="resetCssVariables">{{ t('variableConfigurator.resetAll') }} ({{ currentMode }})</UButton>
       </div>
     </div>
   </div>
@@ -164,6 +182,18 @@ const colorStore = useColorsStore();
 const themeStore = useThemeStore();
 const { t } = useI18n();
 
+// Aktueller Editiermodus aus dem Store
+const currentMode = computed(() => themeStore.getEditMode);
+
+function setMode(mode: 'light'|'dark') {
+  themeStore.setEditMode(mode);
+  if (process.client) {
+    const el = document.documentElement;
+    if (mode === 'dark') el.classList.add('dark');
+    else el.classList.remove('dark');
+  }
+}
+
 // Verfügbare Theme-Variablen
 const themeVariables = themeStore.getThemeVariables;
 
@@ -175,14 +205,23 @@ const selectedColors = ref<Record<ThemeVariable, string>>({} as Record<ThemeVari
 
 // Initialisiere die ausgewählten Farben aus dem Store
 onMounted(() => {
-  // Hole die Mappings aus dem Store
-  const mappings = themeStore.mappings;
-  
-  // Konvertiere die Mappings in das richtige Format für selectedColors
-  Object.entries(mappings).forEach(([key, value]) => {
-    selectedColors.value[key as ThemeVariable] = value || '';
-  });
+  // Initial aus aktuellem Modus laden
+  hydrateSelectedColorsFromMode(currentMode.value);
 });
+
+// Wenn der Modus wechselt, UI-Auswahl aus dem entsprechenden Bucket laden
+watch(currentMode, (mode) => {
+  hydrateSelectedColorsFromMode(mode);
+});
+
+function hydrateSelectedColorsFromMode(mode: 'light'|'dark') {
+  const bucket = themeStore.mappings?.[mode] || {};
+  const next: Record<ThemeVariable, string> = {} as any;
+  (themeVariables as ThemeVariable[]).forEach((v) => {
+    next[v] = (bucket[v] || '') as string;
+  });
+  selectedColors.value = next;
+}
 
 // CSS-Variablen nach Kategorien gruppiert
 const cssVariablesByCategory = computed(() => {
@@ -313,7 +352,7 @@ function isSelectedShade(variable: CssVariableMapping & { selectedColor?: string
 
 // Funktion zum Zurücksetzen aller CSS-Variablen auf Standardwerte
 function resetCssVariables() {
-  themeStore.resetCssVariables();
+  themeStore.resetCssVariables(currentMode.value);
   // Zusätzlich: Theme-Variablen-Zuweisungen zurücksetzen
   themeStore.clearAllMappings();
   // UI zurücksetzen: Auswahl der Farben leeren
@@ -358,7 +397,8 @@ function getColorShade(colorName: string, shade: string): string {
 // Watch for changes in selected colors and update the theme store
 watch(selectedColors, (newValues) => {
   Object.entries(newValues).forEach(([variable, colorName]) => {
-    themeStore.setMapping(variable as ThemeVariable, colorName || null);
+    // Schreibt in den aktuell aktiven Modus (editMode)
+    themeStore.setMapping(variable as ThemeVariable, (colorName as string) || null);
   });
 }, { deep: true });
 </script>

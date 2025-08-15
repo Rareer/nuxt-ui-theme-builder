@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import ThemePreview from '../components/ThemePreview.vue';
-import { useColorsStore } from '../store/colors';
-
-const colorsStore = useColorsStore();
 </script>
 
 <template>

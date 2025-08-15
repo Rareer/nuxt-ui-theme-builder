@@ -16,6 +16,8 @@ export interface CssVariableMapping {
   selectedColor?: string; // Ausgewählte Grundfarbe (ohne Shade) für die UI
 }
 
+export type ThemeMode = 'light' | 'dark'
+
 // Vordefinierte CSS-Variablen
 export const predefinedCssVariables: CssVariableMapping[] = [
   // Text-Variablen
@@ -43,22 +45,67 @@ export const predefinedCssVariables: CssVariableMapping[] = [
     { name: 'ui-radius', type: 'direct-value', value: '0.25rem', label: 'Radius', category: 'Radius' },
 ];
 
+// Dark defaults derived from current darkOverrides in useThemeCss
+const darkDefaultOverrides: Record<string, { type: CssVariableType; value: string }> = {
+  // Background
+  'ui-bg': { type: 'color-reference', value: 'neutral-900' },
+  'ui-bg-muted': { type: 'color-reference', value: 'neutral-800' },
+  'ui-bg-elevated': { type: 'color-reference', value: 'neutral-700' },
+  'ui-bg-accented': { type: 'color-reference', value: 'neutral-600' },
+  'ui-bg-inverted': { type: 'color-reference', value: 'neutral-50' },
+  // Text
+  'ui-text': { type: 'direct-value', value: '#ffffff' },
+  'ui-text-dimmed': { type: 'color-reference', value: 'neutral-400' },
+  'ui-text-muted': { type: 'color-reference', value: 'neutral-300' },
+  'ui-text-toned': { type: 'color-reference', value: 'neutral-200' },
+  'ui-text-highlighted': { type: 'direct-value', value: '#ffffff' },
+  // Border
+  'ui-border': { type: 'color-reference', value: 'neutral-800' },
+  'ui-border-muted': { type: 'color-reference', value: 'neutral-800' },
+  'ui-border-accented': { type: 'color-reference', value: 'neutral-700' },
+  'ui-border-inverted': { type: 'color-reference', value: 'neutral-50' }
+}
+
+function buildPredefinedForMode(mode: ThemeMode): CssVariableMapping[] {
+  if (mode === 'light') return predefinedCssVariables.map(v => ({ ...v }))
+  // dark: copy light and override values/types where provided
+  return predefinedCssVariables.map(v => {
+    const override = darkDefaultOverrides[v.name]
+    if (override) {
+      return { ...v, type: override.type, value: override.value }
+    }
+    return { ...v }
+  })
+}
+
 export const useThemeStore = defineStore('theme', {
   state: () => ({
-    // Speichert die Zuordnungen von Theme-Variablen zu Farbnamen
-    // z.B. { primary: 'Blau', secondary: 'Grün', ... }
-    mappings: {} as Record<ThemeVariable, string | null>,
+    // Speichert die Zuordnungen von Theme-Variablen zu Farbnamen je Modus
+    // z.B. { light: { primary: 'blue', ... }, dark: { primary: 'indigo', ... } }
+    mappings: {
+      light: {} as Record<ThemeVariable, string | null>,
+      dark: {} as Record<ThemeVariable, string | null>
+    },
     
-    // Speichert die Zuordnungen für zusätzliche CSS-Variablen
-    cssVariableMappings: {} as Record<string, CssVariableMapping>,
+    // Editiermodus für UI (welche Variante wird im Editor angezeigt/bearbeitet)
+    editMode: 'light' as ThemeMode,
+
+    // Speichert die Zuordnungen für zusätzliche CSS-Variablen je Modus
+    cssVariableMappings: {
+      light: {} as Record<string, CssVariableMapping>,
+      dark: {} as Record<string, CssVariableMapping>
+    },
   }),
   
   // Initialisiere den Store mit vordefinierten CSS-Variablen
   hydrate(state) {
-    // Initialisiere die CSS-Variablen mit den vordefinierten Werten
-    predefinedCssVariables.forEach(variable => {
-      state.cssVariableMappings[variable.name] = { ...variable };
-    });
+    // Initialisiere die CSS-Variablen mit den vordefinierten Werten je Modus
+    buildPredefinedForMode('light').forEach(variable => {
+      state.cssVariableMappings.light[variable.name] = { ...variable }
+    })
+    buildPredefinedForMode('dark').forEach(variable => {
+      state.cssVariableMappings.dark[variable.name] = { ...variable }
+    })
   },
 
   getters: {
@@ -67,16 +114,26 @@ export const useThemeStore = defineStore('theme', {
       return THEME_VARIABLES;
     },
     
-    // Gibt alle CSS-Variablen zurück
+    // Aktueller Editiermodus
+    getEditMode(state): ThemeMode {
+      return state.editMode
+    },
+
+    // Gibt alle CSS-Variablen (für aktuellen Editiermodus) zurück
     getCssVariables(): CssVariableMapping[] {
-      return Object.values(this.cssVariableMappings);
+      return Object.values(this.cssVariableMappings[this.editMode]);
+    },
+
+    // Gibt alle CSS-Variablen für angegebenen Modus zurück
+    getCssVariablesByMode: (state) => (mode: ThemeMode): CssVariableMapping[] => {
+      return Object.values(state.cssVariableMappings[mode] || {})
     },
     
     // Gibt alle CSS-Variablen nach Kategorie gruppiert zurück
     getCssVariablesByCategory(): Record<string, CssVariableMapping[]> {
       const result: Record<string, CssVariableMapping[]> = {};
       
-      Object.values(this.cssVariableMappings).forEach(variable => {
+      Object.values(this.cssVariableMappings[this.editMode]).forEach(variable => {
         if (variable && variable.category) {
           // Initialize the category array if it doesn't exist
           if (!result[variable.category]) {
@@ -92,73 +149,118 @@ export const useThemeStore = defineStore('theme', {
       
       return result;
     },
+
+    // Kategorie-Gruppierung für angegebenen Modus
+    getCssVariablesByCategoryByMode(): (mode: ThemeMode) => Record<string, CssVariableMapping[]> {
+      return (mode: ThemeMode) => {
+        const result: Record<string, CssVariableMapping[]> = {}
+        Object.values(this.cssVariableMappings[mode] || {}).forEach(variable => {
+          if (variable && variable.category) {
+            if (!result[variable.category]) result[variable.category] = []
+            result[variable.category].push(variable)
+          }
+        })
+        return result
+      }
+    },
     
     // Gibt eine bestimmte CSS-Variable zurück
-    getCssVariable: (state) => (name: string): CssVariableMapping | null => {
-      return state.cssVariableMappings[name] || null;
+    getCssVariable: (state) => (name: string, mode?: ThemeMode): CssVariableMapping | null => {
+      const m = mode || state.editMode
+      return state.cssVariableMappings[m]?.[name] || null;
     },
 
-    // Gibt die aktuelle Zuordnung für eine Theme-Variable zurück
-    getMapping: (state) => (variable: ThemeVariable): string | null => {
-      return state.mappings[variable] || null;
+    // Gibt die aktuelle Zuordnung für eine Theme-Variable zurück (optional Modus)
+    getMapping: (state) => (variable: ThemeVariable, mode?: ThemeMode): string | null => {
+      const m = mode || state.editMode
+      return state.mappings[m]?.[variable] ?? null;
     },
 
-    // Gibt alle CSS-Variablen für die Theme-Vorschau zurück
+    // Gibt alle CSS-Variablen für die Theme-Vorschau zurück (für aktuellen Modus)
     getThemeCssVariables(): Record<string, string> {
-      // build from mappings and additional css variables
-      return buildThemeCssVariables(this.mappings as Record<ThemeVariable, string | null>, this.cssVariableMappings);
+      return buildThemeCssVariables(this.mappings[this.editMode] as Record<ThemeVariable, string | null>, this.cssVariableMappings[this.editMode]);
+    },
+
+    // Für angegebenen Modus
+    getThemeCssVariablesByMode(): (mode: ThemeMode) => Record<string, string> {
+      return (mode: ThemeMode) => buildThemeCssVariables(this.mappings[mode] as Record<ThemeVariable, string | null>, this.cssVariableMappings[mode])
     }
   },
 
   actions: {
-    // Setzt die Zuordnung für eine Theme-Variable
-    setMapping(variable: ThemeVariable, colorName: string | null) {
-      // Normalize color name to ensure consistency across the app
-      this.mappings[variable] = colorName ? normalizeColorName(colorName) : null;
+    setEditMode(mode: ThemeMode) {
+      this.editMode = mode
+    },
+    // Setzt die Zuordnung für eine Theme-Variable (optional Modus)
+    setMapping(variable: ThemeVariable, colorName: string | null, mode?: ThemeMode) {
+      const m = mode || this.editMode
+      this.mappings[m][variable] = colorName ? normalizeColorName(colorName) : null;
     },
 
     // Löscht die Zuordnung für eine Theme-Variable
-    clearMapping(variable: ThemeVariable) {
-      this.mappings[variable] = null;
+    clearMapping(variable: ThemeVariable, mode?: ThemeMode) {
+      const m = mode || this.editMode
+      this.mappings[m][variable] = null;
     },
 
-    // Löscht alle Zuordnungen
-    clearAllMappings() {
-      this.getThemeVariables.forEach(variable => {
-        this.mappings[variable] = null;
-      });
+    // Löscht alle Zuordnungen (optional nur für einen Modus)
+    clearAllMappings(mode?: ThemeMode) {
+      const clearFor = (m: ThemeMode) => {
+        this.getThemeVariables.forEach(variable => {
+          this.mappings[m][variable] = null;
+        });
+      }
+      if (mode) clearFor(mode)
+      else { clearFor('light'); clearFor('dark') }
     },
     
     // Setzt den Wert einer CSS-Variable
-    setCssVariableValue(name: string, value: string) {
-      if (this.cssVariableMappings[name]) {
-        this.cssVariableMappings[name].value = value;
+    setCssVariableValue(name: string, value: string, mode?: ThemeMode) {
+      const m = mode || this.editMode
+      const bucket = this.cssVariableMappings[m]
+      if (bucket && bucket[name]) {
+        bucket[name].value = value
       }
     },
     
     // Setzt den Typ einer CSS-Variable
-    setCssVariableType(name: string, type: CssVariableType) {
-      if (this.cssVariableMappings[name]) {
-        this.cssVariableMappings[name].type = type;
+    setCssVariableType(name: string, type: CssVariableType, mode?: ThemeMode) {
+      const m = mode || this.editMode
+      const bucket = this.cssVariableMappings[m]
+      if (bucket && bucket[name]) {
+        bucket[name].type = type
       }
     },
     
     // Fügt eine neue CSS-Variable hinzu oder aktualisiert eine bestehende
-    updateCssVariable(variable: CssVariableMapping) {
-      this.cssVariableMappings[variable.name] = { ...variable };
+    updateCssVariable(variable: CssVariableMapping, mode?: ThemeMode) {
+      const m = mode || this.editMode
+      this.cssVariableMappings[m][variable.name] = { ...variable };
     },
     
     // Löscht eine CSS-Variable
-    deleteCssVariable(name: string) {
-      delete this.cssVariableMappings[name];
+    deleteCssVariable(name: string, mode?: ThemeMode) {
+      const m = mode || this.editMode
+      delete this.cssVariableMappings[m][name];
     },
     
     // Setzt alle CSS-Variablen auf ihre Standardwerte zurück
-    resetCssVariables() {
-      this.cssVariableMappings = {};
-      predefinedCssVariables.forEach(variable => {
-        this.cssVariableMappings[variable.name] = { ...variable };
-      });
+    resetCssVariables(mode?: ThemeMode) {
+      if (mode) {
+        this.cssVariableMappings[mode] = {}
+        buildPredefinedForMode(mode).forEach(variable => {
+          this.cssVariableMappings[mode][variable.name] = { ...variable }
+        })
+      } else {
+        this.cssVariableMappings.light = {}
+        this.cssVariableMappings.dark = {}
+        buildPredefinedForMode('light').forEach(variable => {
+          this.cssVariableMappings.light[variable.name] = { ...variable }
+        })
+        buildPredefinedForMode('dark').forEach(variable => {
+          this.cssVariableMappings.dark[variable.name] = { ...variable }
+        })
+      }
     },
 
     // Persist the current store state to LocalStorage

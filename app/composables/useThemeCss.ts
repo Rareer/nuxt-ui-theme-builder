@@ -11,8 +11,6 @@ export function useThemeCss() {
   // Only run in client-side environment
   if (process.client) {
     watchEffect(() => {
-      // Get all CSS variables
-      const cssVariables = generateAllCssVariables();
       
       // Create or update style tag
       let styleEl = document.getElementById(styleTagId) as HTMLStyleElement | null;
@@ -22,13 +20,22 @@ export function useThemeCss() {
         document.head.appendChild(styleEl);
       }
 
-      // Generate CSS content - apply to both :root and .theme-preview
-      // This ensures the variables are available globally but also specifically within theme previews
-      const cssVariablesString = Object.entries(cssVariables)
+      // Build per-mode CSS variables using the store
+      const getByMode = themeStore.getThemeCssVariablesByMode;
+      const lightModeVars = { ...generateColorCssVariables(), ...getByMode('light') };
+      const darkModeVars = { ...generateColorCssVariables(), ...getByMode('dark') };
+
+      const lightString = Object.entries(lightModeVars)
         .map(([key, value]) => `  ${key}: ${value};`)
         .join('\n');
-        
-      const cssContent = `.theme-preview {\n${cssVariablesString}\n color: var(--ui-text); background: var(--ui-bg);}`;
+
+      const darkString = Object.entries(darkModeVars)
+        .map(([key, value]) => `  ${key}: ${value};`)
+        .join('\n');
+
+      const baseAppStyles = `\nhtml, body {\n  background-color: var(--ui-bg);\n  color: var(--ui-text);\n}\n`;
+
+      const cssContent = `:root {\n${lightString}\n}\n\n.dark {\n${darkString}\n}\n${baseAppStyles}`;
 
       styleEl.innerHTML = cssContent;
     });

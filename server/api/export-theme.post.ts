@@ -3,10 +3,13 @@ import { defineEventHandler, readBody } from 'h3'
 export default defineEventHandler(async (event) => {
   try {
     // Get theme variables, custom colors, and theme mappings from request body
-    const { themeVariables, customColors, themeMappings } = await readBody<{ 
+    const { themeVariables, customColors, themeMappings, exportMode } = await readBody<{ 
       themeVariables: Record<string, string>,
       customColors?: Array<{ name: string, values: Record<string, string> }>,
-      themeMappings?: Record<string, string | null>
+      // Accept either flat mapping or per-mode mapping coming from the new store
+      themeMappings?: Record<string, string | null> | { light?: Record<string, string | null>, dark?: Record<string, string | null> },
+      // Optional preferred export mode for per-mode mappings
+      exportMode?: 'light' | 'dark'
     }>(event)
     
     if (!themeVariables) {
@@ -20,7 +23,7 @@ export default defineEventHandler(async (event) => {
     const cssContent = generateCssContent(themeVariables, customColors)
     
     // Generate app.config.ts content
-    const appConfigContent = generateAppConfigContent(themeMappings)
+    const appConfigContent = generateAppConfigContent(themeMappings, exportMode)
     
     return {
       success: true,
@@ -36,7 +39,10 @@ export default defineEventHandler(async (event) => {
   }
 })
 
-function generateAppConfigContent(themeMappings?: Record<string, string | null>): string {
+function generateAppConfigContent(
+  themeMappings?: Record<string, string | null> | { light?: Record<string, string | null>, dark?: Record<string, string | null> },
+  exportMode?: 'light' | 'dark'
+): string {
   // Start with the basic structure
   let configContent = `export default defineAppConfig({
   ui: {
@@ -45,8 +51,18 @@ function generateAppConfigContent(themeMappings?: Record<string, string | null>)
   
   // Add color mappings if they exist
   if (themeMappings) {
-    Object.entries(themeMappings).forEach(([variable, colorName]) => {
-      if (colorName) {
+    // Normalize to a flat mapping (default to light mode if per-mode provided)
+    let flat: Record<string, string | null> = {};
+    const isPerMode = typeof (themeMappings as any).light === 'object' || typeof (themeMappings as any).dark === 'object';
+    if (isPerMode) {
+      const mode: 'light'|'dark' = exportMode || 'light';
+      flat = ((themeMappings as any)[mode] || {}) as Record<string, string | null>;
+    } else {
+      flat = themeMappings as Record<string, string | null>;
+    }
+
+    Object.entries(flat).forEach(([variable, colorName]) => {
+      if (typeof colorName === 'string' && colorName.trim().length > 0) {
         // Format the color name to match Nuxt UI's expected format (lowercase, no spaces)
         const formattedColorName = colorName.toLowerCase().replace(/\s+/g, '-');
         configContent += `      ${variable}: '${formattedColorName}',\n`;

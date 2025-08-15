@@ -1,6 +1,5 @@
 <template>
-  <ThemePreview>
-    <UContainer class="space-y-24 py-16">
+  <UContainer class="space-y-24 py-16">
       <!-- Komponenten-Vorschau Grid -->
       <section>
         <h2 class="text-2xl font-semibold mb-6 text-center">{{ $t('preview.componentsPreview') }}</h2>
@@ -422,7 +421,7 @@
   </div>
 </footer>
 </UContainer>
-  </ThemePreview>
+  
 </template>
 
 <script setup lang="ts">

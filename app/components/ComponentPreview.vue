@@ -4,7 +4,6 @@
             <div>
                 <h2 class="text-xl font-bold mb-6">{{ config?.name }}</h2>
             </div>
-            <ThemePreview>
                 <div class="space-y-6 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div 
                         v-if="config?.variants" 
@@ -37,7 +36,6 @@
                         </component>
                     </div>
                 </div>
-            </ThemePreview>
         </div>
         <div class="flex-1 pl-6 border-l border-gray-200 dark:border-gray-800">
             <div class="flex grow gap-4">
