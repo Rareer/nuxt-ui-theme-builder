@@ -1,5 +1,4 @@
-import { ref } from 'vue';
-import { createHighlighter, bundledLanguages, bundledThemes } from 'shiki';
+import { createHighlighter } from 'shiki';
 
 export function useCodeHighlighter() {
 	const isHighlighterReady = ref(false);

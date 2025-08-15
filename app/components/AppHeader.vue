@@ -1,3 +1,117 @@
+<script setup lang="ts">
+import AIGenerateThemeModal from './AIGenerateThemeModal.vue';
+import { useSavedThemesStore } from '../store/savedThemes';
+
+const colorMode = useColorMode();
+const isThemeConfigOpen = ref(false);
+
+const {
+	exportTheme,
+	isExportModalOpen,
+	cssContent,
+	appConfigContent,
+	highlightedCssContent,
+	highlightedAppConfigContent,
+	isHighlighterReady,
+	closeExportModal,
+} = useThemeExport();
+
+const aiModal = ref<InstanceType<typeof AIGenerateThemeModal> | null>(null);
+
+// Save/Load state
+const isSaveModalOpen = ref(false);
+const isLoadModalOpen = ref(false);
+const saveName = ref('');
+const savedThemesStore = useSavedThemesStore();
+const savedNames = computed(() => savedThemesStore.listNames);
+
+const { t, availableLocales, setLocale } = useI18n();
+
+// Locale switch items: set the locale directly to ensure immediate update
+const localeItems = computed(() => (
+	((availableLocales as unknown as string[]) || []).map(l => ({
+		label: t(`locale.${l}` as any),
+		key: `locale-${l}`,
+		onSelect: () => setLocale(l as any),
+	}))
+));
+
+// Dropdown items with onSelect handlers and keys
+const actionItems = computed(() => ([
+	[
+		{ label: t('actions.save'), icon: 'i-heroicons-bookmark', key: 'save', onSelect: () => { isSaveModalOpen.value = true; } },
+		{ label: t('actions.load'), icon: 'i-heroicons-folder-open', key: 'load', onSelect: () => { isLoadModalOpen.value = true; } },
+		{ label: t('actions.export'), icon: 'i-heroicons-arrow-down-tray', key: 'export', onSelect: () => { exportTheme(); } },
+	],
+	[
+		{ label: t('locale.language'), icon: 'i-heroicons-globe-alt', disabled: true },
+		...localeItems.value,
+	],
+]));
+
+function onActionSelect(item: any) {
+	if (item?.onSelect && typeof item.onSelect === 'function') {
+		item.onSelect();
+		return;
+	}
+	switch (item?.key) {
+		case 'save':
+			isSaveModalOpen.value = true;
+			break;
+		case 'load':
+			isLoadModalOpen.value = true;
+			break;
+		case 'export':
+			exportTheme();
+			break;
+	}
+}
+
+const items = computed(() => ([
+]));
+function toggleDark() {
+	colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark';
+}
+
+function openAIModal() {
+	aiModal.value?.show();
+}
+
+function handleSaveTheme() {
+	const name = saveName.value.trim();
+	if (!name) return;
+	if (savedThemesStore.themes[name]) {
+		if (!confirm(t('header.overwriteConfirm', { name }))) return;
+	}
+	savedThemesStore.saveTheme(name);
+	saveName.value = '';
+	isSaveModalOpen.value = false;
+}
+
+async function handleLoadTheme(name: string) {
+	await savedThemesStore.loadTheme(name);
+	isLoadModalOpen.value = false;
+}
+
+function handleDeleteTheme(name: string) {
+	if (!confirm(t('header.deleteConfirm', { name }))) return;
+	savedThemesStore.deleteTheme(name);
+}
+
+// Copy text to clipboard
+function copyToClipboard(text: string) {
+	if (import.meta.client) {
+		navigator.clipboard.writeText(text)
+			.then(() => {
+				// Could add a toast notification here if desired
+			})
+			.catch((err) => {
+				console.error('Failed to copy text: ', err);
+			});
+	}
+}
+</script>
+
 <template>
 	<header class="h-16 px-6 flex items-center justify-between border-b border-gray-200 dark:border-gray-800 relative z-40">
 		<div class="flex items-center" />
@@ -307,121 +421,3 @@
 	<!-- AI Generate Theme Modal -->
 	<AIGenerateThemeModal ref="aiModal" />
 </template>
-
-<script setup lang="ts">
-import { ref, computed } from 'vue';
-import VariableConfigurator from './VariableConfigurator.vue';
-import AIGenerateThemeModal from './AIGenerateThemeModal.vue';
-import { useThemeExport } from '../composables/useThemeExport';
-import { useSavedThemesStore } from '../store/savedThemes';
-import { useI18n } from 'vue-i18n';
-
-const colorMode = useColorMode();
-const isThemeConfigOpen = ref(false);
-const {
-	exportTheme,
-	isExporting,
-	isExportModalOpen,
-	cssContent,
-	appConfigContent,
-	highlightedCssContent,
-	highlightedAppConfigContent,
-	isHighlighterReady,
-	closeExportModal,
-} = useThemeExport();
-
-const aiModal = ref<InstanceType<typeof AIGenerateThemeModal> | null>(null);
-
-// Save/Load state
-const isSaveModalOpen = ref(false);
-const isLoadModalOpen = ref(false);
-const saveName = ref('');
-const savedThemesStore = useSavedThemesStore();
-const savedNames = computed(() => savedThemesStore.listNames);
-
-const { t, availableLocales, setLocale } = useI18n();
-
-// Locale switch items: set the locale directly to ensure immediate update
-const localeItems = computed(() => (
-	((availableLocales as unknown as string[]) || []).map(l => ({
-		label: t(`locale.${l}` as any),
-		key: `locale-${l}`,
-		onSelect: () => setLocale(l as any),
-	}))
-));
-
-// Dropdown items with onSelect handlers and keys
-const actionItems = computed(() => ([
-	[
-		{ label: t('actions.save'), icon: 'i-heroicons-bookmark', key: 'save', onSelect: () => { isSaveModalOpen.value = true; } },
-		{ label: t('actions.load'), icon: 'i-heroicons-folder-open', key: 'load', onSelect: () => { isLoadModalOpen.value = true; } },
-		{ label: t('actions.export'), icon: 'i-heroicons-arrow-down-tray', key: 'export', onSelect: () => { exportTheme(); } },
-	],
-	[
-		{ label: t('locale.language'), icon: 'i-heroicons-globe-alt', disabled: true },
-		...localeItems.value,
-	],
-]));
-
-function onActionSelect(item: any) {
-	if (item?.onSelect && typeof item.onSelect === 'function') {
-		item.onSelect();
-		return;
-	}
-	switch (item?.key) {
-		case 'save':
-			isSaveModalOpen.value = true;
-			break;
-		case 'load':
-			isLoadModalOpen.value = true;
-			break;
-		case 'export':
-			exportTheme();
-			break;
-	}
-}
-
-const items = computed(() => ([
-]));
-function toggleDark() {
-	colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark';
-}
-
-function openAIModal() {
-	aiModal.value?.show();
-}
-
-function handleSaveTheme() {
-	const name = saveName.value.trim();
-	if (!name) return;
-	if (savedThemesStore.themes[name]) {
-		if (!confirm(t('header.overwriteConfirm', { name }))) return;
-	}
-	savedThemesStore.saveTheme(name);
-	saveName.value = '';
-	isSaveModalOpen.value = false;
-}
-
-async function handleLoadTheme(name: string) {
-	await savedThemesStore.loadTheme(name);
-	isLoadModalOpen.value = false;
-}
-
-function handleDeleteTheme(name: string) {
-	if (!confirm(t('header.deleteConfirm', { name }))) return;
-	savedThemesStore.deleteTheme(name);
-}
-
-// Copy text to clipboard
-function copyToClipboard(text: string) {
-	if (import.meta.client) {
-		navigator.clipboard.writeText(text)
-			.then(() => {
-				// Could add a toast notification here if desired
-			})
-			.catch((err) => {
-				console.error('Failed to copy text: ', err);
-			});
-	}
-}
-</script>

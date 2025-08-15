@@ -1,3 +1,47 @@
+<script setup lang="ts">
+import type { NavigationMenuItem } from '@nuxt/ui';
+
+const { availableComponents } = useComponentPreviewConfig();
+const localePath = useLocalePath();
+const { t } = useI18n();
+
+const items = computed<NavigationMenuItem[][]>(() => [
+	[
+		{
+			label: t('nav.navigation'),
+			type: 'label',
+		},
+		{
+			label: t('nav.home'),
+			icon: 'i-lucide-home',
+			to: localePath('/'),
+		},
+		{
+			label: t('nav.globals'),
+			type: 'label',
+		},
+		{
+			label: t('nav.customColors'),
+			icon: 'i-lucide-palette',
+			to: localePath('/colors'),
+		},
+		{
+			label: t('nav.preview'),
+			icon: 'i-lucide-eye',
+			to: localePath('/preview'),
+		},
+		{
+			label: t('nav.components'),
+			icon: 'i-lucide-square-code',
+			children: availableComponents.map(component => ({
+				label: component.label,
+				to: localePath(`/components/${component.value}`),
+			})),
+		},
+	],
+]);
+</script>
+
 <template>
 	<aside class="h-full flex flex-col">
 		<!-- Sidebar Header -->
@@ -58,49 +102,3 @@
 		</div>
 	</aside>
 </template>
-
-<script setup lang="ts">
-import { computed } from 'vue';
-import type { NavigationMenuItem } from '@nuxt/ui';
-import { useI18n } from 'vue-i18n';
-
-const { availableComponents } = useComponentPreviewConfig();
-const localePath = useLocalePath();
-const { t } = useI18n();
-
-const items = computed<NavigationMenuItem[][]>(() => [
-	[
-		{
-			label: t('nav.navigation'),
-			type: 'label',
-		},
-		{
-			label: t('nav.home'),
-			icon: 'i-lucide-home',
-			to: localePath('/'),
-		},
-		{
-			label: t('nav.globals'),
-			type: 'label',
-		},
-		{
-			label: t('nav.customColors'),
-			icon: 'i-lucide-palette',
-			to: localePath('/colors'),
-		},
-		{
-			label: t('nav.preview'),
-			icon: 'i-lucide-eye',
-			to: localePath('/preview'),
-		},
-		{
-			label: t('nav.components'),
-			icon: 'i-lucide-square-code',
-			children: availableComponents.map(component => ({
-				label: component.label,
-				to: localePath(`/components/${component.value}`),
-			})),
-		},
-	],
-]);
-</script>

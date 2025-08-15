@@ -1,3 +1,15 @@
+<script setup lang="ts">
+// Set page meta
+const { t } = useI18n();
+
+useHead(() => ({
+	title: t('index.headTitle'),
+	meta: [
+		{ name: 'description', content: t('index.headDescription') },
+	],
+}));
+</script>
+
 <template>
 	<div class="max-w-6xl mx-auto px-4 py-12">
 		<!-- Hero Section -->
@@ -133,14 +145,3 @@
 		</div>
 	</div>
 </template>
-
-<script setup lang="ts">
-// Set page meta
-const { t } = useI18n();
-useHead(() => ({
-	title: t('index.headTitle'),
-	meta: [
-		{ name: 'description', content: t('index.headDescription') },
-	],
-}));
-</script>

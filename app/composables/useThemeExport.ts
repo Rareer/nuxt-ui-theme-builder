@@ -1,6 +1,5 @@
 import { useThemeStore } from '../store/theme';
 import { useColorsStore } from '../store/colors';
-import { ref, computed } from 'vue';
 import { useCodeHighlighter } from './useCodeHighlighter';
 
 export function useThemeExport() {

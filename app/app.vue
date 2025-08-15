@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import * as locales from '@nuxt/ui/locale';
 
-import { watch } from 'vue';
 import { Analytics } from '@vercel/analytics/nuxt';
-import { useThemeCss } from './composables/useThemeCss';
 import { useThemeStore } from './store/theme';
-import GlobalLoadingOverlay from './components/GlobalLoadingOverlay.vue';
 
 const { locale } = useI18n();
 

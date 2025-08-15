@@ -1,228 +1,10 @@
-<template>
-	<div class="space-y-8 p-4">
-		<!-- Mode Toggle -->
-		<div class="flex items-center justify-between">
-			<div class="flex items-center gap-2">
-				<span class="text-sm text-neutral-500">Mode:</span>
-				<div class="inline-flex rounded-md overflow-hidden ring-1 ring-gray-200">
-					<UButton
-						:color="currentMode === 'light' ? 'primary' : 'neutral'"
-						variant="soft"
-						size="xs"
-						@click="setMode('light')"
-					>
-						Light
-					</UButton>
-					<UButton
-						:color="currentMode === 'dark' ? 'primary' : 'neutral'"
-						variant="soft"
-						size="xs"
-						@click="setMode('dark')"
-					>
-						Dark
-					</UButton>
-				</div>
-			</div>
-		</div>
-		<!-- Theme-Variablen Sektion -->
-		<div class="space-y-6">
-			<h2 class="text-xl font-bold">
-				{{ t('variableConfigurator.assignTitle') }}
-			</h2>
-			<p class="text-sm text-neutral-500">
-				{{ t('variableConfigurator.assignDesc') }}
-			</p>
-			<div class="grid grid-cols-1 gap-4">
-				<div
-					v-for="variable in themeVariables"
-					:key="variable"
-					class="border border-1 border-default rounded-lg p-4 space-y-3 flex flex-col gap-2"
-				>
-					<div class="flex items-center justify-between">
-						<h3 class="font-medium">
-							{{ getVariableLabel(variable) }}
-						</h3>
-						<UBadge :color="variable">
-							{{ variable }}
-						</UBadge>
-					</div>
-
-					<UFormField>
-						<USelect
-							v-model="selectedColors[variable]"
-							class="w-full"
-							:items="colorOptions"
-							:placeholder="t('variableConfigurator.selectColor')"
-						/>
-					</UFormField>
-
-					<div
-						v-if="selectedColors[variable]"
-						class="flex flex-wrap gap-1"
-					>
-						<div
-							v-for="shade in shades"
-							:key="shade"
-							class="w-5 h-5 rounded-sm"
-							:style="{ backgroundColor: getColorShade(selectedColors[variable], shade) }"
-							:title="`${shade}: ${getColorShade(selectedColors[variable], shade)}`"
-						/>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- CSS-Variablen Sektion -->
-		<div class="space-y-6">
-			<h2 class="text-xl font-bold">
-				{{ t('variableConfigurator.cssTitle') }}
-			</h2>
-			<p class="text-sm text-neutral-500">
-				{{ t('variableConfigurator.cssDesc') }}
-			</p>
-			<div class="space-y-4">
-				<UAccordion
-					v-if="Object.keys(cssVariablesByCategory).length > 0"
-					:items="Object.keys(cssVariablesByCategory).map(category => ({
-						label: category,
-						slot: category,
-						defaultOpen: category === 'Text',
-					}))"
-				>
-					<template #default="{ item }">
-						<div class="py-3">
-							<div class="font-medium text-lg">
-								{{ item.label }}
-							</div>
-						</div>
-					</template>
-
-					<template
-						v-for="category in Object.keys(cssVariablesByCategory)"
-						:key="category"
-						#[category]
-					>
-						<div class="grid grid-cols-1 gap-4 py-4 px-1">
-							<div
-								v-for="variable in cssVariablesByCategory[category]"
-								:key="variable.name"
-								class="border border-1 border-default rounded-lg p-4 space-y-3"
-							>
-								<div class="flex items-center justify-between">
-									<h4 class="font-medium">
-										{{ variable.label }}
-									</h4>
-									<UBadge color="neutral">
-										--{{ variable.name }}
-									</UBadge>
-								</div>
-
-								<div class="space-y-3">
-									<!-- Typ-Auswahl -->
-									<URadioGroup
-										v-model="variable.type"
-										:items="[{ label: t('variableConfigurator.colorRef'), value: 'color-reference' }, { label: t('variableConfigurator.directValue'), value: 'direct-value' }]"
-										@update:model-value="updateCssVariable(variable)"
-									/>
-
-									<!-- Eingabefeld je nach Typ -->
-									<div
-										v-if="variable.type === 'color-reference'"
-										class="mt-2"
-									>
-										<UFormField>
-											<USelect
-												v-model="variable.selectedColor"
-												:items="colorOptions"
-												:placeholder="t('variableConfigurator.selectColor')"
-												class="w-full"
-												@update:model-value="updateSelectedColor(variable)"
-											/>
-										</UFormField>
-
-										<!-- Shade-Auswahl durch Klick -->
-										<div
-											v-if="variable.selectedColor"
-											class="mt-3"
-										>
-											<div class="text-xs text-neutral-500 mb-1">
-												{{ t('variableConfigurator.selectShade') }}
-											</div>
-											<div class="flex flex-wrap gap-1">
-												<div
-													v-for="shade in shades"
-													:key="shade"
-													class="w-6 h-6 rounded-sm cursor-pointer transition-all hover:scale-110"
-													:class="{ 'ring-2 ring-primary-500': isSelectedShade(variable, shade) }"
-													:style="{ backgroundColor: getColorShade(variable.selectedColor, shade) }"
-													@click="selectShade(variable, shade)"
-												/>
-											</div>
-										</div>
-
-										<!-- Vorschau der ausgewählten Farbe -->
-										<div
-											v-if="variable.value"
-											class="mt-2 flex items-center gap-2"
-										>
-											<div
-												class="w-6 h-6 rounded-sm"
-												:style="{ backgroundColor: getColorFromReference(variable.value) }"
-											/>
-											<span class="text-xs">{{ getColorFromReference(variable.value) }}</span>
-										</div>
-									</div>
-
-									<div
-										v-else
-										class="mt-2"
-									>
-										<UFormField>
-											<UInput
-												v-model="variable.value"
-												type="text"
-												class="w-full"
-												@update:model-value="updateCssVariable(variable)"
-											>
-												<template
-													v-if="variable.value && variable.value.startsWith('#')"
-													#trailing
-												>
-													<div
-														class="w-4 h-4 rounded-sm"
-														:style="{ backgroundColor: variable.value }"
-													/>
-												</template>
-											</UInput>
-										</UFormField>
-									</div>
-								</div>
-							</div>
-						</div>
-					</template>
-				</UAccordion>
-			</div>
-
-			<div class="mt-4 flex gap-2">
-				<UButton
-					color="neutral"
-					@click="resetCssVariables"
-				>
-					{{ t('variableConfigurator.resetAll') }} ({{ currentMode }})
-				</UButton>
-			</div>
-		</div>
-	</div>
-</template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, watch } from 'vue';
-import { useColorsStore } from '../store/colors';
-import { useThemeStore, type CssVariableMapping, type CssVariableType } from '../store/theme';
 import type { ThemeVariable } from '../constants/theme';
-import { getTailwindColorsAsColorObjects, getTailwindColorByName, isTailwindColor } from '../utils/tailwindColors';
 import type { Color } from '../types/color';
-import { useI18n } from 'vue-i18n';
+
+import { useColorsStore } from '../store/colors';
+import { useThemeStore, type CssVariableMapping } from '../store/theme';
 
 // Type für Farbwerte mit String-Index
 interface ColorValues {
@@ -456,3 +238,220 @@ watch(selectedColors, (newValues) => {
 	});
 }, { deep: true });
 </script>
+
+<template>
+	<div class="space-y-8 p-4">
+		<!-- Mode Toggle -->
+		<div class="flex items-center justify-between">
+			<div class="flex items-center gap-2">
+				<span class="text-sm text-neutral-500">Mode:</span>
+				<div class="inline-flex rounded-md overflow-hidden ring-1 ring-gray-200">
+					<UButton
+						:color="currentMode === 'light' ? 'primary' : 'neutral'"
+						variant="soft"
+						size="xs"
+						@click="setMode('light')"
+					>
+						Light
+					</UButton>
+					<UButton
+						:color="currentMode === 'dark' ? 'primary' : 'neutral'"
+						variant="soft"
+						size="xs"
+						@click="setMode('dark')"
+					>
+						Dark
+					</UButton>
+				</div>
+			</div>
+		</div>
+		<!-- Theme-Variablen Sektion -->
+		<div class="space-y-6">
+			<h2 class="text-xl font-bold">
+				{{ t('variableConfigurator.assignTitle') }}
+			</h2>
+			<p class="text-sm text-neutral-500">
+				{{ t('variableConfigurator.assignDesc') }}
+			</p>
+			<div class="grid grid-cols-1 gap-4">
+				<div
+					v-for="variable in themeVariables"
+					:key="variable"
+					class="border border-1 border-default rounded-lg p-4 space-y-3 flex flex-col gap-2"
+				>
+					<div class="flex items-center justify-between">
+						<h3 class="font-medium">
+							{{ getVariableLabel(variable) }}
+						</h3>
+						<UBadge :color="variable">
+							{{ variable }}
+						</UBadge>
+					</div>
+
+					<UFormField>
+						<USelect
+							v-model="selectedColors[variable]"
+							class="w-full"
+							:items="colorOptions"
+							:placeholder="t('variableConfigurator.selectColor')"
+						/>
+					</UFormField>
+
+					<div
+						v-if="selectedColors[variable]"
+						class="flex flex-wrap gap-1"
+					>
+						<div
+							v-for="shade in shades"
+							:key="shade"
+							class="w-5 h-5 rounded-sm"
+							:style="{ backgroundColor: getColorShade(selectedColors[variable], shade) }"
+							:title="`${shade}: ${getColorShade(selectedColors[variable], shade)}`"
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- CSS-Variablen Sektion -->
+		<div class="space-y-6">
+			<h2 class="text-xl font-bold">
+				{{ t('variableConfigurator.cssTitle') }}
+			</h2>
+			<p class="text-sm text-neutral-500">
+				{{ t('variableConfigurator.cssDesc') }}
+			</p>
+			<div class="space-y-4">
+				<UAccordion
+					v-if="Object.keys(cssVariablesByCategory).length > 0"
+					:items="Object.keys(cssVariablesByCategory).map(category => ({
+						label: category,
+						slot: category,
+						defaultOpen: category === 'Text',
+					}))"
+				>
+					<template #default="{ item }">
+						<div class="py-3">
+							<div class="font-medium text-lg">
+								{{ item.label }}
+							</div>
+						</div>
+					</template>
+
+					<template
+						v-for="category in Object.keys(cssVariablesByCategory)"
+						:key="category"
+						#[category]
+					>
+						<div class="grid grid-cols-1 gap-4 py-4 px-1">
+							<div
+								v-for="variable in cssVariablesByCategory[category]"
+								:key="variable.name"
+								class="border border-1 border-default rounded-lg p-4 space-y-3"
+							>
+								<div class="flex items-center justify-between">
+									<h4 class="font-medium">
+										{{ variable.label }}
+									</h4>
+									<UBadge color="neutral">
+										--{{ variable.name }}
+									</UBadge>
+								</div>
+
+								<div class="space-y-3">
+									<!-- Typ-Auswahl -->
+									<URadioGroup
+										v-model="variable.type"
+										:items="[{ label: t('variableConfigurator.colorRef'), value: 'color-reference' }, { label: t('variableConfigurator.directValue'), value: 'direct-value' }]"
+										@update:model-value="updateCssVariable(variable)"
+									/>
+
+									<!-- Eingabefeld je nach Typ -->
+									<div
+										v-if="variable.type === 'color-reference'"
+										class="mt-2"
+									>
+										<UFormField>
+											<USelect
+												v-model="variable.selectedColor"
+												:items="colorOptions"
+												:placeholder="t('variableConfigurator.selectColor')"
+												class="w-full"
+												@update:model-value="updateSelectedColor(variable)"
+											/>
+										</UFormField>
+
+										<!-- Shade-Auswahl durch Klick -->
+										<div
+											v-if="variable.selectedColor"
+											class="mt-3"
+										>
+											<div class="text-xs text-neutral-500 mb-1">
+												{{ t('variableConfigurator.selectShade') }}
+											</div>
+											<div class="flex flex-wrap gap-1">
+												<div
+													v-for="shade in shades"
+													:key="shade"
+													class="w-6 h-6 rounded-sm cursor-pointer transition-all hover:scale-110"
+													:class="{ 'ring-2 ring-primary-500': isSelectedShade(variable, shade) }"
+													:style="{ backgroundColor: getColorShade(variable.selectedColor, shade) }"
+													@click="selectShade(variable, shade)"
+												/>
+											</div>
+										</div>
+
+										<!-- Vorschau der ausgewählten Farbe -->
+										<div
+											v-if="variable.value"
+											class="mt-2 flex items-center gap-2"
+										>
+											<div
+												class="w-6 h-6 rounded-sm"
+												:style="{ backgroundColor: getColorFromReference(variable.value) }"
+											/>
+											<span class="text-xs">{{ getColorFromReference(variable.value) }}</span>
+										</div>
+									</div>
+
+									<div
+										v-else
+										class="mt-2"
+									>
+										<UFormField>
+											<UInput
+												v-model="variable.value"
+												type="text"
+												class="w-full"
+												@update:model-value="updateCssVariable(variable)"
+											>
+												<template
+													v-if="variable.value && variable.value.startsWith('#')"
+													#trailing
+												>
+													<div
+														class="w-4 h-4 rounded-sm"
+														:style="{ backgroundColor: variable.value }"
+													/>
+												</template>
+											</UInput>
+										</UFormField>
+									</div>
+								</div>
+							</div>
+						</div>
+					</template>
+				</UAccordion>
+			</div>
+
+			<div class="mt-4 flex gap-2">
+				<UButton
+					color="neutral"
+					@click="resetCssVariables"
+				>
+					{{ t('variableConfigurator.resetAll') }} ({{ currentMode }})
+				</UButton>
+			</div>
+		</div>
+	</div>
+</template>

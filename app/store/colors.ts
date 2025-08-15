@@ -1,5 +1,6 @@
-import { defineStore } from 'pinia';
 import type { Color } from '../types/color';
+
+import { defineStore } from 'pinia';
 
 interface ColorsState {
 	colors: Color[];

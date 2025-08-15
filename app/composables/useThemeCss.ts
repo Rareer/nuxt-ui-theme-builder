@@ -1,7 +1,5 @@
-import { watchEffect } from 'vue';
 import { useColorsStore } from '../store/colors';
 import { useThemeStore } from '../store/theme';
-import { tailwindColors } from '../utils/tailwindColors';
 
 export function useThemeCss() {
 	const colorStore = useColorsStore();

@@ -1,3 +1,107 @@
+<script setup lang="ts">
+const form = reactive({
+	name: '',
+	email: '',
+	message: '',
+});
+
+// State für Komponenten-Vorschau
+const inputText = ref('');
+const textareaText = ref('');
+const isOn = ref(true);
+const isModalOpen = ref(false);
+const checkA = ref(false);
+const checkB = ref(true);
+
+const selectItems = ['Apple', 'Banana', 'Cherry'];
+const selectedItem = ref<string | undefined>(selectItems[0]);
+
+const radioOptions = [
+	{ value: 'a', label: 'Option A' },
+	{ value: 'b', label: 'Option B' },
+	{ value: 'c', label: 'Option C' },
+];
+const selectedOption = ref('a');
+
+const tabItems = [
+	{ label: 'Übersicht', content: 'Inhalt Tab 1' },
+	{ label: 'Details', content: 'Inhalt Tab 2' },
+	{ label: 'Einstellungen', content: 'Inhalt Tab 3' },
+];
+const activeTab = ref(0);
+
+const accordionDemo = [
+	{ label: 'Abschnitt A', content: 'Beschreibung für A' },
+	{ label: 'Abschnitt B', content: 'Beschreibung für B' },
+];
+
+// Extra Komponenten: Dropdown, Pagination, Table, Progress, Slider
+const dropdownItems = [
+	[
+		{ label: 'Bearbeiten', icon: 'i-heroicons-pencil-square', click: () => console.log('Bearbeiten') },
+		{ label: 'Teilen', icon: 'i-heroicons-share', click: () => console.log('Teilen') },
+	],
+	[
+		{ label: 'Löschen', icon: 'i-heroicons-trash', color: 'error', click: () => console.log('Löschen') },
+	],
+];
+
+const page = ref(1);
+
+type TableRow = { name: string; email: string; role: string };
+const tableColumns = [
+	{ accessorKey: 'name', header: 'Name' },
+	{ accessorKey: 'email', header: 'E-Mail' },
+	{ accessorKey: 'role', header: 'Rolle' },
+];
+const tableRows: TableRow[] = [
+	{ name: 'Max Mustermann', email: 'max@example.com', role: 'Admin' },
+	{ name: 'Erika Beispiel', email: 'erika@example.com', role: 'User' },
+	{ name: 'Hans Müller', email: 'hans@example.com', role: 'Editor' },
+];
+
+const progress = ref(30);
+const slider = ref(25);
+
+// Toast notifications
+const toast = useToast();
+function notify(title: string, description: string, color: 'info' | 'success' | 'error' | 'warning' | 'primary' | 'neutral' = 'info') {
+	const icon
+    = color === 'success'
+    	? 'i-heroicons-check-circle'
+    	: color === 'error'
+    		? 'i-heroicons-exclamation-triangle'
+    		: 'i-heroicons-information-circle';
+	toast.add({ title, description, color, icon });
+}
+
+// Breadcrumbs
+const breadcrumbLinks = [
+	{ label: 'Home', to: '#' },
+	{ label: 'Library', to: '#' },
+	{ label: 'Data' },
+];
+
+const faqItems = [
+	{
+		label: 'Was ist Nuxtify?',
+		content: 'Nuxtify ist eine Beispielseite, die zeigt, wie man Nuxt UI effektiv nutzt.',
+	},
+	{
+		label: 'Ist Nuxtify Open Source?',
+		content: 'Diese Demo ist vollständig offen und dient Lern- und Demo-Zwecken.',
+	},
+	{
+		label: 'Kann ich die Komponenten anpassen?',
+		content: 'Ja! Alle Komponenten lassen sich via Props, Slots und Tailwind anpassen.',
+	},
+];
+
+function submitForm() {
+	console.log('Form submitted:', { ...form });
+}
+</script>
+
 <template>
 	<UContainer class="space-y-24 py-16">
 		<!-- Komponenten-Vorschau Grid -->
@@ -700,107 +804,3 @@
 		</footer>
 	</UContainer>
 </template>
-
-<script setup lang="ts">
-const form = reactive({
-	name: '',
-	email: '',
-	message: '',
-});
-
-// State für Komponenten-Vorschau
-const inputText = ref('');
-const textareaText = ref('');
-const isOn = ref(true);
-const isModalOpen = ref(false);
-const checkA = ref(false);
-const checkB = ref(true);
-
-const selectItems = ['Apple', 'Banana', 'Cherry'];
-const selectedItem = ref<string | undefined>(selectItems[0]);
-
-const radioOptions = [
-	{ value: 'a', label: 'Option A' },
-	{ value: 'b', label: 'Option B' },
-	{ value: 'c', label: 'Option C' },
-];
-const selectedOption = ref('a');
-
-const tabItems = [
-	{ label: 'Übersicht', content: 'Inhalt Tab 1' },
-	{ label: 'Details', content: 'Inhalt Tab 2' },
-	{ label: 'Einstellungen', content: 'Inhalt Tab 3' },
-];
-const activeTab = ref(0);
-
-const accordionDemo = [
-	{ label: 'Abschnitt A', content: 'Beschreibung für A' },
-	{ label: 'Abschnitt B', content: 'Beschreibung für B' },
-];
-
-// Extra Komponenten: Dropdown, Pagination, Table, Progress, Slider
-const dropdownItems = [
-	[
-		{ label: 'Bearbeiten', icon: 'i-heroicons-pencil-square', click: () => console.log('Bearbeiten') },
-		{ label: 'Teilen', icon: 'i-heroicons-share', click: () => console.log('Teilen') },
-	],
-	[
-		{ label: 'Löschen', icon: 'i-heroicons-trash', color: 'error', click: () => console.log('Löschen') },
-	],
-];
-
-const page = ref(1);
-
-type TableRow = { name: string; email: string; role: string };
-const tableColumns = [
-	{ accessorKey: 'name', header: 'Name' },
-	{ accessorKey: 'email', header: 'E-Mail' },
-	{ accessorKey: 'role', header: 'Rolle' },
-];
-const tableRows: TableRow[] = [
-	{ name: 'Max Mustermann', email: 'max@example.com', role: 'Admin' },
-	{ name: 'Erika Beispiel', email: 'erika@example.com', role: 'User' },
-	{ name: 'Hans Müller', email: 'hans@example.com', role: 'Editor' },
-];
-
-const progress = ref(30);
-const slider = ref(25);
-
-// Toast notifications
-const toast = useToast();
-function notify(title: string, description: string, color: 'info' | 'success' | 'error' | 'warning' | 'primary' | 'neutral' = 'info') {
-	const icon
-    = color === 'success'
-    	? 'i-heroicons-check-circle'
-    	: color === 'error'
-    		? 'i-heroicons-exclamation-triangle'
-    		: 'i-heroicons-information-circle';
-	toast.add({ title, description, color, icon });
-}
-
-// Breadcrumbs
-const breadcrumbLinks = [
-	{ label: 'Home', to: '#' },
-	{ label: 'Library', to: '#' },
-	{ label: 'Data' },
-];
-
-const faqItems = [
-	{
-		label: 'Was ist Nuxtify?',
-		content: 'Nuxtify ist eine Beispielseite, die zeigt, wie man Nuxt UI effektiv nutzt.',
-	},
-	{
-		label: 'Ist Nuxtify Open Source?',
-		content: 'Diese Demo ist vollständig offen und dient Lern- und Demo-Zwecken.',
-	},
-	{
-		label: 'Kann ich die Komponenten anpassen?',
-		content: 'Ja! Alle Komponenten lassen sich via Props, Slots und Tailwind anpassen.',
-	},
-];
-
-function submitForm() {
-	console.log('Form submitted:', { ...form });
-}
-</script>

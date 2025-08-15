@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-
-const props = defineProps({
-	modelValue: Array<string>,
-});
+const props = defineProps<{
+	modelValue: string[],
+}>();
 
 const emit = defineEmits(['update:modelValue']);
 const { getFormattedClasses } = useTailwindClasses();
@@ -46,6 +44,7 @@ const removeItem = (s: string) => {
 				@click="removeItem(s)"
 			/>
 		</div>
+
 		<UInput
 			v-model="currentInput"
 			type="text"

@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+
 // Import the component preview config to access UI element names
 import { useComponentPreviewConfig } from '~/composables/useComponentPreviewConfig';
 import { THEME_VARIABLES, SIZES, type PropertyType } from '../constants/theme';

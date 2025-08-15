@@ -1,7 +1,6 @@
-import { computed } from 'vue';
-import { useColorsStore } from '../store/colors';
-import { getTailwindColorsAsColorObjects, getTailwindColorByName, isTailwindColor } from '../utils/tailwindColors';
 import type { Color } from '../types/color';
+
+import { useColorsStore } from '../store/colors';
 
 export interface ColorValues {
 	[key: string]: string;

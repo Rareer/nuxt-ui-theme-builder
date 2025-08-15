@@ -1,4 +1,3 @@
-import { computed, onMounted, ref, type Ref, watch } from 'vue';
 import { twMerge } from 'tailwind-merge';
 
 export type ConfigType = 'variants' | 'colors' | 'sizes';
