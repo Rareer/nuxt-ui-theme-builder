@@ -79,6 +79,7 @@
               :placeholder="$t('colorListing.namePlaceholder')"
               :disabled="isEditing"
             />
+            <p v-if="nameError" class="text-xs text-red-600 mt-1">{{ nameError }}</p>
           </UFormField>
           <div class="flex flex-col gap-2">
             <UColorPicker v-model="baseColorHex" />
@@ -161,6 +162,7 @@
 
 <script setup lang="ts">
 import { ref, computed, reactive } from 'vue';
+import { z } from 'zod';
 import { useI18n } from 'vue-i18n';
 import { useColorsStore } from '../store/colors';
 import { generateColorPalette } from '../utils/colorUtils';
@@ -197,6 +199,15 @@ const newColor = reactive<Color>({
   }
 });
 
+// Zod schema for color name: only letters and hyphen
+const nameSchema = z.string().min(1).regex(/^[A-Za-z-]+$/);
+
+const isNameValid = computed(() => nameSchema.safeParse(newColor.name.trim()).success);
+const nameError = computed(() => {
+  if (newColor.name.trim() === '') return '';
+  return isNameValid.value ? '' : t('colorListing.nameInvalid');
+});
+
 // Preview palette based on selected base color
 const previewPalette = computed(() => {
   if (!baseColorHex.value || !isValidHexColor(baseColorHex.value)) {
@@ -210,6 +221,7 @@ const previewPalette = computed(() => {
 const isFormValid = computed(() => {
   return (
     newColor.name.trim() !== '' &&
+    isNameValid.value &&
     baseColorHex.value &&
     isValidHexColor(baseColorHex.value)
   );

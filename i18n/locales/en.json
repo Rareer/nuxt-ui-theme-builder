@@ -10,6 +10,7 @@
     "modalAddTitle": "Add new color",
     "nameLabel": "Name",
     "namePlaceholder": "e.g., Blue, Red, Green",
+    "nameInvalid": "Only letters and hyphen are allowed",
     "palettePreview": "Palette preview:",
     "update": "Update",
     "add": "Add",

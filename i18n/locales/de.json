@@ -10,6 +10,7 @@
     "modalAddTitle": "Neue Farbe hinzufügen",
     "nameLabel": "Name",
     "namePlaceholder": "z. B. Blau, Rot, Grün",
+    "nameInvalid": "Nur Buchstaben und Bindestrich erlaubt",
     "palettePreview": "Vorschau der Farbpalette:",
     "update": "Aktualisieren",
     "add": "Hinzufügen",
