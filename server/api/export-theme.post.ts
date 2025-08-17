@@ -96,7 +96,12 @@ function generateCssContent(params: {
 
 	// Helper to serialize vars excluding theme color assignments
 	const toLines = (vars: Record<string, string>) => Object.entries(vars)
-		.filter(([key]) => !/^--ui-(primary|secondary|success|info|warning|error)(-\d+)?$/.test(key))
+		// Exclude semantic vars (--ui-[var], --ui-[var]-[shade], --ui-[var]-color-[shade])
+		// and the new aliases (--ui-color-[var]-[shade]) from export
+		.filter(([key]) => !(
+			/^--ui-(primary|secondary|success|info|warning|error)(?:-\d+|-color-\d+)?$/.test(key) ||
+			/^--ui-color-(primary|secondary|success|info|warning|error)-\d+$/.test(key)
+		))
 		.map(([key, value]) => `  ${key}: ${value};`)
 		.join('\n');
 

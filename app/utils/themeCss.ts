@@ -25,9 +25,15 @@ export function buildThemeCssVariables(
 
 		// Base var references 500 by convention
 		result[`--ui-${variable}`] = `var(--ui-color-${normalized}-500)`;
+		// Alias for 500 shade to support text color usage like --ui-[variable]-color-500
+		result[`--ui-${variable}-color-500`] = `var(--ui-color-${normalized}-500)`;
+
 
 		SHADES.forEach((shade) => {
+			// Old semantic shade alias (kept for compatibility)
 			result[`--ui-${variable}-${shade}`] = `var(--ui-color-${normalized}-${shade})`;
+			// New: per-shade alias under --ui-color-[variable]-[shade]
+			result[`--ui-color-${variable}-${shade}`] = `var(--ui-color-${normalized}-${shade})`;
 		});
 	});
 
