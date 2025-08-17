@@ -59,6 +59,8 @@ const items = computed<NavigationMenuItem[][]>(() => [
     },
   ],
 ]);
+
+console.log(availableComponents);
 </script>
 
 <template>

@@ -11,7 +11,8 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "eslint --fix .",
+    "extract:nuxt-ui": "node scripts/extract-nuxt-ui-types.mjs"
   },
   "dependencies": {
     "@ai-sdk/openai": "^2.0.15",

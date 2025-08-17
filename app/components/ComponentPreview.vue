@@ -8,17 +8,14 @@
 			</div>
 			<div class="space-y-6 w-full grid grid-cols-2 gap-4">
 				<div
-					v-for="variant in config.variants.map((variant) => ({
-						value: variant,
-						label: variant,
-					}))"
-					v-if="config?.variants"
+					v-for="variant in variantItems"
+					v-if="variants.length"
 					:key="variant.value"
 					class="space-y-2 flex flex-col items-start"
 				>
 					<label class="text-sm font-medium">{{ variant.label }}</label>
 					<component
-						v-bind="config?.staticProps"
+						v-bind="staticProps"
 						:is="props.component"
 						:color="color"
 						:size="size"
@@ -51,7 +48,7 @@
 		<div class="flex-1 lg:pl-6 lg:border-l border-gray-200 dark:border-gray-800">
 			<div class="flex grow gap-4">
 				<UFormField
-					v-if="config?.hasColors"
+					v-if="hasColors"
 					label="Color"
 				>
 					<USelect
@@ -60,7 +57,7 @@
 					/>
 				</UFormField>
 				<UFormField
-					v-if="config?.hasSizes"
+					v-if="hasSizes"
 					label="Size"
 				>
 					<USelect
@@ -222,6 +219,7 @@
 
 <script setup lang="ts">
 import { useThemeStore } from '~/store/theme';
+import type { ThemeVariable } from '~/constants/theme';
 import { useComponentConfigStore } from '~/store/componentConfig';
 import { useUiClasses } from '~/composables/useUiClasses';
 
@@ -237,49 +235,75 @@ const props = defineProps({
 		required: true,
 	},
 });
-const sizes = ref<string[]>(['xs', 'sm', 'md', 'lg', 'xl']);
+// Dynamic meta/index derived from generated JSON
+const baseName = computed<string>(() => (props.component || '').replace(/^U/, ''));
+const indexEntry = computed(() => componentConfigs.getIndexEntry(baseName.value));
+const meta = computed(() => componentConfigs.getComponentMeta(baseName.value));
 
-const config = computed(() => componentConfigs.componentConfigs[props.component]);
+const variants = computed<string[]>(() => (indexEntry.value?.hasVariant ? componentConfigs.defaultVariants : []));
+const sizes = computed<string[]>(() => (indexEntry.value?.hasSize ? componentConfigs.defaultSizes : []));
+const hasColors = computed<boolean>(() => !!indexEntry.value?.hasColor);
+const hasSizes = computed<boolean>(() => !!indexEntry.value?.hasSize);
+const staticProps = computed<Record<string, any>>(() => componentConfigs.getStaticProps(baseName.value) ?? {});
+const variantItems = computed<{ value: string; label: string }[]>(() =>
+  variants.value.map((v) => ({ value: v, label: v }))
+);
+
+// Synthetic config to keep existing UI driven by one object
+const config = computed(() => ({
+  name: baseName.value,
+  variants: variants.value,
+  customizable: ([
+    'variants',
+    ...(hasColors.value ? ['colors'] : []),
+    ...(hasSizes.value ? ['sizes'] : []),
+  ]) as Array<'variants' | 'colors' | 'sizes'>,
+  ui: ['base'],
+  hasLoading: true,
+  hasIcon: true,
+  hasTrailingIcon: true,
+  hasHeader: false,
+  hasContent: false,
+  hasFooter: false,
+}));
+
 const uiRootName = computed<string>(() => config.value?.ui?.[0] || 'base');
 
 const variant = ref('solid');
-const color = ref<any>('primary');
-const size = ref('md');
+const color = ref<ThemeVariable>('primary');
+const size = ref<string>('md');
 
-const colors = computed(() => {
-	return Object.entries(themeStore.getThemeVariables).map(([key, value]) => {
-		return {
-			label: value,
-			value: value,
-		};
-	});
+const colors = computed<{ label: string; value: ThemeVariable }[]>(() => {
+  return themeStore.getThemeVariables.map((value: ThemeVariable) => ({
+    label: value,
+    value,
+  }));
 });
 const isLoading = ref(false);
 const trailingIcon = ref(false);
 const showIcon = ref(false);
 
-// Use composable to manage UI classes and helpers
 const {
-	variantClasses,
-	colorClasses,
-	sizeClasses,
-	uiPropertiesClasses,
-	uiProperties,
-	uiPropertyAccordionState,
-	getUiPropertyClassesRef,
-	updateUiPropertyClass,
-	getMergedClassesForProperty,
-	getMergedUiObject,
-	toggleUiPropertyAccordion,
-	// new generic helpers
-	getKeyClasses,
-	setKeyClasses,
-	isExpanded,
-	toggleExpanded,
-	getUiSlotClasses,
-	setUiSlotClasses,
-	initialize,
-	setupWatchers,
+  variantClasses,
+  colorClasses,
+  sizeClasses,
+  uiPropertiesClasses,
+  uiProperties,
+  uiPropertyAccordionState,
+  getUiPropertyClassesRef,
+  updateUiPropertyClass,
+  getMergedClassesForProperty,
+  getMergedUiObject,
+  toggleUiPropertyAccordion,
+  // new generic helpers
+  getKeyClasses,
+  setKeyClasses,
+  isExpanded,
+  toggleExpanded,
+  getUiSlotClasses,
+  setUiSlotClasses,
+  initialize,
+  setupWatchers,
 } = useUiClasses({
 	component: computed(() => props.component),
 	config,
@@ -290,18 +314,15 @@ const {
 });
 
 const customizableTabs = computed(() => {
-	return config.value?.customizable.map((customizable) => {
-		return {
-			label: customizable.charAt(0).toUpperCase() + customizable.slice(1),
-			value: customizable,
-			slot: customizable,
-		};
-	});
+    return (config.value?.customizable || []).map((customizable: 'variants' | 'colors' | 'sizes') => {
+        return {
+            label: customizable.charAt(0).toUpperCase() + customizable.slice(1),
+            value: customizable,
+            slot: customizable,
+        };
+    });
 });
 
-// Watchers are encapsulated in composable
-
-// Initialize component configuration and load classes from the store on component mount
 onMounted(() => {
 	initialize();
 	setupWatchers();
