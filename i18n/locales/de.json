@@ -102,8 +102,6 @@
     "explore": "Farben erkunden"
   },
   "variableConfigurator": {
-    "assignTitle": "Theme-Variablen zuweisen",
-    "assignDesc": "Weise deine erstellten Farben den Nuxt UI Theme-Variablen zu, um das Erscheinungsbild der UI-Komponenten anzupassen.",
     "selectColor": "Farbe auswählen",
     "cssTitle": "CSS-Variablen anpassen",
     "cssDesc": "Passe die zusätzlichen CSS-Variablen an, die für spezielle UI-Elemente verwendet werden.",

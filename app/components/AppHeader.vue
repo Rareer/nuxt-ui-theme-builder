@@ -169,25 +169,26 @@ function copyToClipboard(text: string) {
 		v-model:open="isThemeConfigOpen"
 		side="right"
 		:width="500"
-	>
-		<template #header>
-			<div class="flex items-center justify-between w-full">
-				<h3 class="text-xl font-medium">
-					{{ $t('header.themeConfig') }}
-				</h3>
-				<UButton
-					color="neutral"
-					variant="ghost"
-					icon="i-lucide-x"
-					@click="isThemeConfigOpen = false"
-				/>
-			</div>
-		</template>
+    :overlay="false"
 
-		<template #content>
-			<div class="overflow-auto h-full">
-				<VariableConfigurator />
-			</div>
+	>
+  <template #header>
+    <div class="flex items-center justify-between w-full">
+      <h3 class="text-xl font-medium">
+        {{ $t('header.themeConfig') }}
+      </h3>
+      <UButton
+        icon="i-lucide-x"
+        color="neutral"
+        variant="ghost"
+        size="sm"
+        @click="isThemeConfigOpen = false"
+      />
+    </div>
+  </template>
+
+		<template #body>
+			<VariableConfigurator/>
 		</template>
 	</USlideover>
 

@@ -21,12 +21,6 @@ const currentMode = computed(() => themeStore.getEditMode);
 // Nutze Nuxt Color Mode als globale Quelle
 const colorMode = useColorMode();
 
-function setMode(mode: 'light' | 'dark') {
-	themeStore.setEditMode(mode);
-	// Setze globale Color-Preference; Nuxt ColorMode handhabt die .dark-Klasse
-	colorMode.preference = mode;
-}
-
 // Verfügbare Theme-Variablen
 const themeVariables = themeStore.getThemeVariables;
 
@@ -240,7 +234,7 @@ watch(selectedColors, (newValues) => {
 </script>
 
 <template>
-	<div class="space-y-8 p-4">
+	<div class="space-y-8">
 		<!-- Mode Toggle -->
 		<div class="flex items-center justify-between">
 			<div class="flex items-center gap-2">
@@ -266,52 +260,45 @@ watch(selectedColors, (newValues) => {
 			</div>
 		</div>
 		<!-- Theme-Variablen Sektion -->
-		<div class="space-y-6">
-			<h2 class="text-xl font-bold">
-				{{ t('variableConfigurator.assignTitle') }}
-			</h2>
-			<p class="text-sm text-neutral-500">
-				{{ t('variableConfigurator.assignDesc') }}
-			</p>
-			<div class="grid grid-cols-1 gap-4">
+		<div class="grid grid-cols-1 gap-4">
+			<div
+				v-for="variable in themeVariables"
+				:key="variable"
+				class="border border-1 border-default rounded-lg p-4 space-y-3 flex flex-col gap-2"
+			>
+				<div class="flex items-center justify-between">
+					<h3 class="font-medium">
+						{{ getVariableLabel(variable) }}
+					</h3>
+					<UBadge :color="variable">
+						{{ variable }}
+					</UBadge>
+				</div>
+
+				<UFormField>
+					<USelect
+						v-model="selectedColors[variable]"
+						class="w-full"
+						:items="colorOptions"
+						:placeholder="t('variableConfigurator.selectColor')"
+					/>
+				</UFormField>
+
 				<div
-					v-for="variable in themeVariables"
-					:key="variable"
-					class="border border-1 border-default rounded-lg p-4 space-y-3 flex flex-col gap-2"
+					v-if="selectedColors[variable]"
+					class="flex flex-wrap gap-1"
 				>
-					<div class="flex items-center justify-between">
-						<h3 class="font-medium">
-							{{ getVariableLabel(variable) }}
-						</h3>
-						<UBadge :color="variable">
-							{{ variable }}
-						</UBadge>
-					</div>
-
-					<UFormField>
-						<USelect
-							v-model="selectedColors[variable]"
-							class="w-full"
-							:items="colorOptions"
-							:placeholder="t('variableConfigurator.selectColor')"
-						/>
-					</UFormField>
-
 					<div
-						v-if="selectedColors[variable]"
-						class="flex flex-wrap gap-1"
-					>
-						<div
-							v-for="shade in shades"
-							:key="shade"
-							class="w-5 h-5 rounded-sm"
-							:style="{ backgroundColor: getColorShade(selectedColors[variable], shade) }"
-							:title="`${shade}: ${getColorShade(selectedColors[variable], shade)}`"
-						/>
-					</div>
+						v-for="shade in shades"
+						:key="shade"
+						class="w-5 h-5 rounded-sm"
+						:style="{ backgroundColor: getColorShade(selectedColors[variable], shade) }"
+						:title="`${shade}: ${getColorShade(selectedColors[variable], shade)}`"
+					/>
 				</div>
 			</div>
 		</div>
+	
 
 		<!-- CSS-Variablen Sektion -->
 		<div class="space-y-6">

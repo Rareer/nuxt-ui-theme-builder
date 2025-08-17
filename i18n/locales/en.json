@@ -102,8 +102,6 @@
     "explore": "Explore colors"
   },
   "variableConfigurator": {
-    "assignTitle": "Assign theme variables",
-    "assignDesc": "Map your created colors to Nuxt UI theme variables to customize the look of UI components.",
     "selectColor": "Select color",
     "cssTitle": "Adjust CSS variables",
     "cssDesc": "Adjust additional CSS variables used for special UI elements.",

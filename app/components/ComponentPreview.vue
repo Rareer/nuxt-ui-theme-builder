@@ -1,5 +1,5 @@
 <template>
-	<div class="flex gap-6">
+	<div class="flex lg:flex-row flex-col gap-6">
 		<div class="flex-1">
 			<div>
 				<h2 class="text-xl font-bold mb-6">
@@ -48,7 +48,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="flex-1 pl-6 border-l border-gray-200 dark:border-gray-800">
+		<div class="flex-1 lg:pl-6 lg:border-l border-gray-200 dark:border-gray-800">
 			<div class="flex grow gap-4">
 				<UFormField
 					v-if="config?.hasColors"
