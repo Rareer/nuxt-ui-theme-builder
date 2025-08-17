@@ -21,5 +21,7 @@ export interface ComponentPreviewConfig {
 		title?: string;
 		description?: string;
 		items?: Record<string, string>[];
+		class?: string;
+		icon?: string;
 	};
 }

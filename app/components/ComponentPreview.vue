@@ -6,7 +6,7 @@
 					{{ config?.name }}
 				</h2>
 			</div>
-			<div class="space-y-6 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+			<div class="space-y-6 w-full grid grid-cols-2 gap-4">
 				<div
 					v-for="variant in config.variants.map((variant) => ({
 						value: variant,

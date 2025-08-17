@@ -41,6 +41,20 @@ export const useComponentPreviewConfig = () => {
 			hasColors: true,
 			ui: ['root', 'wrapper', 'title', 'description', 'icon', 'avatar', 'avatarSize', 'actions'],
 		},
+		UBadge: {
+			name: 'Badge',
+			staticProps: {
+				label: 'Badge',
+			},
+			previewProp: 'variants',
+			customizable: ['variants', 'colors', 'sizes'],
+			variants: ['solid', 'outline', 'soft', 'subtle', 'ghost', 'link'],
+			hasColors: true,
+			hasSizes: true,
+			hasIcon: true,
+			hasTrailingIcon: true,
+			ui: ['base', 'label', 'leadingIcon', 'leadingAvatar', 'leadingAvatarSize', 'trailingIcon'],
+		},
 		UButton: {
 			name: 'Button',
 			staticProps: {
@@ -56,19 +70,19 @@ export const useComponentPreviewConfig = () => {
 			hasTrailingIcon: true,
 			ui: ['base', 'label', 'leadingIcon', 'leadingAvatar', 'leadingAvatarSize', 'trailingIcon'],
 		},
-		UBadge: {
-			name: 'Badge',
+		UCard: {
+			name: 'Card',
 			staticProps: {
-				label: 'Badge',
+				label: 'Button',
+				class: 'w-full',
 			},
 			previewProp: 'variants',
-			customizable: ['variants', 'colors', 'sizes'],
-			variants: ['solid', 'outline', 'soft', 'subtle', 'ghost', 'link'],
-			hasColors: true,
-			hasSizes: true,
-			hasIcon: true,
-			hasTrailingIcon: true,
-			ui: ['base', 'label', 'leadingIcon', 'leadingAvatar', 'leadingAvatarSize', 'trailingIcon'],
+			customizable: ['variants'],
+			variants: ['solid', 'outline', 'soft', 'subtle'],
+			hasHeader: true,
+			hasContent: true,
+			hasFooter: true,
+			ui: ['root', 'header', 'body', 'footer'],
 		},
 	};
 	const availableComponents = Object.entries(componentConfigs).map(([key, value]) => {
