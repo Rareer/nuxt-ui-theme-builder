@@ -41,6 +41,18 @@ watch(currentMode, (mode) => {
 	hydrateSelectedColorsFromMode(mode);
 });
 
+// Setzt den Light/Dark-Modus sowohl im Store (Editiermodus) als auch im globalen Nuxt Color Mode
+function setMode(mode: 'light' | 'dark') {
+    if (currentMode.value === mode) return;
+    // Update store edit mode
+    themeStore.setEditMode(mode);
+    // Sync Nuxt color mode preference for global UI theme
+    try {
+        colorMode.preference = mode as any;
+    }
+    catch {}
+}
+
 function hydrateSelectedColorsFromMode(mode: 'light' | 'dark') {
 	const bucket = themeStore.mappings?.[mode] || {};
 	const next: Record<ThemeVariable, string> = {} as any;
