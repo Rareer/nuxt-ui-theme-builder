@@ -110,7 +110,8 @@
     "colorRef": "Farbreferenz",
     "directValue": "Direkter Wert",
     "selectShade": "Shade auswählen:",
-    "resetAll": "Auf Standardwerte zurücksetzen"
+    "resetAll": "Auf Standardwerte zurücksetzen",
+    "resetSelection": "Auswahl zurücksetzen"
   },
   "themeMapping": {
     "assignTitle": "Theme-Variablen zuweisen",

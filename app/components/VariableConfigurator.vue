@@ -90,7 +90,13 @@ const cssVariablesByCategory = computed(() => {
 const colorOptions = computed(() => {
 	const options: Array<{ label: string; value: string; disabled?: boolean }> = [];
 
-	// Eigene Farben Header
+    // Reset-Option ganz oben, setzt Auswahl und Store-Mapping zurück
+    options.push({
+        label: t('variableConfigurator.resetSelection'),
+        value: null,
+    });
+
+    // Eigene Farben Header
 	if (colorStore.colors.length > 0) {
 		options.push({
 			label: `--- ${t('variableConfigurator.customColorsHeader')} ---`,
@@ -207,6 +213,7 @@ function getVariableLabel(variable: ThemeVariable): string {
 	const labels: Record<ThemeVariable, string> = {
 		primary: 'Primary',
 		secondary: 'Secondary',
+		neutral: 'Neutral',
 		success: 'Success',
 		info: 'Info',
 		warning: 'Warning',

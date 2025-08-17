@@ -99,8 +99,8 @@ function generateCssContent(params: {
 		// Exclude semantic vars (--ui-[var], --ui-[var]-[shade], --ui-[var]-color-[shade])
 		// and the new aliases (--ui-color-[var]-[shade]) from export
 		.filter(([key]) => !(
-			/^--ui-(primary|secondary|success|info|warning|error)(?:-\d+|-color-\d+)?$/.test(key) ||
-			/^--ui-color-(primary|secondary|success|info|warning|error)-\d+$/.test(key)
+			/^--ui-(primary|secondary|success|neutral|info|warning|error)(?:-\d+|-color-\d+)?$/.test(key) ||
+			/^--ui-color-(primary|secondary|success|neutral|info|warning|error)-\d+$/.test(key)
 		))
 		.map(([key, value]) => `  ${key}: ${value};`)
 		.join('\n');

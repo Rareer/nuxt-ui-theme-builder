@@ -110,7 +110,8 @@
     "colorRef": "Color reference",
     "directValue": "Direct value",
     "selectShade": "Select shade:",
-    "resetAll": "Reset to defaults"
+    "resetAll": "Reset to defaults",
+    "resetSelection": "Reset selection"
   },
   "themeMapping": {
     "assignTitle": "Assign theme variables",
