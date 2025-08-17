@@ -1,0 +1,69 @@
+<script setup lang="ts">
+import type { NavigationMenuItem } from '@nuxt/ui';
+
+const { availableComponents } = useComponentPreviewConfig();
+const localePath = useLocalePath();
+const { t } = useI18n();
+defineProps<{
+  orientation: 'horizontal' | 'vertical';
+}>();
+
+const items = computed<NavigationMenuItem[][]>(() => [
+  [
+    {
+      label: t('nav.navigation'),
+      type: 'label',
+    },
+    {
+      label: t('nav.home'),
+      icon: 'i-lucide-home',
+      to: localePath('/'),
+    },
+    {
+      label: t('nav.globals'),
+      type: 'label',
+    },
+    {
+      label: t('nav.customColors'),
+      icon: 'i-lucide-palette',
+      to: localePath('/colors'),
+    },
+    {
+      label: t('nav.preview'),
+      icon: 'i-lucide-eye',
+      to: localePath('/preview'),
+    },
+    {
+      label: t('nav.components'),
+      icon: 'i-lucide-square-code',
+      children: availableComponents.map(component => ({
+        label: component.label,
+        to: localePath(`/components/${component.value}`),
+      })),
+    },
+    {
+      label: t('nav.follow'),
+      type: 'label',
+    },
+    {
+      label: 'GitHub',
+      icon: 'i-lucide-github',
+      to: 'https://github.com/Rareer/nuxt-ui-theme-builder',
+      trailingIcon: 'i-lucide-external-link',
+    },
+    {
+      label: 'LinkedIn',
+      icon: 'i-lucide-linkedin',
+      to: 'https://www.linkedin.com/in/toni-kritz-5528a5184/',
+      trailingIcon: 'i-lucide-external-link',
+    },
+  ],
+]);
+</script>
+
+<template>
+  <UNavigationMenu
+    :items="items"
+    :orientation="orientation"
+  />
+</template>

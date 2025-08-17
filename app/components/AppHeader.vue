@@ -110,16 +110,41 @@ function copyToClipboard(text: string) {
 			});
 	}
 }
+
+const isNavigationOpen = ref(false);
 </script>
 
 <template>
 	<header class="h-16 px-6 flex items-center justify-between border-b border-gray-200 dark:border-gray-800 relative z-40">
 		<div class="flex items-center" />
 		<div class="flex items-center">
-			<UNavigationMenu
-				:items="items"
-				orientation="horizontal"
+			<UButton
+				icon="i-lucide-menu"
+				color="neutral"
+				variant="soft"
+				:aria-label="$t('header.toggleNavigation')"
+				@click="isNavigationOpen = true"
+				class="md:hidden"
 			/>
+			<USlideover side="left" v-model:open="isNavigationOpen">
+				<template #header>
+					<div class="flex items-center justify-between w-full">
+						<h3 class="text-xl font-medium">
+							{{ $t('app.name') }}
+						</h3>
+						<UButton
+							icon="i-lucide-x"
+							color="neutral"
+							variant="ghost"
+							size="sm"
+							@click="isNavigationOpen = false"
+						/>
+					</div>
+				</template>
+				<template #body>
+					<AppNavigation orientation="vertical" />
+				</template>
+			</USlideover>
 		</div>
 		<div class="flex items-center gap-4 ml-auto relative z-40">
 			<!-- Generate Theme with AI Button -->

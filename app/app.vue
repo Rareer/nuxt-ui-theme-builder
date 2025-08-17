@@ -33,7 +33,7 @@ if (import.meta.client) {
 <template>
 	<UApp :locale="locales[locale]">
 		<div class="flex h-screen">
-			<AppSidebar class="w-64 border-r border-gray-200 dark:border-gray-800" />
+			<AppSidebar class="hidden md:block w-64 border-r border-gray-200 dark:border-gray-800" />
 
 			<!-- Main Content -->
 			<div class="flex flex-col flex-1 overflow-hidden">
