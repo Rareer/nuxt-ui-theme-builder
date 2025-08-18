@@ -12,7 +12,8 @@
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "extract:nuxt-ui": "node scripts/extract-nuxt-ui-types.mjs"
+    "extract:nuxt-ui": "node scripts/extract-nuxt-ui-types.mjs",
+    "scrape:nuxt-ui-props": "node scripts/scrape-nuxt-ui-props.mjs app/config/nuxt-ui-docs.targets.json --outDir app/generated/nuxt-ui-docs"
   },
   "dependencies": {
     "@ai-sdk/openai": "^2.0.15",
@@ -26,6 +27,7 @@
     "nuxt": "^4.0.3",
     "pinia": "^3.0.3",
     "shiki": "^3.9.2",
+    "cheerio": "^1.0.0-rc.12",
     "tailwind-merge": "^3.3.1",
     "zod": "^3.25.76"
   },
