@@ -1,0 +1,90 @@
+{
+    "alert": {
+        "set": {
+            "title": "Alert",
+            "icon": "i-lucide-square-code",
+            "description": "Description text",
+            "previewProp": "variant",
+            "configProps": ["variant"],
+            "closeIcon": "i-lucide-x",
+            "close": true
+        },
+        "disable": []
+    },
+    "avatar": {
+        "set": {
+            "label": "Avatar",
+            "previewProp": "size",
+            "configProps": ["size"],
+            "src": "https://github.com/benjamincanac.png",
+            "icon": "i-lucide-square-code"
+        },
+        "disable": ["alt", "text"]
+    },
+    "badge": {
+        "set": {
+            "label": "Badge",
+            "icon": "i-lucide-square-code",
+            "previewProp": "variant",
+            "configProps": ["variant"]
+        },
+        "disable": ["type", "label", "leadingIcon", "trailingIcon", "loadingIcon"]
+    },
+    "button": {
+        "set": {
+            "label": "Button",
+            "icon": "i-lucide-square-code",
+            "previewProp": "variant",
+            "configProps": ["variant"],
+            "color": "primary"
+        },
+        "disable": ["type", "label", "leadingIcon", "trailingIcon", "loadingIcon", "leading", "loadingAuto", "block"]
+    },
+    "calendar": {
+        "set": {
+            "color": "primary",
+            "configProps": ["variant"]
+        },
+        "disable": ["allowNonContiguousRange", "pagedNavigation", "preventDeselect", "fixedWeeks", "initalFocus", "disableDaysOutsideCurrentView", "fixedDate"]
+    },
+    "card": {
+        "set": {
+            "header": "Header",
+            "content": "Content",
+            "footer": "Footer",
+            "previewProp": "variant",
+            "configProps": ["variant"]
+        },
+        "slots": {
+            "header": "Header",
+            "default": "Content",
+            "footer": "Footer"
+        },
+        "disable": []
+    },
+    "checkbox": {
+        "set": {
+            "color": "primary",
+            "size": "md",
+            "previewProp": "variant",
+            "configProps": ["variant"],
+            "label": "Checkbox",
+            "description": "Description text",
+            "icon": "i-lucide-check"
+        },
+        "disable": ["name", "id", "indeterminateIcon"]
+    },
+    "chip": {
+        "set": {
+            "color": "primary",
+            "size": "md",
+            "show": true,
+            "previewProp": "position",
+            "configProps": ["position", "color", "size"]
+        },
+        "slots": {
+            "default": "Chip"
+        },
+        "disable": []
+    }
+}

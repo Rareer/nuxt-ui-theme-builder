@@ -12,9 +12,51 @@ const currentConfig = computed(() =>
 
 const docsProps = computed<DocsProp[]>(() => currentConfig.value?.props || []);
 
-const booleanProps = computed(() => docsProps.value.filter(p => p.type === 'boolean'));
-const optionProps = computed(() => docsProps.value.filter(p => Array.isArray(p.type)) as {name: string; type: string[]}[]);
-const stringProps = computed(() => docsProps.value.filter(p => p.type === 'string'));
+const booleanPropsAll = computed(() => docsProps.value.filter(p => p.type === 'boolean'));
+
+function extractOptions(t: DocsProp['type']): string[] {
+  // Already array of options
+  if (Array.isArray(t)) return t as string[];
+  // Union type expressed as string: "'solid' | 'outline' | 'soft'"
+  if (typeof t === 'string' && t.includes('|')) {
+    return t
+      .split('|')
+      .map(s => s.trim().replace(/^'+|"+|'+$|"+$/g, '').replace(/^'|"|`|\{|\}|\(|\)/g, '').replace(/'|"|`/g, ''))
+      .filter(Boolean);
+  }
+  // Enum-like object: { options: [...] } or { enum: [...] } or { values: [...] }
+  if (t && typeof t === 'object') {
+    const anyT = t as any;
+    const arr = anyT.options || anyT.enum || anyT.values;
+    if (Array.isArray(arr)) return arr as string[];
+  }
+  return [];
+}
+
+const optionPropsAll = computed(() => docsProps.value
+  .map(p => ({ name: p.name, type: extractOptions(p.type) }))
+  .filter(p => Array.isArray(p.type) && (p.type as string[]).length) as { name: string; type: string[] }[]);
+
+const stringPropsAll = computed(() => docsProps.value.filter(p => p.type === 'string'));
+
+// Preview configuration from overrides
+const previewPropName = computed(() => currentConfig.value?.previewProp);
+const previewPropOptions = computed<string[]>(() => {
+  const name = previewPropName.value?.toLowerCase();
+  if (!name) return [];
+  // look up in all docs props to allow extraction beyond simple arrays
+  const prop = docsProps.value.find(p => p.name.toLowerCase() === name);
+  if (!prop) return [];
+  return extractOptions(prop.type);
+});
+
+// Slots content from overrides
+const slotsContent = computed<Record<string, string>>(() => currentConfig.value?.slots || {});
+
+// Exclude previewProp from top controls
+const booleanProps = computed(() => booleanPropsAll.value.filter(p => p.name.toLowerCase() !== (previewPropName.value || '').toLowerCase()));
+const optionProps = computed(() => optionPropsAll.value.filter(p => p.name.toLowerCase() !== (previewPropName.value || '').toLowerCase()));
+const stringProps = computed(() => stringPropsAll.value.filter(p => p.name.toLowerCase() !== (previewPropName.value || '').toLowerCase()));
 
 // Bound props state
 const bound = reactive<Record<string, any>>({});
@@ -23,6 +65,14 @@ const bound = reactive<Record<string, any>>({});
 watchEffect(() => {
   for (const p of booleanProps.value) {
     if (!(p.name in bound)) bound[p.name] = false;
+  }
+});
+
+// Initialize preset defaults from overrides
+watchEffect(() => {
+  const preset = currentConfig.value?.preset || {};
+  for (const key in preset) {
+    if (!(key in bound)) bound[key] = preset[key];
   }
 });
 
@@ -35,33 +85,58 @@ watchEffect(() => {
     }
   }
 });
+
+// Initialize preset values from overrides (e.g., label for UButton)
+watchEffect(() => {
+  const preset = currentConfig.value?.preset as Record<string, any> | undefined;
+  if (!preset) return;
+  for (const [k, v] of Object.entries(preset)) {
+    if (!(k in bound)) bound[k] = v;
+  }
+});
 </script>
 
-<template>
-  <div class="flex flex-col gap-6">
-    
-    <div class="space-y-4 flex flex-wrap gap-4">
-      <div v-if="booleanProps.length === 0 && optionProps.length === 0 && stringProps.length === 0" class="text-sm text-gray-500">No configurable props from docs.</div>
-
-      <div v-for="p in booleanProps" :key="p.name" class="flex items-center justify-between gap-4 py-2">
-        <div class="min-w-0">
-          <label class="block text-sm font-medium">{{ p.name }}</label>
+<template>   
+    <div v-if="booleanProps.length || optionProps.length || stringProps.length"class="flex-1 w-full">
+        <div class="flex flex-wrap items-center gap-6 mb-4">
+        <UFormField v-for="p in booleanProps" :key="p.name" :label="p.name">
+            <USwitch v-model="bound[p.name]" />
+        </UFormField>
         </div>
-        <USwitch v-model="bound[p.name]" />
-      </div>
 
-      <div v-for="p in optionProps" :key="p.name" class="space-y-1">
-        <label class="block text-sm font-medium">{{ p.name }}</label>
-        <USelect class="block w-full" :items="(p.type as string[]).map(v => ({ label: v, value: v }))" v-model="bound[p.name]" />
-      </div>
+        <div class="flex flex-wrap items-center gap-6 mb-4">
+        <UFormField v-for="p in optionProps" :key="p.name" :label="p.name">
+            <USelect class="block w-full" :items="(p.type as string[]).map(v => ({ label: v, value: v }))" v-model="bound[p.name]" />
+        </UFormField>
+        </div>
 
-      <div v-for="p in stringProps" :key="p.name" class="space-y-1">
-        <label class="block text-sm font-medium">{{ p.name }}</label>
-        <UInput v-model="bound[p.name]" />
-      </div>
+        <div class="flex flex-wrap items-center gap-6 mb-4">
+        <UFormField v-for="p in stringProps" :key="p.name" :label="p.name">
+            <UInput v-model="bound[p.name]" />
+        </UFormField>
+        </div>
     </div>
-    <div class="lg:col-span-2">
-      <component :is="props.component" v-bind="bound" />
+    <USeparator class="my-6" v-if="previewPropOptions.length"/>
+    <div class="flex-1 w-full">
+        <h2 class="text-lg font-semibold my-8">Preview</h2>
+        <template v-if="previewPropOptions.length">
+          <div class="flex flex-wrap gap-8">
+            <UFormField v-for="opt in previewPropOptions" :key="opt" class="space-y-2" :label="opt">
+              <component :is="props.component" :key="opt" v-bind="{ ...bound, [previewPropName as string]: opt }">
+                <template v-for="(content, slotName) in slotsContent" :key="slotName" v-slot:[slotName]>
+                  {{ content }}
+                </template>
+              </component>
+            </UFormField>
+          </div>
+        </template>
+        <template v-else>
+          <component :is="props.component" v-bind="bound">
+            <template v-for="(content, slotName) in slotsContent" :key="slotName" v-slot:[slotName]>
+              {{ content }}
+            </template>
+          </component>
+        </template>
     </div>
-  </div>
+    <USeparator class="my-6"/>
 </template>
