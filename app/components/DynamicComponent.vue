@@ -15,6 +15,51 @@ const docsProps = computed<DocsProp[]>(() => currentConfig.value?.props || []);
 // Exclude 'ui' once and reuse
 const filteredDocsProps = computed<DocsProp[]>(() => docsProps.value.filter(p => p.name !== 'ui'))
 
+// Config tabs based on overrides
+const configPropNames = computed<string[]>(() => currentConfig.value?.configProps || [])
+const optionsByProp = computed<Record<string, string[]>>(() => {
+  const map: Record<string, string[]> = {}
+  for (const name of configPropNames.value) {
+    const prop = docsProps.value.find(p => p.name.toLowerCase() === name.toLowerCase())
+    map[name] = prop ? extractOptions(prop.type) : []
+  }
+  return map
+})
+// Available UI slots for this component
+const uiSlots = computed<string[]>(() => {
+  const uiProp = docsProps.value.find(p => p.name === 'ui')
+  return uiProp ? extractOptions(uiProp.type) : []
+})
+// Reactive store for classes per configProp -> option -> uiSlot
+const configUi = reactive<Record<string, Record<string, Record<string, string[]>>>>({})
+// v-model helper to avoid undefined typing in template
+const uiModel = (propName: string, opt: string, slot: string) => computed<string[]>({
+  get() {
+    if (!configUi[propName]) configUi[propName] = {}
+    if (!configUi[propName][opt]) configUi[propName][opt] = {}
+    if (!configUi[propName][opt][slot]) configUi[propName][opt][slot] = []
+    return configUi[propName][opt][slot]
+  },
+  set(v: string[]) {
+    if (!configUi[propName]) configUi[propName] = {}
+    if (!configUi[propName][opt]) configUi[propName][opt] = {}
+    configUi[propName][opt][slot] = v
+  }
+})
+// Ensure structure exists
+watchEffect(() => {
+  for (const propName of configPropNames.value) {
+    configUi[propName] ||= {}
+    const opts = optionsByProp.value[propName] || []
+    for (const opt of opts) {
+      configUi[propName][opt] ||= {}
+      for (const slot of uiSlots.value) {
+        configUi[propName][opt][slot] ||= []
+      }
+    }
+  }
+})
+
 // Exclude 'ui' from all configurator lists
 const booleanPropsAll = computed(() => filteredDocsProps.value.filter(p => p.type === 'boolean'));
 
@@ -205,4 +250,26 @@ watchEffect(() => {
         </template>
     </div>
     <USeparator class="my-6"/>
+    <!-- Config tabs for configProps: per option -> Combobox per ui slot -->
+     <h2 class="text-lg font-semibold my-8">Config</h2>
+    <UTabs v-if="configPropNames.length && uiSlots.length" color="neutral" :items="configPropNames.map(n => ({ label: n }))" class="my-6">
+      <!-- @vue-ignore: Volar types for UTabs slot context are not inferred -->
+      <template #content="{ item }">
+        <div class="space-y-6">
+          <div v-for="opt in (optionsByProp[(item as any).label] || [])" :key="opt" class="space-y-3">
+            <!-- @vue-ignore -->
+             <UCollapsible>
+                <UButton :label="opt" block variant="soft" color="neutral" trailing-icon="i-lucide-chevron-down" />
+                <template #content>
+                    <div class="flex flex-col gap-2 py-2">
+                        <UFormField v-for="slotName in uiSlots" :key="slotName" :label="slotName">
+                            <Combobox v-model="uiModel((item as any).label, opt, slotName).value" />
+                        </UFormField>
+                    </div>
+                </template>
+             </UCollapsible>
+          </div>
+        </div>
+      </template>
+    </UTabs>
 </template>

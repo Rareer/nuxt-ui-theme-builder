@@ -70,7 +70,7 @@ const overrides: Overrides = {
       color: 'primary',
     },
     previewProp: 'variant',
-    configProps: ['variant'],
+    configProps: ['variant', 'color', 'size'],
     disable: ['type', 'label', 'leadingIcon', 'trailingIcon', 'loadingIcon', 'leading', 'loadingAuto', 'block'],
   },
   Calendar: {
