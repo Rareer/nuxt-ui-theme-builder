@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { h, resolveComponent, defineComponent } from 'vue'
 type DocsProp = { name: string; type: 'boolean' | 'string' | string[] | unknown };
 
 const props = defineProps<{ component: string }>();
@@ -50,8 +51,45 @@ const previewPropOptions = computed<string[]>(() => {
   return extractOptions(prop.type);
 });
 
-// Slots content from overrides
+// Slots content from overrides (string-only handling)
 const slotsContent = computed<Record<string, string>>(() => currentConfig.value?.slots || {});
+
+// Optional top-level child spec to be rendered into the default slot
+const childSpec = computed<any | undefined>(() => (currentConfig.value as any)?.child)
+
+function renderChild(spec: any) {
+  if (typeof spec === 'function') return spec
+  if (spec && typeof spec === 'object' && (spec.is || spec.component)) {
+    return () => {
+      const name = spec.is || spec.component
+      const comp = typeof name === 'string' ? resolveComponent(name) : name
+      const children = spec.children
+      if (Array.isArray(children)) return h(comp as any, spec.props || {}, children)
+      if (typeof children === 'function') return h(comp as any, spec.props || {}, children)
+      if (children != null) return h(comp as any, spec.props || {}, () => children)
+      return h(comp as any, spec.props || {})
+    }
+  }
+  return () => spec
+}
+
+// No renderedSlots needed; we render named slots via <template v-for> and child directly
+
+// Lightweight helper component to render a VNode-producing function as default content
+const RenderFn = defineComponent<{ render: () => any }>({
+  name: 'RenderFn',
+  props: {
+    render: { type: Function as unknown as () => () => any, required: true },
+  },
+  setup(props) {
+    return () => props.render()
+  },
+})
+
+const renderedChildFn = computed<(() => any) | null>(() => {
+  if (childSpec.value === undefined) return null
+  return renderChild(childSpec.value)
+})
 
 // Exclude previewProp from top controls
 const booleanProps = computed(() => booleanPropsAll.value.filter(p => p.name.toLowerCase() !== (previewPropName.value || '').toLowerCase()));
@@ -61,18 +99,18 @@ const stringProps = computed(() => stringPropsAll.value.filter(p => p.name.toLow
 // Bound props state
 const bound = reactive<Record<string, any>>({});
 
-// Initialize defaults for boolean props
-watchEffect(() => {
-  for (const p of booleanProps.value) {
-    if (!(p.name in bound)) bound[p.name] = false;
-  }
-});
-
-// Initialize preset defaults from overrides
+// Initialize preset defaults from overrides (run BEFORE defaults)
 watchEffect(() => {
   const preset = currentConfig.value?.preset || {};
   for (const key in preset) {
     if (!(key in bound)) bound[key] = preset[key];
+  }
+});
+
+// Initialize defaults for boolean props (only if not set by preset)
+watchEffect(() => {
+  for (const p of booleanProps.value) {
+    if (!(p.name in bound)) bound[p.name] = false;
   }
 });
 
@@ -86,14 +124,7 @@ watchEffect(() => {
   }
 });
 
-// Initialize preset values from overrides (e.g., label for UButton)
-watchEffect(() => {
-  const preset = currentConfig.value?.preset as Record<string, any> | undefined;
-  if (!preset) return;
-  for (const [k, v] of Object.entries(preset)) {
-    if (!(k in bound)) bound[k] = v;
-  }
-});
+// (Removed duplicate preset initializer)
 </script>
 
 <template>   
@@ -123,6 +154,7 @@ watchEffect(() => {
           <div class="flex flex-wrap gap-8">
             <UFormField v-for="opt in previewPropOptions" :key="opt" class="space-y-2" :label="opt">
               <component :is="props.component" :key="opt" v-bind="{ ...bound, [previewPropName as string]: opt }">
+                <RenderFn v-if="renderedChildFn" :render="renderedChildFn" />
                 <template v-for="(content, slotName) in slotsContent" :key="slotName" v-slot:[slotName]>
                   {{ content }}
                 </template>
@@ -132,6 +164,7 @@ watchEffect(() => {
         </template>
         <template v-else>
           <component :is="props.component" v-bind="bound">
+            <RenderFn v-if="renderedChildFn" :render="renderedChildFn" />
             <template v-for="(content, slotName) in slotsContent" :key="slotName" v-slot:[slotName]>
               {{ content }}
             </template>

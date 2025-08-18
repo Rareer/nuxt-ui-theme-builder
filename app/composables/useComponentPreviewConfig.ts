@@ -17,7 +17,9 @@ type AvailableComponentConfig = {
   // list of props that are relevant for slot configuration
   configProps?: string[];
   // slot demo content keyed by slot name (e.g., { header: 'Header', default: 'Body', footer: 'Footer' })
-  slots?: Record<string, string>;
+  slots?: Record<string, any>;
+  // preferred declarative child for default slot (overrides slots.default if present)
+  child?: any;
 };
 
 // Overrides format
@@ -26,20 +28,25 @@ type Overrides = Record<string, {
   set?: Record<string, any>;
   previewProp?: string;
   configProps?: string[];
-  slots?: Record<string, string>;
+  slots?: Record<string, any>;
+  child?: any;
 }>;
 
-const docsPropsMap = import.meta.glob('../generated/nuxt-ui-docs/*.json', {
+// Prefer centralized utility dataset; fallback to per-file JSON globs
+import docsData from '@/utils/nuxt-ui-docs.data';
+const docsPropsMapGlob = import.meta.glob('../generated/nuxt-ui-docs/*.json', {
   eager: true,
   import: 'default',
 }) as Record<string, DocsProp[]>;
 
-// Load manual overrides
+// Load manual overrides via utility, with fallback to JSON
+import overridesUtil from '@/utils/nuxt-ui-docs.overrides';
 const overridesGlob = import.meta.glob('../config/nuxt-ui-docs.overrides.json', {
   eager: true,
   import: 'default',
 }) as Record<string, Overrides>;
-const overrides: Overrides = (Object.values(overridesGlob)[0] as Overrides) || {};
+const overridesFromJson: Overrides = (Object.values(overridesGlob)[0] as Overrides) || {};
+const overrides: Overrides = Object.keys(overridesUtil || {}).length ? overridesUtil : overridesFromJson;
 
 function fileKeyToComponentName(key: string): string {
   const normalized = key.replace(/\\/g, '/');
@@ -56,6 +63,14 @@ function pascalCase(s: string): string {
 }
 
 export const useComponentPreviewConfig = () => {
+  // Build dataset from utility or globbed files
+  const docsPropsMap: Record<string, DocsProp[]> = (Object.keys(docsData || {}).length
+    ? Object.fromEntries(Object.entries(docsData).map(([name, props]) => [
+        `utils://${name}.json`,
+        props,
+      ]))
+    : docsPropsMapGlob);
+
   const names = Object.keys(docsPropsMap)
     .map((k) => fileKeyToComponentName(k))
     .filter(Boolean);
@@ -83,6 +98,7 @@ export const useComponentPreviewConfig = () => {
     const resolvedPreviewProp = overrideEntry?.previewProp ?? (overrideEntry as any)?.set?.previewProp;
     const resolvedConfigProps = overrideEntry?.configProps ?? (overrideEntry as any)?.set?.configProps;
     const resolvedSlots = overrideEntry?.slots ?? (overrideEntry as any)?.set?.slots;
+    const resolvedChild = (overrideEntry as any)?.child ?? (overrideEntry as any)?.set?.child;
 
     // Build preset, stripping reserved keys if they were incorrectly placed in `set`
     let preset: Record<string, any> | undefined = undefined;
@@ -99,6 +115,7 @@ export const useComponentPreviewConfig = () => {
       previewProp: resolvedPreviewProp,
       configProps: resolvedConfigProps,
       slots: resolvedSlots,
+      child: resolvedChild,
     };
   });
 
