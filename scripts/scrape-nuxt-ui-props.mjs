@@ -131,13 +131,16 @@ async function main() {
         canonical = [...new Set(literals)]
       }
 
-      // Keep only when valid AND not the 'ui' property (exception)
+      // Keep only when valid; special handling for 'ui'
       if (!name) return
       const valid = canonical === 'boolean' || canonical === 'string' || Array.isArray(canonical)
-      if (name !== 'ui' && !valid) return
-
-      // Filter: except for 'ui', only allow boolean, string, or array of strings
-      if (name !== 'ui') {
+      if (name === 'ui') {
+        // Try to extract keys directly from the type cell (object-like signature)
+        const uiKeysFromType = extractUiKeysFromTypeCell(typeCell.text())
+        const uiKeys = uiKeysFromType.length ? uiKeysFromType : extractUiKeys($)
+        props.push({ name, type: { values: uiKeys } })
+      } else {
+        if (!valid) return
         // Normalize output type (boolean | string | string[])
         let outType = canonical
         if (Array.isArray(outType)) {
@@ -148,6 +151,56 @@ async function main() {
       }
     })
     return props
+  }
+
+  // Heuristic: find a 'ui' section and parse likely keys from code/pre or inline code tokens
+  function extractUiKeys($) {
+    const keys = new Set()
+    // Search for a heading with id 'ui'
+    const uiHeading = $('h2#ui, h3#ui, [id="ui"]').first()
+    if (uiHeading.length) {
+      // Collect code blocks and inline code following the heading up to the next heading
+      const allNodes = $('*')
+      const startIdx = allNodes.index(uiHeading)
+      const nextHeadingIdx = (() => {
+        let idx = allNodes.length
+        $('h1, h2, h3, h4, h5, h6').each((_, el) => {
+          const i = allNodes.index(el)
+          if (i > startIdx && i < idx) idx = i
+        })
+        return idx
+      })()
+      allNodes.each((i, el) => {
+        if (i <= startIdx || i >= nextHeadingIdx) return
+        const $el = $(el)
+        if (el.tagName === 'code' || el.tagName === 'pre') {
+          const text = $el.text()
+          // Extract object-like keys and quoted keys
+          for (const m of text.matchAll(/['"]([a-zA-Z0-9_-]+)['"]\s*:/g)) keys.add(m[1])
+          for (const m of text.matchAll(/\b([a-zA-Z][a-zA-Z0-9_-]{1,})\s*:/g)) keys.add(m[1])
+          for (const m of text.matchAll(/class\s*:\s*['"][^'"]+['"]/g)) keys.add('class')
+        }
+      })
+    }
+    return Array.from(keys).sort()
+  }
+
+  // Parse object-like type cell text to extract keys within braces, e.g.
+  // "{ content?: ClassNameValue; arrow?: ClassNameValue; text?: ClassNameValue }"
+  function extractUiKeysFromTypeCell(text) {
+    const keys = new Set()
+    if (!text) return []
+    // Get substring within first {...}
+    const m = text.match(/\{([\s\S]*?)\}/)
+    const body = m ? m[1] : text
+    // Match patterns like: key?:, key: , 'key'?:, "key":
+    for (const mm of body.matchAll(/['"]?([a-zA-Z_][a-zA-Z0-9_-]*)['"]?\s*\?*\s*:/g)) {
+      const k = mm[1]
+      if (k && k !== 'class') keys.add(k)
+    }
+    // Commonly present class key
+    if (/\bclass\s*:\s*/.test(body)) keys.add('class')
+    return Array.from(keys).sort()
   }
 
   const isUrl = /^https?:\/\//i.test(input)

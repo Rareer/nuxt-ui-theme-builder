@@ -13,7 +13,8 @@ const currentConfig = computed(() =>
 
 const docsProps = computed<DocsProp[]>(() => currentConfig.value?.props || []);
 
-const booleanPropsAll = computed(() => docsProps.value.filter(p => p.type === 'boolean'));
+// Exclude 'ui' from all configurator lists
+const booleanPropsAll = computed(() => docsProps.value.filter(p => p.name !== 'ui' && p.type === 'boolean'));
 
 function extractOptions(t: DocsProp['type']): string[] {
   // Already array of options
@@ -35,10 +36,11 @@ function extractOptions(t: DocsProp['type']): string[] {
 }
 
 const optionPropsAll = computed(() => docsProps.value
+  .filter(p => p.name !== 'ui')
   .map(p => ({ name: p.name, type: extractOptions(p.type) }))
   .filter(p => Array.isArray(p.type) && (p.type as string[]).length) as { name: string; type: string[] }[]);
 
-const stringPropsAll = computed(() => docsProps.value.filter(p => p.type === 'string'));
+const stringPropsAll = computed(() => docsProps.value.filter(p => p.name !== 'ui' && p.type === 'string'));
 
 // Preview configuration from overrides
 const previewPropName = computed(() => currentConfig.value?.previewProp);
@@ -80,12 +82,20 @@ function renderChild(spec: any) {
         const propName = childModelCfg.value.prop || 'modelValue'
         const customEvent = childModelCfg.value.event?.trim()
         // Map event name to Vue listener key
-        // - if event provided includes ':', keep it as is (e.g., 'update:foo') -> 'onUpdate:foo'
-        // - else, camel-case first letter (e.g., 'change' -> 'onChange')
-        const eventKey = customEvent
-          ? (customEvent.includes(':') ? `on${customEvent[0].toUpperCase()}${customEvent.slice(1)}`.replace('OnUpdate:', 'onUpdate:')
-                                       : `on${customEvent[0].toUpperCase()}${customEvent.slice(1)}`)
-          : `onUpdate:${propName}`
+        let eventKey: string
+        if (customEvent) {
+          const ce = customEvent as string
+          if (ce.includes(':')) {
+            // e.g., 'update:foo' -> 'onUpdate:foo'
+            const up = `on${ce[0].toUpperCase()}${ce.slice(1)}`
+            eventKey = up.replace('OnUpdate:', 'onUpdate:')
+          } else {
+            // e.g., 'change' -> 'onChange'
+            eventKey = `on${ce[0].toUpperCase()}${ce.slice(1)}`
+          }
+        } else {
+          eventKey = `onUpdate:${propName}`
+        }
         propsMerged[propName] = childModelValue.value
         propsMerged[eventKey] = (v: any) => { childModelValue.value = v }
       }

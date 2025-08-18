@@ -36,6 +36,22 @@ const data: DocsPropsData = {
     {
       "name": "unmountOnHide",
       "type": "boolean"
+    },
+    {
+      "name": "ui",
+      "type": {
+        "values": [
+          "body",
+          "content",
+          "header",
+          "item",
+          "label",
+          "leadingIcon",
+          "root",
+          "trailingIcon",
+          "trigger"
+        ]
+      }
     }
   ],
   Alert: [
@@ -82,6 +98,22 @@ const data: DocsPropsData = {
     {
       "name": "closeIcon",
       "type": "string"
+    },
+    {
+      "name": "ui",
+      "type": {
+        "values": [
+          "actions",
+          "avatar",
+          "avatarSize",
+          "close",
+          "description",
+          "icon",
+          "root",
+          "title",
+          "wrapper"
+        ]
+      }
     }
   ],
   Avatar: [
@@ -114,6 +146,17 @@ const data: DocsPropsData = {
         "2xl",
         "3xl"
       ]
+    },
+    {
+      "name": "ui",
+      "type": {
+        "values": [
+          "fallback",
+          "icon",
+          "image",
+          "root"
+        ]
+      }
     }
   ],
   Badge: [
@@ -171,6 +214,19 @@ const data: DocsPropsData = {
     {
       "name": "trailingIcon",
       "type": "string"
+    },
+    {
+      "name": "ui",
+      "type": {
+        "values": [
+          "base",
+          "label",
+          "leadingAvatar",
+          "leadingAvatarSize",
+          "leadingIcon",
+          "trailingIcon"
+        ]
+      }
     }
   ],
   Breadcrumb: [
@@ -181,6 +237,23 @@ const data: DocsPropsData = {
     {
       "name": "labelKey",
       "type": "string"
+    },
+    {
+      "name": "ui",
+      "type": {
+        "values": [
+          "item",
+          "link",
+          "linkLabel",
+          "linkLeadingAvatar",
+          "linkLeadingAvatarSize",
+          "linkLeadingIcon",
+          "list",
+          "root",
+          "separator",
+          "separatorIcon"
+        ]
+      }
     }
   ],
   Button: [
@@ -299,6 +372,19 @@ const data: DocsPropsData = {
     {
       "name": "active",
       "type": "boolean"
+    },
+    {
+      "name": "ui",
+      "type": {
+        "values": [
+          "base",
+          "label",
+          "leadingAvatar",
+          "leadingAvatarSize",
+          "leadingIcon",
+          "trailingIcon"
+        ]
+      }
     }
   ],
   Calendar: [
@@ -402,6 +488,24 @@ const data: DocsPropsData = {
         "start",
         "end"
       ]
+    },
+    {
+      "name": "ui",
+      "type": {
+        "values": [
+          "body",
+          "cell",
+          "cellTrigger",
+          "grid",
+          "gridBody",
+          "gridRow",
+          "gridWeekDaysRow",
+          "headCell",
+          "header",
+          "heading",
+          "root"
+        ]
+      }
     }
   ],
   Card: [
@@ -413,6 +517,17 @@ const data: DocsPropsData = {
         "soft",
         "subtle"
       ]
+    },
+    {
+      "name": "ui",
+      "type": {
+        "values": [
+          "body",
+          "footer",
+          "header",
+          "root"
+        ]
+      }
     }
   ],
   Checkbox: [
@@ -484,6 +599,21 @@ const data: DocsPropsData = {
     {
       "name": "id",
       "type": "string"
+    },
+    {
+      "name": "ui",
+      "type": {
+        "values": [
+          "base",
+          "container",
+          "description",
+          "icon",
+          "indicator",
+          "label",
+          "root",
+          "wrapper"
+        ]
+      }
     }
   ],
   Chip: [
@@ -533,6 +663,15 @@ const data: DocsPropsData = {
     {
       "name": "show",
       "type": "boolean"
+    },
+    {
+      "name": "ui",
+      "type": {
+        "values": [
+          "base",
+          "root"
+        ]
+      }
     }
   ],
   DropdownMenu: [
@@ -569,6 +708,29 @@ const data: DocsPropsData = {
     {
       "name": "modal",
       "type": "boolean"
+    },
+    {
+      "name": "ui",
+      "type": {
+        "values": [
+          "arrow",
+          "content",
+          "group",
+          "item",
+          "itemLabel",
+          "itemLabelExternalIcon",
+          "itemLeadingAvatar",
+          "itemLeadingAvatarSize",
+          "itemLeadingIcon",
+          "itemTrailing",
+          "itemTrailingIcon",
+          "itemTrailingKbds",
+          "itemTrailingKbdsSize",
+          "label",
+          "separator",
+          "viewport"
+        ]
+      }
     }
   ],
   Input: [
@@ -663,6 +825,79 @@ const data: DocsPropsData = {
     {
       "name": "loadingIcon",
       "type": "string"
+    },
+    {
+      "name": "ui",
+      "type": {
+        "values": [
+          "base",
+          "leading",
+          "leadingAvatar",
+          "leadingAvatarSize",
+          "leadingIcon",
+          "root",
+          "trailing",
+          "trailingIcon"
+        ]
+      }
+    }
+  ],
+  Modal: [
+    {
+      "name": "title",
+      "type": "string"
+    },
+    {
+      "name": "description",
+      "type": "string"
+    },
+    {
+      "name": "overlay",
+      "type": "boolean"
+    },
+    {
+      "name": "transition",
+      "type": "boolean"
+    },
+    {
+      "name": "fullscreen",
+      "type": "boolean"
+    },
+    {
+      "name": "closeIcon",
+      "type": "string"
+    },
+    {
+      "name": "dismissible",
+      "type": "boolean"
+    },
+    {
+      "name": "open",
+      "type": "boolean"
+    },
+    {
+      "name": "defaultOpen",
+      "type": "boolean"
+    },
+    {
+      "name": "modal",
+      "type": "boolean"
+    },
+    {
+      "name": "ui",
+      "type": {
+        "values": [
+          "body",
+          "close",
+          "content",
+          "description",
+          "footer",
+          "header",
+          "overlay",
+          "title",
+          "wrapper"
+        ]
+      }
     }
   ],
   Progress: [
@@ -713,6 +948,19 @@ const data: DocsPropsData = {
         "swing",
         "elastic"
       ]
+    },
+    {
+      "name": "ui",
+      "type": {
+        "values": [
+          "base",
+          "indicator",
+          "root",
+          "status",
+          "step",
+          "steps"
+        ]
+      }
     }
   ],
   Select: [
@@ -823,6 +1071,38 @@ const data: DocsPropsData = {
     {
       "name": "loadingIcon",
       "type": "string"
+    },
+    {
+      "name": "ui",
+      "type": {
+        "values": [
+          "arrow",
+          "base",
+          "content",
+          "empty",
+          "group",
+          "item",
+          "itemLabel",
+          "itemLeadingAvatar",
+          "itemLeadingAvatarSize",
+          "itemLeadingChip",
+          "itemLeadingChipSize",
+          "itemLeadingIcon",
+          "itemTrailing",
+          "itemTrailingIcon",
+          "label",
+          "leading",
+          "leadingAvatar",
+          "leadingAvatarSize",
+          "leadingIcon",
+          "placeholder",
+          "separator",
+          "trailing",
+          "trailingIcon",
+          "value",
+          "viewport"
+        ]
+      }
     }
   ],
   Switch: [
@@ -899,6 +1179,21 @@ const data: DocsPropsData = {
     {
       "name": "modelValue",
       "type": "boolean"
+    },
+    {
+      "name": "ui",
+      "type": {
+        "values": [
+          "base",
+          "container",
+          "description",
+          "icon",
+          "label",
+          "root",
+          "thumb",
+          "wrapper"
+        ]
+      }
     }
   ],
   Tabs: [
@@ -956,6 +1251,24 @@ const data: DocsPropsData = {
     {
       "name": "unmountOnHide",
       "type": "boolean"
+    },
+    {
+      "name": "ui",
+      "type": {
+        "values": [
+          "content",
+          "indicator",
+          "label",
+          "leadingAvatar",
+          "leadingAvatarSize",
+          "leadingIcon",
+          "list",
+          "root",
+          "trailingBadge",
+          "trailingBadgeSize",
+          "trigger"
+        ]
+      }
     }
   ],
   Tooltip: [
@@ -986,6 +1299,18 @@ const data: DocsPropsData = {
     {
       "name": "ignoreNonKeyboardFocus",
       "type": "boolean"
+    },
+    {
+      "name": "ui",
+      "type": {
+        "values": [
+          "arrow",
+          "content",
+          "kbds",
+          "kbdsSize",
+          "text"
+        ]
+      }
     }
   ]
 };
