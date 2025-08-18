@@ -43,6 +43,25 @@ const overrides: Overrides = {
     configProps: ['variant'],
     disable: ['type', 'label', 'leadingIcon', 'trailingIcon', 'loadingIcon'],
   },
+  Breadcrumb: {
+    set: {
+      items: [
+        {
+          label: 'Home',
+          icon: 'i-lucide-house'
+        },
+        {
+          label: 'Components',
+          icon: 'i-lucide-box',
+        },
+        {
+          label: 'Breadcrumb',
+          icon: 'i-lucide-link',
+        }
+      ]
+    },
+    disable: ['labelKey'],
+  },
   Button: {
     set: {
       label: 'Button',
@@ -103,6 +122,138 @@ const overrides: Overrides = {
       props: { label: 'Button' },
     },
     disable: [],
+  },
+  DropdownMenu: {
+    set: {
+      color: 'primary',
+      modal: false,
+      defaultOpen: true,
+      ui:{ content: 'w-48' },
+      items: [
+        {
+          label: 'Profile',
+          icon: 'i-lucide-user',
+          check: true,
+        },
+        {
+          label: 'Billing',
+          icon: 'i-lucide-credit-card'
+        },
+        {
+          label: 'Settings',
+          icon: 'i-lucide-cog',
+          kbds: [',']
+        },
+        {
+          label: 'Keyboard shortcuts',
+          icon: 'i-lucide-monitor'
+        }
+      ],
+    },
+    child: {
+      is: 'UButton',
+      props: { icon: 'i-lucide-menu', label: 'Open' },
+    },
+    previewProp: 'variant',
+    configProps: ['variant'],
+    disable: ['modal', 'defaultOpen', 'open'],
+  },
+  Input: {
+    set: {
+      color: 'primary',
+      size: 'md',
+      label: 'Input',
+      placeholder: 'Placeholder',
+      icon: 'i-lucide-search'
+    },
+    previewProp: 'variant',
+    configProps: ['variant', 'color', 'size'],
+    disable: ["id", "name", "autocomplete", "leading", "autofocus"],
+  },
+  Progress: {
+    set: {
+      max: 100,
+      color: 'primary',
+      size: 'md',
+      class: 'w-48 h-48'
+    },
+    previewProp: 'orientation',
+    configProps: ['orientation', 'color', 'size'],
+    disable: ['status', 'inverted'],
+  },
+  Select: {
+    set: {
+      modelValue: 'backlog',
+      color: 'primary',
+      size:'md',
+      items: [
+        {
+          label: 'Backlog',
+          value: 'backlog'
+        },
+        {
+          label: 'Todo',
+          value: 'todo'
+        },
+        {
+          label: 'In Progress',
+          value: 'in_progress'
+        },
+        {
+          label: 'Done',
+          value: 'done'
+        }
+      ]      
+    },
+    previewProp: 'variant',
+    configProps: ['variant', 'color', 'size'],
+    disable: ['autofocus', 'leading', 'name', 'id', 'placeholder', 'autocomplete', 'defaultOpen', 'required', 'multiple', 'open'],
+  },
+  Switch: {
+    set: {
+      color: 'primary',
+      size: 'md',
+      label: 'Switch',
+      description: 'Description text',
+    },
+    previewProp: 'orientation',
+    configProps: ['orientation', 'color', 'size'],
+    disable: ['defaultValue', 'modelValue', 'id', 'name', 'value'],
+  },
+  Tabs: {
+    set: {
+      color: 'primary',
+      size: 'md',
+      items: [
+        {
+          label: 'Account',
+          icon: 'i-lucide-user',
+          content: 'This is the account content.'
+        },
+        {
+          label: 'Password',
+          icon: 'i-lucide-lock',
+          content: 'This is the password content.'
+        }
+      ]
+    },
+    previewProp: 'variant',
+    configProps: ['variant', 'color', 'size'],
+    disable: ['unmountOnHide', 'activationMode', 'labelKey'],
+  },
+  Tooltip: {
+    set: {
+      color: 'primary',
+      size: 'md',
+      text: "Tooltip text example"
+    },
+    child: {
+      is: 'UButton',
+      props: { label: 'Please hover me' },
+    },
+    previewProp: 'variant',
+    configProps: ['variant', 'color', 'size'],
+    disable: ['open', 'defaultOpen', 'disableHoverableContent', 'disableClosingTrigger', 'ignoreNonKeyboardFocus', 'disabled'],
   },
 };
 

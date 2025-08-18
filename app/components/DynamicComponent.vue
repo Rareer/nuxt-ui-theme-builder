@@ -56,6 +56,16 @@ const slotsContent = computed<Record<string, string>>(() => currentConfig.value?
 
 // Optional top-level child spec to be rendered into the default slot
 const childSpec = computed<any | undefined>(() => (currentConfig.value as any)?.child)
+const childModelCfg = computed<{ value: any; prop?: string; event?: string } | undefined>(() => (currentConfig.value as any)?.childModel)
+const childModelValue = ref<any>()
+
+watchEffect(() => {
+  if (childModelCfg.value) {
+    childModelValue.value = childModelCfg.value.value
+  } else {
+    childModelValue.value = undefined
+  }
+})
 
 function renderChild(spec: any) {
   if (typeof spec === 'function') return spec
@@ -64,10 +74,25 @@ function renderChild(spec: any) {
       const name = spec.is || spec.component
       const comp = typeof name === 'string' ? resolveComponent(name) : name
       const children = spec.children
-      if (Array.isArray(children)) return h(comp as any, spec.props || {}, children)
-      if (typeof children === 'function') return h(comp as any, spec.props || {}, children)
-      if (children != null) return h(comp as any, spec.props || {}, () => children)
-      return h(comp as any, spec.props || {})
+      // merge props with optional v-model-like binding
+      const propsMerged: Record<string, any> = { ...(spec.props || {}) }
+      if (childModelCfg.value) {
+        const propName = childModelCfg.value.prop || 'modelValue'
+        const customEvent = childModelCfg.value.event?.trim()
+        // Map event name to Vue listener key
+        // - if event provided includes ':', keep it as is (e.g., 'update:foo') -> 'onUpdate:foo'
+        // - else, camel-case first letter (e.g., 'change' -> 'onChange')
+        const eventKey = customEvent
+          ? (customEvent.includes(':') ? `on${customEvent[0].toUpperCase()}${customEvent.slice(1)}`.replace('OnUpdate:', 'onUpdate:')
+                                       : `on${customEvent[0].toUpperCase()}${customEvent.slice(1)}`)
+          : `onUpdate:${propName}`
+        propsMerged[propName] = childModelValue.value
+        propsMerged[eventKey] = (v: any) => { childModelValue.value = v }
+      }
+      if (Array.isArray(children)) return h(comp as any, propsMerged, children)
+      if (typeof children === 'function') return h(comp as any, propsMerged, children)
+      if (children != null) return h(comp as any, propsMerged, () => children)
+      return h(comp as any, propsMerged)
     }
   }
   return () => spec

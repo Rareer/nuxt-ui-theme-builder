@@ -535,7 +535,7 @@ const data: DocsPropsData = {
       "type": "boolean"
     }
   ],
-  Dropdown: [
+  DropdownMenu: [
     {
       "name": "size",
       "type": [
@@ -663,48 +663,6 @@ const data: DocsPropsData = {
     {
       "name": "loadingIcon",
       "type": "string"
-    }
-  ],
-  Modal: [
-    {
-      "name": "title",
-      "type": "string"
-    },
-    {
-      "name": "description",
-      "type": "string"
-    },
-    {
-      "name": "overlay",
-      "type": "boolean"
-    },
-    {
-      "name": "transition",
-      "type": "boolean"
-    },
-    {
-      "name": "fullscreen",
-      "type": "boolean"
-    },
-    {
-      "name": "closeIcon",
-      "type": "string"
-    },
-    {
-      "name": "dismissible",
-      "type": "boolean"
-    },
-    {
-      "name": "open",
-      "type": "boolean"
-    },
-    {
-      "name": "defaultOpen",
-      "type": "boolean"
-    },
-    {
-      "name": "modal",
-      "type": "boolean"
     }
   ],
   Progress: [

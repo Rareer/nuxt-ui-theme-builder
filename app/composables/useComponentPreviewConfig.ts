@@ -20,6 +20,8 @@ type AvailableComponentConfig = {
   slots?: Record<string, any>;
   // preferred declarative child for default slot (overrides slots.default if present)
   child?: any;
+  // optional v-model binding for child: prop/event names default to modelValue/update:modelValue
+  childModel?: { value: any; prop?: string; event?: string };
 };
 
 // Overrides format
@@ -30,6 +32,7 @@ type Overrides = Record<string, {
   configProps?: string[];
   slots?: Record<string, any>;
   child?: any;
+  childModel?: { value: any; prop?: string; event?: string };
 }>;
 
 // Prefer centralized utility dataset; fallback to per-file JSON globs
@@ -99,6 +102,7 @@ export const useComponentPreviewConfig = () => {
     const resolvedConfigProps = overrideEntry?.configProps ?? (overrideEntry as any)?.set?.configProps;
     const resolvedSlots = overrideEntry?.slots ?? (overrideEntry as any)?.set?.slots;
     const resolvedChild = (overrideEntry as any)?.child ?? (overrideEntry as any)?.set?.child;
+    const resolvedChildModel = (overrideEntry as any)?.childModel ?? (overrideEntry as any)?.set?.childModel;
 
     // Build preset, stripping reserved keys if they were incorrectly placed in `set`
     let preset: Record<string, any> | undefined = undefined;
@@ -116,6 +120,7 @@ export const useComponentPreviewConfig = () => {
       configProps: resolvedConfigProps,
       slots: resolvedSlots,
       child: resolvedChild,
+      childModel: resolvedChildModel,
     };
   });
 
