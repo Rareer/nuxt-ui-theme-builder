@@ -12,9 +12,11 @@ const currentConfig = computed(() =>
 );
 
 const docsProps = computed<DocsProp[]>(() => currentConfig.value?.props || []);
+// Exclude 'ui' once and reuse
+const filteredDocsProps = computed<DocsProp[]>(() => docsProps.value.filter(p => p.name !== 'ui'))
 
 // Exclude 'ui' from all configurator lists
-const booleanPropsAll = computed(() => docsProps.value.filter(p => p.name !== 'ui' && p.type === 'boolean'));
+const booleanPropsAll = computed(() => filteredDocsProps.value.filter(p => p.type === 'boolean'));
 
 function extractOptions(t: DocsProp['type']): string[] {
   // Already array of options
@@ -35,15 +37,15 @@ function extractOptions(t: DocsProp['type']): string[] {
   return [];
 }
 
-const optionPropsAll = computed(() => docsProps.value
-  .filter(p => p.name !== 'ui')
+const optionPropsAll = computed(() => filteredDocsProps.value
   .map(p => ({ name: p.name, type: extractOptions(p.type) }))
   .filter(p => Array.isArray(p.type) && (p.type as string[]).length) as { name: string; type: string[] }[]);
 
-const stringPropsAll = computed(() => docsProps.value.filter(p => p.name !== 'ui' && p.type === 'string'));
+const stringPropsAll = computed(() => filteredDocsProps.value.filter(p => p.type === 'string'));
 
 // Preview configuration from overrides
 const previewPropName = computed(() => currentConfig.value?.previewProp);
+const previewPropLower = computed(() => (previewPropName.value || '').toLowerCase())
 const previewPropOptions = computed<string[]>(() => {
   const name = previewPropName.value?.toLowerCase();
   if (!name) return [];
@@ -83,18 +85,17 @@ function renderChild(spec: any) {
         const customEvent = childModelCfg.value.event?.trim()
         // Map event name to Vue listener key
         let eventKey: string
-        if (customEvent) {
+        if (!customEvent) {
+          eventKey = `onUpdate:${propName}`
+        } else {
           const ce = customEvent as string
-          if (ce.includes(':')) {
-            // e.g., 'update:foo' -> 'onUpdate:foo'
-            const up = `on${ce[0].toUpperCase()}${ce.slice(1)}`
-            eventKey = up.replace('OnUpdate:', 'onUpdate:')
+          // Special-case update:foo -> onUpdate:foo
+          if (ce.startsWith('update:')) {
+            eventKey = `onUpdate:${ce.slice('update:'.length)}`
           } else {
             // e.g., 'change' -> 'onChange'
             eventKey = `on${ce[0].toUpperCase()}${ce.slice(1)}`
           }
-        } else {
-          eventKey = `onUpdate:${propName}`
         }
         propsMerged[propName] = childModelValue.value
         propsMerged[eventKey] = (v: any) => { childModelValue.value = v }
@@ -127,30 +128,27 @@ const renderedChildFn = computed<(() => any) | null>(() => {
 })
 
 // Exclude previewProp from top controls
-const booleanProps = computed(() => booleanPropsAll.value.filter(p => p.name.toLowerCase() !== (previewPropName.value || '').toLowerCase()));
-const optionProps = computed(() => optionPropsAll.value.filter(p => p.name.toLowerCase() !== (previewPropName.value || '').toLowerCase()));
-const stringProps = computed(() => stringPropsAll.value.filter(p => p.name.toLowerCase() !== (previewPropName.value || '').toLowerCase()));
+const booleanProps = computed(() => booleanPropsAll.value.filter(p => p.name.toLowerCase() !== previewPropLower.value));
+const optionProps = computed(() => optionPropsAll.value.filter(p => p.name.toLowerCase() !== previewPropLower.value));
+const stringProps = computed(() => stringPropsAll.value.filter(p => p.name.toLowerCase() !== previewPropLower.value));
 
 // Bound props state
 const bound = reactive<Record<string, any>>({});
 
-// Initialize preset defaults from overrides (run BEFORE defaults)
+// Initialize defaults in a single ordered pass: preset -> booleans -> options
 watchEffect(() => {
+  // Preset from overrides (does not overwrite user changes)
   const preset = currentConfig.value?.preset || {};
   for (const key in preset) {
     if (!(key in bound)) bound[key] = preset[key];
   }
-});
 
-// Initialize defaults for boolean props (only if not set by preset)
-watchEffect(() => {
+  // Boolean defaults
   for (const p of booleanProps.value) {
     if (!(p.name in bound)) bound[p.name] = false;
   }
-});
 
-// Initialize option (select) props to their first entry if unset
-watchEffect(() => {
+  // Option (select) defaults
   for (const p of optionProps.value) {
     const options = Array.isArray(p.type) ? (p.type as string[]) : [];
     if (options.length && !(p.name in bound)) {
@@ -163,7 +161,7 @@ watchEffect(() => {
 </script>
 
 <template>   
-    <div v-if="booleanProps.length || optionProps.length || stringProps.length"class="flex-1 w-full">
+    <div v-if="booleanProps.length || optionProps.length || stringProps.length" class="flex-1 w-full">
         <div class="flex flex-wrap items-center gap-6 mb-4">
         <UFormField v-for="p in booleanProps" :key="p.name" :label="p.name">
             <USwitch v-model="bound[p.name]" />

@@ -38,6 +38,7 @@ const overrides: Overrides = {
     set: {
       label: 'Badge',
       icon: 'i-lucide-square-code',
+      color: 'primary',
     },
     previewProp: 'variant',
     configProps: ['variant'],

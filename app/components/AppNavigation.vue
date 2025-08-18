@@ -11,17 +11,9 @@ defineProps<{
 const items = computed<NavigationMenuItem[][]>(() => [
   [
     {
-      label: t('nav.navigation'),
-      type: 'label',
-    },
-    {
       label: t('nav.home'),
       icon: 'i-lucide-home',
       to: localePath('/'),
-    },
-    {
-      label: t('nav.globals'),
-      type: 'label',
     },
     {
       label: t('nav.customColors'),
