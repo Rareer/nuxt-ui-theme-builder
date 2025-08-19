@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { h, resolveComponent, defineComponent, onMounted, watch } from 'vue'
 import { useComponentUiConfigStore } from '@/store/componentUiConfig'
-import { useUiClasses } from '@/composables/useUiClasses'
+import { useUiClasses, buildUiObject } from '@/composables/useUiClasses'
 
 type DocsProp = { name: string; type: 'boolean' | 'string' | string[] | unknown };
 
@@ -211,6 +211,17 @@ const uiObject = useUiClasses({
   getPropValue: (propName: string) => bound[propName] as string | undefined,
 })
 
+// Build per-item UI object for preview (override previewProp with current opt)
+function uiForPreviewOption(opt: string): Record<string, string> {
+  const selections: Record<string, string | undefined> = {}
+  for (const name of configPropNames.value) {
+    selections[name] = (name.toLowerCase() === previewPropLower.value)
+      ? opt
+      : (bound[name] as string | undefined)
+  }
+  return buildUiObject(props.component, selections, uiSlots.value)
+}
+
 // Indicators and reset handlers for collapsibles
 const hasAnyDefault = computed(() => uiStore.hasAnyDefaultClasses(props.component))
 function resetDefault() {
@@ -275,7 +286,7 @@ watchEffect(() => {
         <template v-if="previewPropOptions.length">
           <div class="flex flex-wrap gap-8">
             <UFormField v-for="opt in previewPropOptions" :key="opt" class="space-y-2" :label="opt">
-              <component :is="props.component" :key="opt" v-bind="{ ...bound, [previewPropName as string]: opt }" :ui="uiObject">
+              <component :is="props.component" :key="opt" v-bind="{ ...bound, [previewPropName as string]: opt }" :ui="uiForPreviewOption(opt)">
                 <RenderFn v-if="renderedChildFn" :render="renderedChildFn" />
                 <template v-for="(content, slotName) in slotsContent" :key="slotName" v-slot:[slotName]>
                   {{ content }}
