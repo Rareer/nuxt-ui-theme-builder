@@ -79,7 +79,7 @@ useHead(() => ({
 					{{ $t('index.featureComponentsDesc') }}
 				</p>
 				<UButton
-					to="/components"
+					to="/components/UButton"
 					variant="soft"
 					size="sm"
 				>

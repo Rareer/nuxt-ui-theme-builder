@@ -297,7 +297,7 @@ watch(selectedColors, (newValues) => {
 				<UFormField>
 					<USelect
 						v-model="selectedColors[variable]"
-						class="w-full"
+						class="w-full h-8"
 						:items="colorOptions"
 						:placeholder="t('variableConfigurator.selectColor')"
 					/>
