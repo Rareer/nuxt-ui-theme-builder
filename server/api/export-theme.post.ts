@@ -3,7 +3,7 @@ import { defineEventHandler, readBody } from 'h3';
 export default defineEventHandler(async (event) => {
 	try {
 		// Get theme variables, custom colors, and theme mappings from request body
-		const { themeVariables, themeVariablesByMode, customColors, themeMappings, exportMode } = await readBody<{
+		const { themeVariables, themeVariablesByMode, customColors, themeMappings, exportMode, componentUiConfigs } = await readBody<{
 			themeVariables?: Record<string, string>;
 			themeVariablesByMode?: { light?: Record<string, string>; dark?: Record<string, string> };
 			customColors?: Array<{ name: string; values: Record<string, string> }>;
@@ -11,6 +11,8 @@ export default defineEventHandler(async (event) => {
 			themeMappings?: Record<string, string | null> | { light?: Record<string, string | null>; dark?: Record<string, string | null> };
 			// Optional preferred export mode for per-mode mappings
 			exportMode?: 'light' | 'dark';
+			// Optional component UI configs from client
+			componentUiConfigs?: { byComponent?: Record<string, any> };
 		}>(event);
 
 		if (!themeVariables && !themeVariablesByMode) {
@@ -24,7 +26,7 @@ export default defineEventHandler(async (event) => {
 		const cssContent = generateCssContent({ themeVariables, themeVariablesByMode, customColors });
 
 		// Generate app.config.ts content
-		const appConfigContent = generateAppConfigContent(themeMappings, exportMode);
+		const appConfigContent = generateAppConfigContent(themeMappings, exportMode, componentUiConfigs?.byComponent || {});
 
 		return {
 			success: true,
@@ -44,12 +46,13 @@ export default defineEventHandler(async (event) => {
 function generateAppConfigContent(
 	themeMappings?: Record<string, string | null> | { light?: Record<string, string | null>; dark?: Record<string, string | null> },
 	exportMode?: 'light' | 'dark',
+	byComponent: Record<string, any> = {},
 ): string {
 	// Start with the basic structure
 	let configContent = `export default defineAppConfig({
-  ui: {
-    colors: {
-`;
+	  ui: {
+	    colors: {
+	`;
 
 	// Add color mappings if they exist
 	if (themeMappings) {
@@ -73,9 +76,77 @@ function generateAppConfigContent(
 		});
 	}
 
-	// Close the structure
-	configContent += `    }
-  }
+	configContent += `    },
+`;
+
+    // Helper: map component name like "UButton" -> "button"
+    const mapComponentKey = (name: string) => {
+        let n = name || ''
+        if (n.startsWith('U')) n = n.slice(1)
+        return n.length ? n[0].toLowerCase() + n.slice(1) : n
+    }
+
+    // Serialize each component as sibling under ui, skipping empty ones
+    const entries = Object.entries(byComponent || {});
+    entries.forEach(([componentName, cfg]) => {
+        const key = mapComponentKey(componentName)
+
+        // Build slots content
+        const slotLines: string[] = []
+        if (cfg && cfg.defaults) {
+            for (const [slot, arr] of Object.entries(cfg.defaults)) {
+                if (Array.isArray(arr) && arr.length) {
+                    const cls = (arr as string[]).join(' ').replace(/`/g, '\\`')
+                    slotLines.push(`        ${slot}: \`${cls}\`,`)
+                }
+            }
+        }
+
+        // Build variants content
+        const variantPropBlocks: string[] = []
+        if (cfg && cfg.props) {
+            for (const [propName, options] of Object.entries(cfg.props)) {
+                let optionBuffer = ''
+                for (const [optionName, slots] of Object.entries(options as Record<string, any>)) {
+                    const slotEntries = Object.entries(slots as Record<string, string[]>)
+                        .filter(([_, arr]) => Array.isArray(arr) && (arr as string[]).length)
+                    if (!slotEntries.length) continue
+                    if (slotEntries.length === 1 && slotEntries[0][0] === 'base') {
+                        const cls = (slotEntries[0][1] as string[]).join(' ').replace(/`/g, '\\`')
+                        optionBuffer += `        ${optionName}: \`${cls}\`,\n`
+                    } else {
+                        optionBuffer += `        ${optionName}: {\n`
+                        for (const [slot, arr] of slotEntries) {
+                            const cls = (arr as string[]).join(' ').replace(/`/g, '\\`')
+                            optionBuffer += `          ${slot}: \`${cls}\`,\n`
+                        }
+                        optionBuffer += `        },\n`
+                    }
+                }
+                if (optionBuffer) {
+                    variantPropBlocks.push(`      ${propName}: {\n${optionBuffer}      },`)
+                }
+            }
+        }
+
+        // Skip entirely if nothing to output
+        if (slotLines.length === 0 && variantPropBlocks.length === 0) return
+
+        // Start component block
+        configContent += `    ${key}: {\n`
+        // slots (only if any)
+        if (slotLines.length) {
+            configContent += `      slots: {\n${slotLines.join('\n')}\n      },\n`
+        }
+        // variants (only if any)
+        if (variantPropBlocks.length) {
+            configContent += `      variants: {\n${variantPropBlocks.join('\n')}\n      }\n`
+        }
+        configContent += `    },\n`
+    });
+
+    // Close the structure
+    configContent += `  }
 });
 `;
 

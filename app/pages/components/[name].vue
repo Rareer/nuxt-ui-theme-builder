@@ -1,7 +1,6 @@
 <template>
-	<div class="p-6">
-		<ComponentPreview :component="component.value" />
-	</div>
+	<h1 class="text-2xl font-bold mb-6">{{ component.label }}</h1>
+	<DynamicComponent :component="component.value" />
 </template>
 
 <script setup lang="ts">
