@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { h, resolveComponent, defineComponent } from 'vue'
+import { h, resolveComponent, defineComponent, onMounted, watch } from 'vue'
+import { useComponentUiConfigStore } from '@/store/componentUiConfig'
+
 type DocsProp = { name: string; type: 'boolean' | 'string' | string[] | unknown };
 
 const props = defineProps<{ component: string }>();
@@ -30,35 +32,38 @@ const uiSlots = computed<string[]>(() => {
   const uiProp = docsProps.value.find(p => p.name === 'ui')
   return uiProp ? extractOptions(uiProp.type) : []
 })
-// Reactive store for classes per configProp -> option -> uiSlot
-const configUi = reactive<Record<string, Record<string, Record<string, string[]>>>>({})
-// v-model helper to avoid undefined typing in template
+// Pinia store for Combobox-driven UI config
+const uiStore = useComponentUiConfigStore()
+
+// v-model helper backed by the store
 const uiModel = (propName: string, opt: string, slot: string) => computed<string[]>({
   get() {
-    if (!configUi[propName]) configUi[propName] = {}
-    if (!configUi[propName][opt]) configUi[propName][opt] = {}
-    if (!configUi[propName][opt][slot]) configUi[propName][opt][slot] = []
-    return configUi[propName][opt][slot]
+    uiStore.ensurePath(props.component, propName, opt, slot)
+    return uiStore.getClasses(props.component, propName, opt, slot)
   },
   set(v: string[]) {
-    if (!configUi[propName]) configUi[propName] = {}
-    if (!configUi[propName][opt]) configUi[propName][opt] = {}
-    configUi[propName][opt][slot] = v
+    uiStore.setClasses(props.component, propName, opt, slot, v)
   }
 })
-// Ensure structure exists
+
+// Ensure store paths exist for all prop/option/slot combinations
 watchEffect(() => {
   for (const propName of configPropNames.value) {
-    configUi[propName] ||= {}
     const opts = optionsByProp.value[propName] || []
     for (const opt of opts) {
-      configUi[propName][opt] ||= {}
       for (const slot of uiSlots.value) {
-        configUi[propName][opt][slot] ||= []
+        uiStore.ensurePath(props.component, propName, opt, slot)
       }
     }
   }
 })
+
+// Persistence lifecycle
+onMounted(() => {
+  uiStore.loadFromLocalStorage()
+})
+
+watch(() => uiStore.byComponent, () => uiStore.saveToLocalStorage(), { deep: true })
 
 // Exclude 'ui' from all configurator lists
 const booleanPropsAll = computed(() => filteredDocsProps.value.filter(p => p.type === 'boolean'));
