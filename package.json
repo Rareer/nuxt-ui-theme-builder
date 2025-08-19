@@ -5,6 +5,9 @@
   "version": "1.0.0",
   "author": "Toni Kritz",
   "scripts": {
+    "predev": "node scripts/generate-tailwind-safelist.mjs",
+    "prebuild": "node scripts/generate-tailwind-safelist.mjs",
+    "pregenerate": "node scripts/generate-tailwind-safelist.mjs",
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
