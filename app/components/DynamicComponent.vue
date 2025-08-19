@@ -304,7 +304,6 @@ watchEffect(() => {
           </component>
         </template>
     </div>
-    {{ uiObject }}
     <USeparator class="my-6"/>
     <!-- Default classes per UI slot (component-wide) -->
     <h2 class="text-lg font-semibold my-8">Config</h2>
