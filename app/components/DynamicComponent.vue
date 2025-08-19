@@ -46,6 +46,17 @@ const uiModel = (propName: string, opt: string, slot: string) => computed<string
   }
 })
 
+// v-model helper for component-wide default classes per slot
+const defaultUiModel = (slot: string) => computed<string[]>({
+  get() {
+    uiStore.ensureDefaultSlot(props.component, slot)
+    return uiStore.getDefaultClasses(props.component, slot)
+  },
+  set(v: string[]) {
+    uiStore.setDefaultClasses(props.component, slot, v)
+  }
+})
+
 // Ensure store paths exist for all prop/option/slot combinations
 watchEffect(() => {
   for (const propName of configPropNames.value) {
@@ -55,6 +66,10 @@ watchEffect(() => {
         uiStore.ensurePath(props.component, propName, opt, slot)
       }
     }
+  }
+  // Ensure defaults exist for each slot regardless of configProps
+  for (const slot of uiSlots.value) {
+    uiStore.ensureDefaultSlot(props.component, slot)
   }
 })
 
@@ -255,8 +270,20 @@ watchEffect(() => {
         </template>
     </div>
     <USeparator class="my-6"/>
+    <!-- Default classes per UI slot (component-wide) -->
+    <h2 class="text-lg font-semibold my-8">Config</h2>
+    <UCollapsible v-if="uiSlots.length">
+      <UButton label="Default" block variant="soft" color="neutral" trailing-icon="i-lucide-chevron-down" />
+      <template #content>
+        <div class="flex flex-col gap-2 py-2">
+          <UFormField v-for="slotName in uiSlots" :key="slotName" :label="slotName">
+            <Combobox v-model="defaultUiModel(slotName).value" />
+          </UFormField>
+        </div>
+      </template>
+    </UCollapsible>
+
     <!-- Config tabs for configProps: per option -> Combobox per ui slot -->
-     <h2 class="text-lg font-semibold my-8">Config</h2>
     <UTabs v-if="configPropNames.length && uiSlots.length" color="neutral" :items="configPropNames.map(n => ({ label: n }))" class="my-6">
       <!-- @vue-ignore: Volar types for UTabs slot context are not inferred -->
       <template #content="{ item }">
