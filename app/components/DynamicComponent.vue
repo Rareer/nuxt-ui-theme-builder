@@ -261,28 +261,7 @@ watchEffect(() => {
 </script>
 
 <template>   
-    <div v-if="booleanProps.length || optionProps.length || stringProps.length" class="flex-1 w-full">
-        <div class="flex flex-wrap items-center gap-6 mb-4">
-        <UFormField v-for="p in booleanProps" :key="p.name" :label="p.name">
-            <USwitch v-model="bound[p.name]" />
-        </UFormField>
-        </div>
-
-        <div class="flex flex-wrap items-center gap-6 mb-4">
-        <UFormField v-for="p in optionProps" :key="p.name" :label="p.name">
-            <USelect class="block w-full" :items="(p.type as string[]).map(v => ({ label: v, value: v }))" v-model="bound[p.name]" />
-        </UFormField>
-        </div>
-
-        <div class="flex flex-wrap items-center gap-6 mb-4">
-        <UFormField v-for="p in stringProps" :key="p.name" :label="p.name">
-            <UInput v-model="bound[p.name]" />
-        </UFormField>
-        </div>
-    </div>
-    <USeparator class="my-6" v-if="previewPropOptions.length"/>
-    <div class="flex-1 w-full">
-        <h2 class="text-lg font-semibold my-8">Preview</h2>
+    <div class="flex-1 w-full shadow-lg border border-gray-200 dark:border-gray-800 rounded-lg py-10 px-6 mb-10">
         <template v-if="previewPropOptions.length">
           <div class="flex flex-wrap gap-8">
             <UFormField v-for="opt in previewPropOptions" :key="opt" class="space-y-2" :label="opt">
@@ -304,9 +283,30 @@ watchEffect(() => {
           </component>
         </template>
     </div>
-    <USeparator class="my-6"/>
+    <div v-if="booleanProps.length || optionProps.length || stringProps.length" class="flex-1 w-full">
+      <h2 class="text-lg font-semibold my-8">Preview Options</h2>
+      <div class="space-y-4">
+        <div class="flex flex-wrap items-center gap-6">
+          <UFormField v-for="p in booleanProps" :key="p.name" :label="p.name">
+              <USwitch v-model="bound[p.name]" />
+          </UFormField>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-6">
+          <UFormField v-for="p in optionProps" :key="p.name" :label="p.name">
+              <USelect class="block w-full" :items="(p.type as string[]).map(v => ({ label: v, value: v }))" v-model="bound[p.name]" />
+          </UFormField>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-6">
+          <UFormField v-for="p in stringProps" :key="p.name" :label="p.name">
+              <UInput v-model="bound[p.name]" />
+          </UFormField>
+        </div>
+      </div>
+    </div>
     <!-- Default classes per UI slot (component-wide) -->
-    <h2 class="text-lg font-semibold my-8">Config</h2>
+    <h2 class="text-lg font-semibold my-8">Component Config</h2>
     <UCollapsible v-if="uiSlots.length">
       <div class="flex items-center gap-2">
         <UButton

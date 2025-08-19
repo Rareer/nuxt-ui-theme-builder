@@ -29,7 +29,8 @@ useHead(() => ({
 					{{ $t('index.btnManageColors') }}
 				</UButton>
 				<UButton
-					to="/components"
+					to="/components/UButton"
+					color="secondary"
 					variant="outline"
 					size="lg"
 					icon="i-lucide-square-code"

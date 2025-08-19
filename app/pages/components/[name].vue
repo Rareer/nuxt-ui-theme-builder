@@ -1,5 +1,5 @@
 <template>
-	<h1 class="text-2xl font-bold mb-6">{{ component.label }}</h1>
+	<h1 class="text-2xl font-bold mb-6">U{{ component.label }}</h1>
 	<DynamicComponent :component="component.value" />
 </template>
 

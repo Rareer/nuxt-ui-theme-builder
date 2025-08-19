@@ -40,12 +40,14 @@ const items = computed<NavigationMenuItem[][]>(() => [
     {
       label: 'GitHub',
       icon: 'i-lucide-github',
+      target: '_blank',
       to: 'https://github.com/Rareer/nuxt-ui-theme-builder',
       trailingIcon: 'i-lucide-external-link',
     },
     {
       label: 'LinkedIn',
       icon: 'i-lucide-linkedin',
+      target: '_blank',
       to: 'https://www.linkedin.com/in/toni-kritz-5528a5184/',
       trailingIcon: 'i-lucide-external-link',
     },
