@@ -41,6 +41,42 @@ export const useComponentUiConfigStore = defineStore('componentUiConfig', {
       }
     },
 
+    // Check if any default classes exist for a component
+    hasAnyDefaultClasses(componentName: string): boolean {
+      const comp = this.byComponent[componentName]
+      if (!comp || !comp.defaults) return false
+      return Object.values(comp.defaults).some(arr => Array.isArray(arr) && arr.length > 0)
+    },
+
+    // Clear all default classes for a component
+    clearDefaultClasses(componentName: string) {
+      const comp = (this.byComponent[componentName] ??= { props: {}, defaults: {} })
+      comp.defaults = {}
+    },
+
+    // Check if any classes exist for a specific prop/option across any slot
+    hasAnyClassesForOption(componentName: string, propName: string, option: string): boolean {
+      const comp = this.byComponent[componentName]
+      if (!comp) return false
+      const byProp = comp.props[propName]
+      if (!byProp) return false
+      const byOption = byProp[option]
+      if (!byOption) return false
+      return Object.values(byOption).some(arr => Array.isArray(arr) && arr.length > 0)
+    },
+
+    // Clear all classes for a specific prop/option across all slots
+    clearClassesForOption(componentName: string, propName: string, option: string) {
+      const comp = this.byComponent[componentName]
+      if (!comp) return
+      const byProp = comp.props[propName]
+      if (!byProp) return
+      if (byProp[option]) {
+        // Remove the option entirely for clean state
+        delete byProp[option]
+      }
+    },
+
     // Ensure nested path exists and return the current SlotClasses array reference
     ensurePath(
       componentName: string,

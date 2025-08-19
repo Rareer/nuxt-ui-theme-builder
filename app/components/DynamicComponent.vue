@@ -211,6 +211,18 @@ const uiObject = useUiClasses({
   getPropValue: (propName: string) => bound[propName] as string | undefined,
 })
 
+// Indicators and reset handlers for collapsibles
+const hasAnyDefault = computed(() => uiStore.hasAnyDefaultClasses(props.component))
+function resetDefault() {
+  uiStore.clearDefaultClasses(props.component)
+}
+function hasAnyForOption(propName: string, opt: string) {
+  return uiStore.hasAnyClassesForOption(props.component, propName, opt)
+}
+function resetOption(propName: string, opt: string) {
+  uiStore.clearClassesForOption(props.component, propName, opt)
+}
+
 // Initialize defaults in a single ordered pass: preset -> booleans -> options
 watchEffect(() => {
   // Preset from overrides (does not overwrite user changes)
@@ -234,6 +246,7 @@ watchEffect(() => {
 });
 
 // (Removed duplicate preset initializer)
+
 </script>
 
 <template>   
@@ -285,7 +298,24 @@ watchEffect(() => {
     <!-- Default classes per UI slot (component-wide) -->
     <h2 class="text-lg font-semibold my-8">Config</h2>
     <UCollapsible v-if="uiSlots.length">
-      <UButton label="Default" block variant="soft" color="neutral" trailing-icon="i-lucide-chevron-down" />
+      <div class="flex items-center gap-2">
+        <UButton
+          label="Default"
+          class="flex-1"
+          variant="soft"
+          :color="hasAnyDefault ? 'primary' : 'neutral'"
+          :leading-icon="hasAnyDefault ? 'i-lucide-dot' : undefined"
+          trailing-icon="i-lucide-chevron-down"
+        />
+        <UButton
+          v-if="hasAnyDefault"
+          variant="ghost"
+          color="neutral"
+          size="xs"
+          icon="i-lucide-rotate-ccw"
+          @click.stop="resetDefault()"
+        />
+      </div>
       <template #content>
         <div class="flex flex-col gap-2 py-2">
           <UFormField v-for="slotName in uiSlots" :key="slotName" :label="slotName">
@@ -303,7 +333,24 @@ watchEffect(() => {
           <div v-for="opt in (optionsByProp[(item as any).label] || [])" :key="opt" class="space-y-3">
             <!-- @vue-ignore -->
              <UCollapsible>
-                <UButton :label="opt" block variant="soft" color="neutral" trailing-icon="i-lucide-chevron-down" />
+                <div class="flex items-center gap-2">
+                  <UButton
+                    :label="opt"
+                    class="flex-1"
+                    variant="soft"
+                    :color="hasAnyForOption((item as any).label, opt) ? 'primary' : 'neutral'"
+                    :leading-icon="hasAnyForOption((item as any).label, opt) ? 'i-lucide-sparkles' : undefined"
+                    trailing-icon="i-lucide-chevron-down"
+                  />
+                  <UButton
+                    v-if="hasAnyForOption((item as any).label, opt)"
+                    variant="ghost"
+                    color="neutral"
+                    size="xs"
+                    icon="i-lucide-rotate-ccw"
+                    @click.stop="resetOption((item as any).label, opt)"
+                  />
+                </div>
                 <template #content>
                     <div class="flex flex-col gap-2 py-2">
                         <UFormField v-for="slotName in uiSlots" :key="slotName" :label="slotName">
