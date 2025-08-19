@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { h, resolveComponent, defineComponent, onMounted, watch } from 'vue'
 import { useComponentUiConfigStore } from '@/store/componentUiConfig'
+import { useUiClasses } from '@/composables/useUiClasses'
 
 type DocsProp = { name: string; type: 'boolean' | 'string' | string[] | unknown };
 
@@ -154,8 +155,10 @@ function renderChild(spec: any) {
           eventKey = `onUpdate:${propName}`
         } else {
           const ce = customEvent as string
-          // Special-case update:foo -> onUpdate:foo
-          if (ce.startsWith('update:')) {
+          if (!ce || ce.length === 0) {
+            eventKey = 'onChange'
+          } else if (ce.startsWith('update:')) {
+            // Special-case update:foo -> onUpdate:foo
             eventKey = `onUpdate:${ce.slice('update:'.length)}`
           } else {
             // e.g., 'change' -> 'onChange'
@@ -199,6 +202,14 @@ const stringProps = computed(() => stringPropsAll.value.filter(p => p.name.toLow
 
 // Bound props state
 const bound = reactive<Record<string, any>>({});
+
+// Build merged ui object from defaults + selected options
+const uiObject = useUiClasses({
+  component: computed(() => props.component),
+  configPropNames,
+  uiSlots,
+  getPropValue: (propName: string) => bound[propName] as string | undefined,
+})
 
 // Initialize defaults in a single ordered pass: preset -> booleans -> options
 watchEffect(() => {
@@ -251,7 +262,7 @@ watchEffect(() => {
         <template v-if="previewPropOptions.length">
           <div class="flex flex-wrap gap-8">
             <UFormField v-for="opt in previewPropOptions" :key="opt" class="space-y-2" :label="opt">
-              <component :is="props.component" :key="opt" v-bind="{ ...bound, [previewPropName as string]: opt }">
+              <component :is="props.component" :key="opt" v-bind="{ ...bound, [previewPropName as string]: opt }" :ui="uiObject">
                 <RenderFn v-if="renderedChildFn" :render="renderedChildFn" />
                 <template v-for="(content, slotName) in slotsContent" :key="slotName" v-slot:[slotName]>
                   {{ content }}
@@ -261,7 +272,7 @@ watchEffect(() => {
           </div>
         </template>
         <template v-else>
-          <component :is="props.component" v-bind="bound">
+          <component :is="props.component" v-bind="bound" :ui="uiObject">
             <RenderFn v-if="renderedChildFn" :render="renderedChildFn" />
             <template v-for="(content, slotName) in slotsContent" :key="slotName" v-slot:[slotName]>
               {{ content }}
@@ -269,6 +280,7 @@ watchEffect(() => {
           </component>
         </template>
     </div>
+    {{ uiObject }}
     <USeparator class="my-6"/>
     <!-- Default classes per UI slot (component-wide) -->
     <h2 class="text-lg font-semibold my-8">Config</h2>
