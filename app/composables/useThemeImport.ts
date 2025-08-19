@@ -1,7 +1,7 @@
 import { useColorsStore } from '../store/colors';
 import { useThemeStore, type CssVariableMapping } from '../store/theme';
 import type { ThemeVariable } from '../constants/theme';
-import { useComponentConfigStore, type ComponentsConfig } from '../store/componentConfig';
+import { useComponentUiConfigStore, type UiConfigsState } from '../store/componentUiConfig';
 import type { Color } from '../types/color';
 
 export type ThemeImportPayload = {
@@ -15,8 +15,8 @@ export type ThemeImportPayload = {
 	themeMappingsDark?: Partial<Record<ThemeVariable, string | null>>;
 	// Additional CSS variables (array or record)
 	cssVariables?: CssVariableMapping[] | Record<string, CssVariableMapping>;
-	// Component configuration
-	componentsConfig?: ComponentsConfig;
+	// Component UI configurations (new store shape)
+	componentUiConfigs?: UiConfigsState;
 	// Merge into current state (default: true). If false, existing state will be replaced.
 	merge?: boolean;
 };
@@ -166,7 +166,7 @@ function buildExtraCssVariableMappings(vars: Record<string, string>): CssVariabl
 export function useThemeImport() {
 	const colorsStore = useColorsStore();
 	const themeStore = useThemeStore();
-	const componentConfigStore = useComponentConfigStore();
+	const componentUiStore = useComponentUiConfigStore();
 
 	function resetStateForReplace() {
 		// Replace mode: clear existing state
@@ -180,7 +180,7 @@ export function useThemeImport() {
 			mappings: { light: { ...clearedMappings }, dark: { ...clearedMappings } },
 			cssVariableMappings: { light: {}, dark: {} },
 		});
-		componentConfigStore.$patch({ componentsConfig: {} as ComponentsConfig });
+		componentUiStore.$patch({ byComponent: {} });
 	}
 
 	function importColors(colors: Color[], merge = true): string[] {
@@ -239,13 +239,13 @@ export function useThemeImport() {
 		return names;
 	}
 
-	function importComponentsConfig(cfg: ComponentsConfig | undefined, merge = true): string[] {
+	function importComponentUiConfigs(cfg: UiConfigsState | undefined, merge = true): string[] {
 		if (!cfg) return [];
 		if (!merge) {
-			componentConfigStore.$patch({ componentsConfig: {} as ComponentsConfig });
+			componentUiStore.$patch({ byComponent: {} });
 		}
-		componentConfigStore.importConfig(cfg);
-		return Object.keys(cfg);
+		componentUiStore.importAll(cfg);
+		return Object.keys(cfg.byComponent || {});
 	}
 
 	function importFromCss(css: string, merge = true) {
@@ -305,8 +305,8 @@ export function useThemeImport() {
 			summary.details.cssVariables.push(...names);
 		}
 
-		if (payload.componentsConfig) {
-			const comps = importComponentsConfig(payload.componentsConfig, merge);
+		if (payload.componentUiConfigs) {
+			const comps = importComponentUiConfigs(payload.componentUiConfigs, merge);
 			summary.imported.components += comps.length;
 			summary.details.components.push(...comps);
 		}
