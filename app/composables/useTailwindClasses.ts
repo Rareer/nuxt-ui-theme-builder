@@ -713,9 +713,26 @@ export const useTailwindClasses = () => {
 		},
 	];
 
+	// Build a single, unique, alphabetically sorted list of classes
+	const getUniqueSortedClasses = (): TailwindClass[] => {
+		const all = classGroups.flatMap(group => group.classes);
+		// Deduplicate by value, keep first occurrence's label/description
+		const map = new Map<string, TailwindClass>();
+		for (const c of all) {
+			if (!map.has(c.value)) map.set(c.value, c);
+		}
+		return Array.from(map.values()).sort((a, b) => {
+			const aNeg = a.value.startsWith('-');
+			const bNeg = b.value.startsWith('-');
+			if (aNeg && !bNeg) return 1; // negatives go after
+			if (!aNeg && bNeg) return -1;
+			return a.value.localeCompare(b.value);
+		});
+	};
+
 	// Get all classes as flat array
 	const getAllClasses = (): TailwindClass[] => {
-		return classGroups.flatMap(group => group.classes);
+		return getUniqueSortedClasses();
 	};
 
 	// Get classes by group

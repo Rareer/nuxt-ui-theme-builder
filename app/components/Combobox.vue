@@ -1,30 +1,30 @@
 <script setup lang="ts">
+import { fa } from 'zod/v4/locales';
+
 const props = defineProps<{
 	modelValue: string[],
 }>();
 
 const emit = defineEmits(['update:modelValue']);
-const { getFormattedClasses } = useTailwindClasses();
+const { getAllClasses } = useTailwindClasses();
 const currentInput = ref('');
+const label = ref('')
+const suggestions = computed(() => getAllClasses().map((s) => ({label: s.value})));
 
-const suggestions = computed(() => getFormattedClasses().map(s => s.value));
-
-const filtered = computed(() =>
-	suggestions.value.filter(s =>
-		s.toLowerCase().includes(currentInput.value.toLowerCase()),
-	),
-);
-
-const selectSuggestion = (s: string) => {
-	const input = s.trim();
+const selectSuggestion = (s: string | undefined) => {
+	const input = s?.trim();
 	if (!input) return;
 	emit('update:modelValue', [...props.modelValue || [], input]);
 	currentInput.value = '';
 };
-
 const removeItem = (s: string) => {
 	emit('update:modelValue', props.modelValue?.filter(item => item !== s));
 };
+
+const updateSearchTerm = (val: string) => {
+	currentInput.value = val;
+};
+
 </script>
 
 <template>
@@ -44,28 +44,50 @@ const removeItem = (s: string) => {
 				@click="removeItem(s)"
 			/>
 		</div>
-
-		<UInput
-			v-model="currentInput"
-			type="text"
-			placeholder="Type a tailwind class ..."
-			class="w-full rounded"
-			@keyup.enter="selectSuggestion(currentInput)"
-			@keydown.space="selectSuggestion(currentInput)"
-		/>
-
-		<ul
-			v-if="currentInput && filtered.length"
-			class="absolute z-10 bg-white border border-gray-200 dark:border-gray-800 w-full mt-1 rounded-md shadow-lg max-h-64 overflow-y-scroll"
+		<UPopover
+			:open-on-click="true"
+			:open-on-hover="false"
+			:content="{ side: 'bottom', align: 'start' }"
 		>
-			<li
-				v-for="s in filtered"
-				:key="s"
-				class="px-3 py-1 hover:bg-gray-100 cursor-pointer"
-				@click="selectSuggestion(s)"
+			<UButton
+				icon="i-lucide-plus"
+				color="primary"
+				variant="soft"
+				size="xs"
+				label="Add class"
+			/>
+
+			<template #content>
+			<UCommandPalette
+				v-model="label"
+				placeholder="Search or type class..."
+				:groups="[{ id: 'labels', items: suggestions }]"
+				:search-term="currentInput"
+				:multiple="false"
+				@update:search-term="updateSearchTerm($event)"
+				@keydown.enter="selectSuggestion(currentInput)"
+				@submit="selectSuggestion(currentInput)"
+				:ui="{ input: '[&>input]:h-8 [&>input]:text-sm', content: 'max-h-[100px] overflow-y-auto' }"
 			>
-				{{ s }}
-			</li>
-		</ul>
+				<template #empty>
+					<div class="p-4 text-center text-sm text-gray-500">
+						Type your custom class and hit Enter.
+					</div>
+				</template>
+				<template #item="{ item }">
+					<UButton
+						block
+						class="justify-start"
+						color="neutral"
+						variant="link"
+						size="xs"
+						@click="selectSuggestion(item.label)"
+					>
+						{{ item.label }}
+					</UButton>
+				</template>
+			</UCommandPalette>
+			</template>
+	</UPopover>
 	</div>
 </template>
