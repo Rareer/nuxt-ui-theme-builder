@@ -76,11 +76,22 @@ function notify(title: string, description: string, color: 'info' | 'success' | 
 }
 
 // Breadcrumbs
-const breadcrumbLinks = [
-	{ label: 'Home', to: '#' },
-	{ label: 'Library', to: '#' },
-	{ label: 'Data' },
-];
+const breadcrumbLinks = ref([
+  {
+    label: 'Home',
+    icon: 'i-lucide-house'
+  },
+  {
+    label: 'Components',
+    icon: 'i-lucide-box',
+    to: '/components'
+  },
+  {
+    label: 'Breadcrumb',
+    icon: 'i-lucide-link',
+    to: '/components/breadcrumb'
+  }
+])
 
 const faqItems = [
 	{
@@ -152,6 +163,9 @@ function submitForm() {
 					<div class="flex flex-wrap gap-2">
 						<UBadge color="primary">
 							Primary
+						</UBadge>
+						<UBadge color="secondary">
+							Secondary
 						</UBadge>
 						<UBadge color="neutral">
 							Neutral
@@ -394,21 +408,21 @@ function submitForm() {
 					</UPopover>
 				</UCard>
 
-				<!-- Dropdown -->
+				<!-- DropdownMenu -->
 				<UCard>
 					<template #header>
 						<div class="font-medium">
-							Dropdown
+							DropdownMenu
 						</div>
 					</template>
-					<UDropdown :items="dropdownItems">
+					<UDropdownMenu :items="dropdownItems">
 						<UButton
 							icon="i-heroicons-ellipsis-vertical"
 							variant="outline"
 						>
 							{{ $t('actions.actions') }}
 						</UButton>
-					</UDropdown>
+					</UDropdownMenu>
 				</UCard>
 
 				<!-- Pagination -->
@@ -484,6 +498,9 @@ function submitForm() {
 						<UChip color="primary">
 							Primary
 						</UChip>
+						<UChip color="secondary">
+							Secondary
+						</UChip>
 						<UChip color="neutral">
 							Neutral
 						</UChip>
@@ -558,21 +575,7 @@ function submitForm() {
 							Breadcrumbs
 						</div>
 					</template>
-					<UBreadcrumbs :links="breadcrumbLinks" />
-				</UCard>
-
-				<!-- Spinner -->
-				<UCard>
-					<template #header>
-						<div class="font-medium">
-							Spinner
-						</div>
-					</template>
-					<div class="flex items-center gap-4">
-						<USpinner size="sm" />
-						<USpinner size="md" />
-						<USpinner size="lg" />
-					</div>
+					<UBreadcrumb :items="breadcrumbLinks" />
 				</UCard>
 
 				<!-- Avatar Group -->
