@@ -368,6 +368,7 @@ watch(selectedColors, (newValues) => {
 									<!-- Typ-Auswahl -->
 									<URadioGroup
 										v-model="variable.type"
+										v-if="variable.type === 'color-reference'"
 										:items="[{ label: t('variableConfigurator.colorRef'), value: 'color-reference' }, { label: t('variableConfigurator.directValue'), value: 'direct-value' }]"
 										@update:model-value="updateCssVariable(variable)"
 									/>
