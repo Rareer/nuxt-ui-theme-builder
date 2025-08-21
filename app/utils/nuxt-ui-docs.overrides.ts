@@ -21,7 +21,7 @@ const overrides: Overrides = {
       close: true,
     },
     previewProp: 'variant',
-    configProps: ['variant'],
+    configProps: ['variant', 'color', 'orientation'],
     disable: [],
   },
   Avatar: {
@@ -41,7 +41,7 @@ const overrides: Overrides = {
       color: 'primary',
     },
     previewProp: 'variant',
-    configProps: ['variant'],
+    configProps: ['variant', 'color', 'size'],
     disable: ['type', 'label', 'leadingIcon', 'trailingIcon', 'loadingIcon'],
   },
   Breadcrumb: {
@@ -78,7 +78,7 @@ const overrides: Overrides = {
       color: 'primary',
     },
     // Note: Calendar has no 'variant' prop in the scraped dataset, but we keep this per original config
-    configProps: ['variant'],
+    configProps: ['variant', 'color', 'size'],
     // Corrected prop names to match dataset: allowNonContiguousRanges, initialFocus
     disable: ['allowNonContiguousRanges', 'pagedNavigation', 'preventDeselect', 'fixedWeeks', 'initialFocus', 'disableDaysOutsideCurrentView', 'fixedDate'],
   },
@@ -106,7 +106,7 @@ const overrides: Overrides = {
       icon: 'i-lucide-check',
     },
     previewProp: 'variant',
-    configProps: ['variant'],
+    configProps: ['variant', 'color', 'size'],
     disable: ['name', 'id', 'indeterminateIcon'],
   },
   Chip: {
@@ -156,7 +156,7 @@ const overrides: Overrides = {
       props: { icon: 'i-lucide-menu', label: 'Open' },
     },
     previewProp: 'variant',
-    configProps: ['variant'],
+    configProps: ['variant', 'color', 'size'],
     disable: ['modal', 'defaultOpen', 'open'],
   },
   Input: {
@@ -170,6 +170,29 @@ const overrides: Overrides = {
     previewProp: 'variant',
     configProps: ['variant', 'color', 'size'],
     disable: ["id", "name", "autocomplete", "leading", "autofocus"],
+  },
+  Modal: {
+    set: {
+      overlay: true,
+      modal: true,
+      title: 'Modal title',
+      description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      close:{
+        color: 'primary',
+        variant: 'outline',
+        class: 'rounded-full'
+      }
+    },
+    child: {
+      is: 'UButton',
+      props: { icon: 'i-lucide-menu', label: 'Open' },
+    },
+    previewProp: 'variant',
+    slots: {
+      body: 'Modal content',
+    },
+    configProps: [],
+    disable: ['open'],
   },
   Progress: {
     set: {
@@ -217,8 +240,8 @@ const overrides: Overrides = {
       label: 'Switch',
       description: 'Description text',
     },
-    previewProp: 'orientation',
-    configProps: ['orientation', 'color', 'size'],
+    previewProp: 'size',
+    configProps: ['color', 'size'],
     disable: ['defaultValue', 'modelValue', 'id', 'name', 'value'],
   },
   Tabs: {
@@ -239,7 +262,7 @@ const overrides: Overrides = {
       ]
     },
     previewProp: 'variant',
-    configProps: ['variant', 'color', 'size'],
+    configProps: ['variant', 'color', 'size', 'orientation'],
     disable: ['unmountOnHide', 'activationMode', 'labelKey'],
   },
   Tooltip: {
@@ -253,7 +276,7 @@ const overrides: Overrides = {
       props: { label: 'Please hover me' },
     },
     previewProp: 'variant',
-    configProps: ['variant', 'color', 'size'],
+    configProps: [],
     disable: ['open', 'defaultOpen', 'disableHoverableContent', 'disableClosingTrigger', 'ignoreNonKeyboardFocus', 'disabled'],
   },
 };
