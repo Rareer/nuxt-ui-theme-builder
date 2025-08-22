@@ -92,13 +92,6 @@ const cssVariablesByCategory = computed(() => {
 // Farboptionen für die Dropdown-Menüs
 const colorOptions = computed(() => {
 	const options: Array<{ label: string; value: string; disabled?: boolean }> = [];
-
-    // Reset-Option ganz oben, setzt Auswahl und Store-Mapping zurück
-    options.push({
-        label: t('variableConfigurator.resetSelection'),
-        value: '',
-    });
-
     // Eigene Farben Header
 	if (colorStore.colors.length > 0) {
 		options.push({
@@ -327,14 +320,22 @@ watch(selectedColors, (newValues) => {
 					</UBadge>
 				</div>
 
-				<UFormField>
+				<div class="flex items-center gap-2">
 					<USelect
 						v-model="selectedColors[variable]"
-						class="w-full h-8"
+						class="w-full h-8 flex-1"
 						:items="colorOptions"
 						:placeholder="t('variableConfigurator.selectColor')"
 					/>
-				</UFormField>
+					<UButton
+						icon="i-lucide-rotate-ccw"
+						color="neutral"
+						variant="soft"
+						title="Reset color"
+						size="sm"
+						@click="selectedColors[variable] = ''"
+					/>
+				</div>
 
 				<div
 					v-if="selectedColors[variable]"
