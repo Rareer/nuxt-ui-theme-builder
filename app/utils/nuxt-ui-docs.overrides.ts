@@ -78,7 +78,7 @@ const overrides: Overrides = {
       color: 'primary',
     },
     // Note: Calendar has no 'variant' prop in the scraped dataset, but we keep this per original config
-    configProps: ['variant', 'color', 'size'],
+    configProps: ['color', 'size'],
     // Corrected prop names to match dataset: allowNonContiguousRanges, initialFocus
     disable: ['allowNonContiguousRanges', 'pagedNavigation', 'preventDeselect', 'fixedWeeks', 'initialFocus', 'disableDaysOutsideCurrentView', 'fixedDate'],
   },
