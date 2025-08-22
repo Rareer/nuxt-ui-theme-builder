@@ -39,12 +39,12 @@ const localeItems = computed(() => (
 // Dropdown items with onSelect handlers and keys
 const actionItems = computed(() => ([
 	[
-		{ label: t('actions.save'), icon: 'i-heroicons-bookmark', key: 'save', onSelect: () => { isSaveModalOpen.value = true; } },
-		{ label: t('actions.load'), icon: 'i-heroicons-folder-open', key: 'load', onSelect: () => { isLoadModalOpen.value = true; } },
-		{ label: t('actions.export'), icon: 'i-heroicons-arrow-down-tray', key: 'export', onSelect: () => { exportTheme(); } },
+		{ label: t('actions.save'), icon: 'i-lucide-bookmark', key: 'save', onSelect: () => { isSaveModalOpen.value = true; } },
+		{ label: t('actions.load'), icon: 'i-lucide-folder-open', key: 'load', onSelect: () => { isLoadModalOpen.value = true; } },
+		{ label: t('actions.export'), icon: 'i-lucide-download', key: 'export', onSelect: () => { exportTheme(); } },
 	],
 	[
-		{ label: t('locale.language'), icon: 'i-heroicons-globe-alt', disabled: true },
+		{ label: t('locale.language'), icon: 'i-lucide-globe', disabled: true },
 		...localeItems.value,
 	],
 ]));
@@ -165,7 +165,7 @@ const isNavigationOpen = ref(false);
 			/>
 			<!-- Dark Mode Toggle -->
 			<UButton
-				icon="i-heroicons-moon-20-solid"
+				:icon="colorMode.value === 'dark' ? 'i-lucide-sun' : 'i-lucide-moon'"
 				color="neutral"
 				variant="soft"
 				:aria-label="$t('header.toggleDark')"
@@ -180,7 +180,7 @@ const isNavigationOpen = ref(false);
 			>
 				<UButton
 					class="z-50"
-					icon="i-heroicons-ellipsis-vertical"
+					icon="i-lucide-ellipsis-vertical"
 					color="neutral"
 					variant="soft"
 					:aria-label="$t('actions.actions')"
@@ -251,7 +251,7 @@ const isNavigationOpen = ref(false);
 							class="block text-sm font-medium"
 						>{{ $t('header.appConfig') }}</label>
 						<UButton
-							icon="i-heroicons-clipboard"
+							icon="i-lucide-clipboard"
 							color="primary"
 							variant="soft"
 							size="sm"
@@ -286,7 +286,7 @@ const isNavigationOpen = ref(false);
 							class="block text-sm font-medium"
 						>{{ $t('header.mainCss') }}</label>
 						<UButton
-							icon="i-heroicons-clipboard"
+							icon="i-lucide-clipboard"
 							color="primary"
 							variant="soft"
 							size="sm"
@@ -419,7 +419,7 @@ const isNavigationOpen = ref(false);
 								size="sm"
 								color="primary"
 								variant="soft"
-								icon="i-heroicons-arrow-down-tray"
+								icon="i-lucide-download"
 								@click="handleLoadTheme(name)"
 							>
 								{{ $t('actions.load') }}
@@ -428,7 +428,7 @@ const isNavigationOpen = ref(false);
 								size="sm"
 								color="error"
 								variant="ghost"
-								icon="i-heroicons-trash"
+								icon="i-lucide-trash"
 								@click="handleDeleteTheme(name)"
 							/>
 						</div>

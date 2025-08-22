@@ -276,7 +276,7 @@ watch(selectedColors, (newValues) => {
 			<!-- Actions: Save, Load, Export -->
 			<div class="flex items-center gap-2">
 				<UButton
-					icon="i-heroicons-bookmark"
+					icon="i-lucide-bookmark"
 					color="neutral"
 					variant="soft"
 					size="xs"
@@ -285,7 +285,7 @@ watch(selectedColors, (newValues) => {
 					{{ t('actions.save') }}
 				</UButton>
 				<UButton
-					icon="i-heroicons-folder-open"
+					icon="i-lucide-folder-open"
 					color="neutral"
 					variant="soft"
 					size="xs"
@@ -294,7 +294,7 @@ watch(selectedColors, (newValues) => {
 					{{ t('actions.load') }}
 				</UButton>
 				<UButton
-					icon="i-heroicons-arrow-down-tray"
+					icon="i-lucide-download"
 					color="neutral"
 					variant="soft"
 					size="xs"

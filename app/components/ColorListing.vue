@@ -138,7 +138,7 @@ function deleteColor() {
 	<div class="color-listing">
 		<div class="flex justify-end items-center mb-6">
 			<UButton
-				icon="i-heroicons-plus"
+				icon="i-lucide-plus"
 				color="primary"
 				@click="isAddModalOpen = true"
 			>
@@ -182,13 +182,13 @@ function deleteColor() {
 				<!-- Actions -->
 				<div class="flex gap-2">
 					<UButton
-						icon="i-heroicons-pencil-square"
+						icon="i-lucide-pencil"
 						color="neutral"
 						variant="ghost"
 						@click="editColor(color)"
 					/>
 					<UButton
-						icon="i-heroicons-trash"
+						icon="i-lucide-trash"
 						color="error"
 						variant="ghost"
 						@click="confirmDelete(color.name)"
@@ -203,7 +203,7 @@ function deleteColor() {
 			class="text-center py-10 ring ring-gray-200 rounded-lg"
 		>
 			<UIcon
-				name="i-heroicons-swatch"
+				name="i-lucide-palette"
 				class="text-4xl text-gray-400 mx-auto mb-2"
 			/>
 			<p class="text-gray-500">

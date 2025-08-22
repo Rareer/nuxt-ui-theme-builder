@@ -38,11 +38,11 @@ const accordionDemo = [
 // Extra Komponenten: Dropdown, Pagination, Table, Progress, Slider
 const dropdownItems = [
 	[
-		{ label: 'Bearbeiten', icon: 'i-heroicons-pencil-square', click: () => console.log('Bearbeiten') },
-		{ label: 'Teilen', icon: 'i-heroicons-share', click: () => console.log('Teilen') },
+		{ label: 'Bearbeiten', icon: 'i-lucide-pencil', click: () => console.log('Bearbeiten') },
+		{ label: 'Teilen', icon: 'i-lucide-share', click: () => console.log('Teilen') },
 	],
 	[
-		{ label: 'Löschen', icon: 'i-heroicons-trash', color: 'error', click: () => console.log('Löschen') },
+		{ label: 'Löschen', icon: 'i-lucide-trash', color: 'error', click: () => console.log('Löschen') },
 	],
 ];
 
@@ -68,10 +68,10 @@ const toast = useToast();
 function notify(title: string, description: string, color: 'info' | 'success' | 'error' | 'warning' | 'primary' | 'neutral' = 'info') {
 	const icon
     = color === 'success'
-    	? 'i-heroicons-check-circle'
+    	? 'i-lucide-check-circle'
     	: color === 'error'
-    		? 'i-heroicons-exclamation-triangle'
-    		: 'i-heroicons-information-circle';
+    		? 'i-lucide-triangle-alert'
+    		: 'i-lucide-info';
 	toast.add({ title, description, color, icon });
 }
 
@@ -140,13 +140,13 @@ function submitForm() {
 						</UButton>
 						<UButton
 							color="success"
-							icon="i-heroicons-check-circle"
+							icon="i-lucide-check-circle"
 						>
 							Success
 						</UButton>
 						<UButton
 							color="warning"
-							icon="i-heroicons-exclamation-triangle"
+							icon="i-lucide-triangle-alert"
 						>
 							Warn
 						</UButton>
@@ -195,7 +195,7 @@ function submitForm() {
 					<UAlert
 						color="info"
 						variant="soft"
-						icon="i-heroicons-information-circle"
+						icon="i-lucide-info"
 						:title="$t('preview.themingPreviewTitle')"
 						:description="$t('preview.themingPreviewDesc')"
 					/>
@@ -310,7 +310,7 @@ function submitForm() {
 					</template>
 					<div class="flex items-center gap-3">
 						<UButton
-							icon="i-heroicons-rectangle-stack"
+							icon="i-lucide-layers"
 							@click="isModalOpen = true"
 						>
 							{{ $t('preview.open') }}
@@ -320,7 +320,7 @@ function submitForm() {
 					<UModal v-model:open="isModalOpen">
 						<template #header>
 							<div class="flex items-center gap-2">
-								<UIcon name="i-heroicons-sparkles" />
+								<UIcon name="i-lucide-sparkles" />
 								<span>{{ $t('preview.exampleModal') }}</span>
 							</div>
 						</template>
@@ -378,7 +378,7 @@ function submitForm() {
 						<UTooltip :text="$t('preview.moreInfo')">
 							<UButton
 								variant="outline"
-								icon="i-heroicons-question-mark-circle"
+								icon="i-lucide-circle-help"
 							>
 								{{ $t('preview.hover') }}
 							</UButton>
@@ -396,7 +396,7 @@ function submitForm() {
 					<UPopover>
 						<UButton
 							variant="soft"
-							icon="i-heroicons-chevron-down"
+							icon="i-lucide-chevron-down"
 						>
 							{{ $t('preview.open') }}
 						</UButton>
@@ -417,7 +417,7 @@ function submitForm() {
 					</template>
 					<UDropdownMenu :items="dropdownItems">
 						<UButton
-							icon="i-heroicons-ellipsis-vertical"
+							icon="i-lucide-ellipsis-vertical"
 							variant="outline"
 						>
 							{{ $t('actions.actions') }}
@@ -591,7 +591,7 @@ function submitForm() {
 							alt="Nuxt"
 						/>
 						<UAvatar
-							src="https://github.com/nuxtlabs.png"
+							src="https://github.com/nuxt-labs.png"
 							alt="Nuxt Labs"
 						/>
 						<UAvatar
@@ -607,7 +607,7 @@ function submitForm() {
 		<UAlert
 			color="info"
 			variant="soft"
-			icon="i-heroicons-information-circle"
+			icon="i-lucide-info"
 			title="Neu in Version 1.5"
 			description="Jetzt mit integriertem Dark Mode, neuen Komponenten und verbesserter Performance!"
 		/>
@@ -627,7 +627,7 @@ function submitForm() {
 					color="primary"
 					variant="solid"
 					size="lg"
-					icon="i-heroicons-play-circle"
+					icon="i-lucide-play-circle"
 				>
 					{{ $t('preview.btnGetStarted') }}
 				</UButton>
@@ -652,7 +652,7 @@ function submitForm() {
 				<UCard>
 					<template #header>
 						<div class="flex items-center gap-2">
-							<UIcon name="i-heroicons-lightning-bolt" />
+							<UIcon name="i-lucide-zap" />
 							<span>{{ $t('preview.featureFastTitle') }}</span>
 						</div>
 					</template>
@@ -661,7 +661,7 @@ function submitForm() {
 				<UCard>
 					<template #header>
 						<div class="flex items-center gap-2">
-							<UIcon name="i-heroicons-device-mobile" />
+							<UIcon name="i-lucide-smartphone" />
 							<span>{{ $t('preview.featureResponsiveTitle') }}</span>
 						</div>
 					</template>
@@ -670,7 +670,7 @@ function submitForm() {
 				<UCard>
 					<template #header>
 						<div class="flex items-center gap-2">
-							<UIcon name="i-heroicons-cube" />
+							<UIcon name="i-lucide-cube" />
 							<span>{{ $t('preview.featureModularTitle') }}</span>
 						</div>
 					</template>
@@ -769,7 +769,7 @@ function submitForm() {
 				<UButton
 					color="primary"
 					block
-					icon="i-heroicons-paper-airplane"
+					icon="i-lucide-send"
 					@click="submitForm"
 				>
 					{{ $t('preview.contact.send') }}

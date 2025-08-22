@@ -8,7 +8,7 @@
 			class="h-16 px-4 flex items-center border-b border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors cursor-pointer"
 		>
 			<UIcon
-				name="i-heroicons-swatch-20-solid"
+				name="i-lucide-palette"
 				class="text-primary-500 mr-2 text-xl"
 			/>
 			<h2 class="font-bold text-lg">{{ $t('app.name') }}</h2> <UBadge
