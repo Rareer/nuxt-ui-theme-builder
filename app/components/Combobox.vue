@@ -16,6 +16,7 @@ const selectSuggestion = (s: string | undefined) => {
 	if (!input) return;
 	emit('update:modelValue', [...props.modelValue || [], input]);
 	currentInput.value = '';
+	label.value = '';
 };
 const removeItem = (s: string) => {
 	emit('update:modelValue', props.modelValue?.filter(item => item !== s));
@@ -66,6 +67,7 @@ const updateSearchTerm = (val: string) => {
 				:multiple="false"
 				@update:search-term="updateSearchTerm($event)"
 				@keydown.enter="selectSuggestion(currentInput)"
+				@keydown.space="selectSuggestion(currentInput)"
 				@submit="selectSuggestion(currentInput)"
 				:ui="{ input: '[&>input]:h-8 [&>input]:text-sm', content: 'max-h-[100px] overflow-y-auto' }"
 			>
