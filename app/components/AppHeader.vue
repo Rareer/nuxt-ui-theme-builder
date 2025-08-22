@@ -122,7 +122,7 @@ const isNavigationOpen = ref(false);
 				icon="i-lucide-menu"
 				color="neutral"
 				variant="soft"
-				:aria-label="$t('header.toggleNavigation')"
+				:title="$t('header.toggleNavigation')"
 				@click="isNavigationOpen = true"
 				class="md:hidden"
 			/>
@@ -152,7 +152,7 @@ const isNavigationOpen = ref(false);
 				icon="i-lucide-sparkles"
 				color="primary"
 				variant="soft"
-				:aria-label="$t('header.generateWithAI')"
+				:title="$t('header.generateWithAI')"
 				@click="openAIModal"
 			/>
 			<!-- Theme Configuration Button -->
@@ -160,7 +160,7 @@ const isNavigationOpen = ref(false);
 				icon="i-lucide-palette"
 				color="primary"
 				variant="soft"
-				:aria-label="$t('header.themeConfig')"
+				:title="$t('header.themeConfig')"
 				@click="isThemeConfigOpen = true"
 			/>
 			<!-- Dark Mode Toggle -->
@@ -168,8 +168,16 @@ const isNavigationOpen = ref(false);
 				:icon="colorMode.value === 'dark' ? 'i-lucide-sun' : 'i-lucide-moon'"
 				color="neutral"
 				variant="soft"
-				:aria-label="$t('header.toggleDark')"
+				:title="$t('header.toggleDark')"
 				@click="toggleDark"
+			/>
+			<UButton
+				icon="i-custom-discord"
+				color="neutral"
+				variant="soft"
+				to="https://discord.gg/uZZTfqc8"
+				target="_blank"
+				:title="$t('header.discord')"
 			/>
 			<!-- Actions Dropdown: Export, Speichern, Laden -->
 			<UDropdownMenu
@@ -183,7 +191,7 @@ const isNavigationOpen = ref(false);
 					icon="i-lucide-ellipsis-vertical"
 					color="neutral"
 					variant="soft"
-					:aria-label="$t('actions.actions')"
+					:title="$t('actions.actions')"
 				/>
 			</UDropdownMenu>
 		</div>

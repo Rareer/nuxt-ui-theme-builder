@@ -53,7 +53,8 @@
     "deleteConfirm": "Delete theme \"{name}\"?",
     "appConfig": "app.config.ts",
     "mainCss": "main.css",
-    "noThemes": "No saved themes found."
+    "noThemes": "No saved themes found.",
+    "discord": "To our Discord channel"
   },
   "locale": {
     "language": "Language",
