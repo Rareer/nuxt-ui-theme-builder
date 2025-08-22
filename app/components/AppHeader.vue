@@ -213,7 +213,11 @@ const isNavigationOpen = ref(false);
   </template>
 
 		<template #body>
-			<VariableConfigurator/>
+			<VariableConfigurator
+				@request-save="isSaveModalOpen = true"
+				@request-load="isLoadModalOpen = true"
+				@request-export="exportTheme"
+			/>
 		</template>
 	</USlideover>
 

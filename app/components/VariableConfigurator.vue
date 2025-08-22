@@ -15,6 +15,9 @@ const colorStore = useColorsStore();
 const themeStore = useThemeStore();
 const { t } = useI18n();
 
+// Emit events to parent (AppHeader) to open Save/Load modals and Export modal
+defineEmits(['request-save', 'request-load', 'request-export']);
+
 // Aktueller Editiermodus aus dem Store
 const currentMode = computed(() => themeStore.getEditMode);
 
@@ -93,7 +96,7 @@ const colorOptions = computed(() => {
     // Reset-Option ganz oben, setzt Auswahl und Store-Mapping zurück
     options.push({
         label: t('variableConfigurator.resetSelection'),
-        value: null,
+        value: '',
     });
 
     // Eigene Farben Header
@@ -276,6 +279,36 @@ watch(selectedColors, (newValues) => {
 						Dark
 					</UButton>
 				</div>
+			</div>
+			<!-- Actions: Save, Load, Export -->
+			<div class="flex items-center gap-2">
+				<UButton
+					icon="i-heroicons-bookmark"
+					color="neutral"
+					variant="soft"
+					size="xs"
+					@click="$emit('request-save')"
+				>
+					{{ t('actions.save') }}
+				</UButton>
+				<UButton
+					icon="i-heroicons-folder-open"
+					color="neutral"
+					variant="soft"
+					size="xs"
+					@click="$emit('request-load')"
+				>
+					{{ t('actions.load') }}
+				</UButton>
+				<UButton
+					icon="i-heroicons-arrow-down-tray"
+					color="neutral"
+					variant="soft"
+					size="xs"
+					@click="$emit('request-export')"
+				>
+					{{ t('actions.export') }}
+				</UButton>
 			</div>
 		</div>
 		<!-- Theme-Variablen Sektion -->
