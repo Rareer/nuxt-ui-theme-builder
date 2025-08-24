@@ -1,4 +1,5 @@
 export default defineNuxtConfig({
+	ssr: true,
 	icon: {
 		customCollections: [{
 			prefix: 'custom',
@@ -10,6 +11,7 @@ export default defineNuxtConfig({
 		'@nuxt/eslint',
 		'@pinia/nuxt',
 		'@nuxtjs/i18n',
+		'@nuxtjs/seo',
 	],
 	components: {
 		dirs: [
@@ -58,9 +60,11 @@ export default defineNuxtConfig({
 			useCookie: true,
 			cookieKey: 'i18n_redirected',
 			alwaysRedirect: false,
-			fallbackLocale: 'de',
+			fallbackLocale: 'en',
 		},
-
+		experimental: {
+			localeDetector: 'localeDetector.ts'
+		},
 		langDir: 'locales',
 	},
 });
