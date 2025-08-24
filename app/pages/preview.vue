@@ -84,12 +84,11 @@ const breadcrumbLinks = ref([
 	{
 		label: 'Components',
 		icon: 'i-lucide-box',
-		to: '/components',
 	},
 	{
 		label: 'Breadcrumb',
 		icon: 'i-lucide-link',
-		to: '/components/breadcrumb',
+		to: '/components/UBreadcrumb',
 	},
 ]);
 
