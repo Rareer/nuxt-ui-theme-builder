@@ -1,4 +1,3 @@
-
 <script setup lang="ts">
 import { useColorsStore } from '../store/colors';
 import { useThemeStore, type CssVariableMapping } from '../store/theme';

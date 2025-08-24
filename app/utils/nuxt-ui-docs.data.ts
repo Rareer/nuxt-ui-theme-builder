@@ -2,1317 +2,1317 @@
 // Centralized Nuxt UI docs props dataset
 
 export type DocsProp = {
-  name: string;
-  type: 'boolean' | 'string' | string[] | unknown;
+	name: string;
+	type: 'boolean' | 'string' | string[] | unknown;
 };
 
 export type DocsPropsData = Record<string, DocsProp[]>;
 
 const data: DocsPropsData = {
-  Accordion: [
-    {
-      "name": "trailingIcon",
-      "type": "string"
-    },
-    {
-      "name": "labelKey",
-      "type": "string"
-    },
-    {
-      "name": "collapsible",
-      "type": "boolean"
-    },
-    {
-      "name": "type",
-      "type": [
-        "single",
-        "multiple"
-      ]
-    },
-    {
-      "name": "disabled",
-      "type": "boolean"
-    },
-    {
-      "name": "unmountOnHide",
-      "type": "boolean"
-    },
-    {
-      "name": "ui",
-      "type": {
-        "values": [
-          "body",
-          "content",
-          "header",
-          "item",
-          "label",
-          "leadingIcon",
-          "root",
-          "trailingIcon",
-          "trigger"
-        ]
-      }
-    }
-  ],
-  Alert: [
-    {
-      "name": "title",
-      "type": "string"
-    },
-    {
-      "name": "description",
-      "type": "string"
-    },
-    {
-      "name": "icon",
-      "type": "string"
-    },
-    {
-      "name": "color",
-      "type": [
-        "error",
-        "primary",
-        "secondary",
-        "success",
-        "info",
-        "warning",
-        "neutral"
-      ]
-    },
-    {
-      "name": "variant",
-      "type": [
-        "solid",
-        "outline",
-        "soft",
-        "subtle"
-      ]
-    },
-    {
-      "name": "orientation",
-      "type": [
-        "vertical",
-        "horizontal"
-      ]
-    },
-    {
-      "name": "closeIcon",
-      "type": "string"
-    },
-    {
-      "name": "ui",
-      "type": {
-        "values": [
-          "actions",
-          "avatar",
-          "avatarSize",
-          "close",
-          "description",
-          "icon",
-          "root",
-          "title",
-          "wrapper"
-        ]
-      }
-    }
-  ],
-  Avatar: [
-    {
-      "name": "src",
-      "type": "string"
-    },
-    {
-      "name": "alt",
-      "type": "string"
-    },
-    {
-      "name": "icon",
-      "type": "string"
-    },
-    {
-      "name": "text",
-      "type": "string"
-    },
-    {
-      "name": "size",
-      "type": [
-        "md",
-        "3xs",
-        "2xs",
-        "xs",
-        "sm",
-        "lg",
-        "xl",
-        "2xl",
-        "3xl"
-      ]
-    },
-    {
-      "name": "ui",
-      "type": {
-        "values": [
-          "fallback",
-          "icon",
-          "image",
-          "root"
-        ]
-      }
-    }
-  ],
-  Badge: [
-    {
-      "name": "color",
-      "type": [
-        "error",
-        "primary",
-        "secondary",
-        "success",
-        "info",
-        "warning",
-        "neutral"
-      ]
-    },
-    {
-      "name": "variant",
-      "type": [
-        "solid",
-        "outline",
-        "soft",
-        "subtle"
-      ]
-    },
-    {
-      "name": "size",
-      "type": [
-        "md",
-        "xs",
-        "sm",
-        "lg",
-        "xl"
-      ]
-    },
-    {
-      "name": "square",
-      "type": "boolean"
-    },
-    {
-      "name": "icon",
-      "type": "string"
-    },
-    {
-      "name": "leading",
-      "type": "boolean"
-    },
-    {
-      "name": "leadingIcon",
-      "type": "string"
-    },
-    {
-      "name": "trailing",
-      "type": "boolean"
-    },
-    {
-      "name": "trailingIcon",
-      "type": "string"
-    },
-    {
-      "name": "ui",
-      "type": {
-        "values": [
-          "base",
-          "label",
-          "leadingAvatar",
-          "leadingAvatarSize",
-          "leadingIcon",
-          "trailingIcon"
-        ]
-      }
-    }
-  ],
-  Breadcrumb: [
-    {
-      "name": "separatorIcon",
-      "type": "string"
-    },
-    {
-      "name": "labelKey",
-      "type": "string"
-    },
-    {
-      "name": "ui",
-      "type": {
-        "values": [
-          "item",
-          "link",
-          "linkLabel",
-          "linkLeadingAvatar",
-          "linkLeadingAvatarSize",
-          "linkLeadingIcon",
-          "list",
-          "root",
-          "separator",
-          "separatorIcon"
-        ]
-      }
-    }
-  ],
-  Button: [
-    {
-      "name": "label",
-      "type": "string"
-    },
-    {
-      "name": "color",
-      "type": [
-        "error",
-        "primary",
-        "secondary",
-        "success",
-        "info",
-        "warning",
-        "neutral"
-      ]
-    },
-    {
-      "name": "activeColor",
-      "type": [
-        "error",
-        "primary",
-        "secondary",
-        "success",
-        "info",
-        "warning",
-        "neutral"
-      ]
-    },
-    {
-      "name": "variant",
-      "type": [
-        "link",
-        "solid",
-        "outline",
-        "soft",
-        "subtle",
-        "ghost"
-      ]
-    },
-    {
-      "name": "activeVariant",
-      "type": [
-        "link",
-        "solid",
-        "outline",
-        "soft",
-        "subtle",
-        "ghost"
-      ]
-    },
-    {
-      "name": "size",
-      "type": [
-        "md",
-        "xs",
-        "sm",
-        "lg",
-        "xl"
-      ]
-    },
-    {
-      "name": "square",
-      "type": "boolean"
-    },
-    {
-      "name": "block",
-      "type": "boolean"
-    },
-    {
-      "name": "loadingAuto",
-      "type": "boolean"
-    },
-    {
-      "name": "icon",
-      "type": "string"
-    },
-    {
-      "name": "leading",
-      "type": "boolean"
-    },
-    {
-      "name": "leadingIcon",
-      "type": "string"
-    },
-    {
-      "name": "trailing",
-      "type": "boolean"
-    },
-    {
-      "name": "trailingIcon",
-      "type": "string"
-    },
-    {
-      "name": "loading",
-      "type": "boolean"
-    },
-    {
-      "name": "loadingIcon",
-      "type": "string"
-    },
-    {
-      "name": "type",
-      "type": [
-        "reset",
-        "submit",
-        "button"
-      ]
-    },
-    {
-      "name": "disabled",
-      "type": "boolean"
-    },
-    {
-      "name": "active",
-      "type": "boolean"
-    },
-    {
-      "name": "ui",
-      "type": {
-        "values": [
-          "base",
-          "label",
-          "leadingAvatar",
-          "leadingAvatarSize",
-          "leadingIcon",
-          "trailingIcon"
-        ]
-      }
-    }
-  ],
-  Calendar: [
-    {
-      "name": "nextYearIcon",
-      "type": "string"
-    },
-    {
-      "name": "nextMonthIcon",
-      "type": "string"
-    },
-    {
-      "name": "prevYearIcon",
-      "type": "string"
-    },
-    {
-      "name": "prevMonthIcon",
-      "type": "string"
-    },
-    {
-      "name": "color",
-      "type": [
-        "error",
-        "primary",
-        "secondary",
-        "success",
-        "info",
-        "warning",
-        "neutral"
-      ]
-    },
-    {
-      "name": "size",
-      "type": [
-        "md",
-        "xs",
-        "sm",
-        "lg",
-        "xl"
-      ]
-    },
-    {
-      "name": "range",
-      "type": "boolean"
-    },
-    {
-      "name": "multiple",
-      "type": "boolean"
-    },
-    {
-      "name": "monthControls",
-      "type": "boolean"
-    },
-    {
-      "name": "yearControls",
-      "type": "boolean"
-    },
-    {
-      "name": "allowNonContiguousRanges",
-      "type": "boolean"
-    },
-    {
-      "name": "pagedNavigation",
-      "type": "boolean"
-    },
-    {
-      "name": "preventDeselect",
-      "type": "boolean"
-    },
-    {
-      "name": "weekdayFormat",
-      "type": [
-        "narrow",
-        "short",
-        "long"
-      ]
-    },
-    {
-      "name": "fixedWeeks",
-      "type": "boolean"
-    },
-    {
-      "name": "disabled",
-      "type": "boolean"
-    },
-    {
-      "name": "readonly",
-      "type": "boolean"
-    },
-    {
-      "name": "initialFocus",
-      "type": "boolean"
-    },
-    {
-      "name": "disableDaysOutsideCurrentView",
-      "type": "boolean"
-    },
-    {
-      "name": "fixedDate",
-      "type": [
-        "start",
-        "end"
-      ]
-    },
-    {
-      "name": "ui",
-      "type": {
-        "values": [
-          "body",
-          "cell",
-          "cellTrigger",
-          "grid",
-          "gridBody",
-          "gridRow",
-          "gridWeekDaysRow",
-          "headCell",
-          "header",
-          "heading",
-          "root"
-        ]
-      }
-    }
-  ],
-  Card: [
-    {
-      "name": "variant",
-      "type": [
-        "solid",
-        "outline",
-        "soft",
-        "subtle"
-      ]
-    },
-    {
-      "name": "ui",
-      "type": {
-        "values": [
-          "body",
-          "footer",
-          "header",
-          "root"
-        ]
-      }
-    }
-  ],
-  Checkbox: [
-    {
-      "name": "label",
-      "type": "string"
-    },
-    {
-      "name": "description",
-      "type": "string"
-    },
-    {
-      "name": "color",
-      "type": [
-        "error",
-        "primary",
-        "secondary",
-        "success",
-        "info",
-        "warning",
-        "neutral"
-      ]
-    },
-    {
-      "name": "variant",
-      "type": [
-        "card",
-        "list"
-      ]
-    },
-    {
-      "name": "size",
-      "type": [
-        "xs",
-        "sm",
-        "md",
-        "lg",
-        "xl"
-      ]
-    },
-    {
-      "name": "indicator",
-      "type": [
-        "start",
-        "end",
-        "hidden"
-      ]
-    },
-    {
-      "name": "icon",
-      "type": "string"
-    },
-    {
-      "name": "indeterminateIcon",
-      "type": "string"
-    },
-    {
-      "name": "disabled",
-      "type": "boolean"
-    },
-    {
-      "name": "name",
-      "type": "string"
-    },
-    {
-      "name": "required",
-      "type": "boolean"
-    },
-    {
-      "name": "id",
-      "type": "string"
-    },
-    {
-      "name": "ui",
-      "type": {
-        "values": [
-          "base",
-          "container",
-          "description",
-          "icon",
-          "indicator",
-          "label",
-          "root",
-          "wrapper"
-        ]
-      }
-    }
-  ],
-  Chip: [
-    {
-      "name": "color",
-      "type": [
-        "error",
-        "primary",
-        "secondary",
-        "success",
-        "info",
-        "warning",
-        "neutral"
-      ]
-    },
-    {
-      "name": "size",
-      "type": [
-        "xs",
-        "sm",
-        "md",
-        "lg",
-        "xl",
-        "3xs",
-        "2xs",
-        "2xl",
-        "3xl"
-      ]
-    },
-    {
-      "name": "position",
-      "type": [
-        "top-right",
-        "bottom-right",
-        "top-left",
-        "bottom-left"
-      ]
-    },
-    {
-      "name": "inset",
-      "type": "boolean"
-    },
-    {
-      "name": "standalone",
-      "type": "boolean"
-    },
-    {
-      "name": "show",
-      "type": "boolean"
-    },
-    {
-      "name": "ui",
-      "type": {
-        "values": [
-          "base",
-          "root"
-        ]
-      }
-    }
-  ],
-  DropdownMenu: [
-    {
-      "name": "size",
-      "type": [
-        "sm",
-        "md",
-        "xs",
-        "lg",
-        "xl"
-      ]
-    },
-    {
-      "name": "checkedIcon",
-      "type": "string"
-    },
-    {
-      "name": "loadingIcon",
-      "type": "string"
-    },
-    {
-      "name": "disabled",
-      "type": "boolean"
-    },
-    {
-      "name": "defaultOpen",
-      "type": "boolean"
-    },
-    {
-      "name": "open",
-      "type": "boolean"
-    },
-    {
-      "name": "modal",
-      "type": "boolean"
-    },
-    {
-      "name": "ui",
-      "type": {
-        "values": [
-          "arrow",
-          "content",
-          "group",
-          "item",
-          "itemLabel",
-          "itemLabelExternalIcon",
-          "itemLeadingAvatar",
-          "itemLeadingAvatarSize",
-          "itemLeadingIcon",
-          "itemTrailing",
-          "itemTrailingIcon",
-          "itemTrailingKbds",
-          "itemTrailingKbdsSize",
-          "label",
-          "separator",
-          "viewport"
-        ]
-      }
-    }
-  ],
-  Input: [
-    {
-      "name": "id",
-      "type": "string"
-    },
-    {
-      "name": "name",
-      "type": "string"
-    },
-    {
-      "name": "placeholder",
-      "type": "string"
-    },
-    {
-      "name": "color",
-      "type": [
-        "error",
-        "primary",
-        "secondary",
-        "success",
-        "info",
-        "warning",
-        "neutral"
-      ]
-    },
-    {
-      "name": "variant",
-      "type": [
-        "outline",
-        "soft",
-        "subtle",
-        "ghost",
-        "none"
-      ]
-    },
-    {
-      "name": "size",
-      "type": [
-        "xs",
-        "sm",
-        "md",
-        "lg",
-        "xl"
-      ]
-    },
-    {
-      "name": "required",
-      "type": "boolean"
-    },
-    {
-      "name": "autocomplete",
-      "type": "string"
-    },
-    {
-      "name": "autofocus",
-      "type": "boolean"
-    },
-    {
-      "name": "disabled",
-      "type": "boolean"
-    },
-    {
-      "name": "highlight",
-      "type": "boolean"
-    },
-    {
-      "name": "icon",
-      "type": "string"
-    },
-    {
-      "name": "leading",
-      "type": "boolean"
-    },
-    {
-      "name": "leadingIcon",
-      "type": "string"
-    },
-    {
-      "name": "trailing",
-      "type": "boolean"
-    },
-    {
-      "name": "trailingIcon",
-      "type": "string"
-    },
-    {
-      "name": "loading",
-      "type": "boolean"
-    },
-    {
-      "name": "loadingIcon",
-      "type": "string"
-    },
-    {
-      "name": "ui",
-      "type": {
-        "values": [
-          "base",
-          "leading",
-          "leadingAvatar",
-          "leadingAvatarSize",
-          "leadingIcon",
-          "root",
-          "trailing",
-          "trailingIcon"
-        ]
-      }
-    }
-  ],
-  Modal: [
-    {
-      "name": "title",
-      "type": "string"
-    },
-    {
-      "name": "description",
-      "type": "string"
-    },
-    {
-      "name": "overlay",
-      "type": "boolean"
-    },
-    {
-      "name": "transition",
-      "type": "boolean"
-    },
-    {
-      "name": "fullscreen",
-      "type": "boolean"
-    },
-    {
-      "name": "closeIcon",
-      "type": "string"
-    },
-    {
-      "name": "dismissible",
-      "type": "boolean"
-    },
-    {
-      "name": "open",
-      "type": "boolean"
-    },
-    {
-      "name": "defaultOpen",
-      "type": "boolean"
-    },
-    {
-      "name": "modal",
-      "type": "boolean"
-    },
-    {
-      "name": "ui",
-      "type": {
-        "values": [
-          "body",
-          "close",
-          "content",
-          "description",
-          "footer",
-          "header",
-          "overlay",
-          "title",
-          "wrapper"
-        ]
-      }
-    }
-  ],
-  Progress: [
-    {
-      "name": "status",
-      "type": "boolean"
-    },
-    {
-      "name": "inverted",
-      "type": "boolean"
-    },
-    {
-      "name": "size",
-      "type": [
-        "md",
-        "xs",
-        "sm",
-        "lg",
-        "xl",
-        "2xs",
-        "2xl"
-      ]
-    },
-    {
-      "name": "color",
-      "type": [
-        "error",
-        "primary",
-        "secondary",
-        "success",
-        "info",
-        "warning",
-        "neutral"
-      ]
-    },
-    {
-      "name": "orientation",
-      "type": [
-        "horizontal",
-        "vertical"
-      ]
-    },
-    {
-      "name": "animation",
-      "type": [
-        "carousel",
-        "carousel-inverse",
-        "swing",
-        "elastic"
-      ]
-    },
-    {
-      "name": "ui",
-      "type": {
-        "values": [
-          "base",
-          "indicator",
-          "root",
-          "status",
-          "step",
-          "steps"
-        ]
-      }
-    }
-  ],
-  Select: [
-    {
-      "name": "id",
-      "type": "string"
-    },
-    {
-      "name": "placeholder",
-      "type": "string"
-    },
-    {
-      "name": "color",
-      "type": [
-        "error",
-        "primary",
-        "secondary",
-        "success",
-        "info",
-        "warning",
-        "neutral"
-      ]
-    },
-    {
-      "name": "variant",
-      "type": [
-        "outline",
-        "soft",
-        "subtle",
-        "ghost",
-        "none"
-      ]
-    },
-    {
-      "name": "size",
-      "type": [
-        "sm",
-        "md",
-        "xs",
-        "lg",
-        "xl"
-      ]
-    },
-    {
-      "name": "trailingIcon",
-      "type": "string"
-    },
-    {
-      "name": "selectedIcon",
-      "type": "string"
-    },
-    {
-      "name": "multiple",
-      "type": "boolean"
-    },
-    {
-      "name": "highlight",
-      "type": "boolean"
-    },
-    {
-      "name": "autofocus",
-      "type": "boolean"
-    },
-    {
-      "name": "disabled",
-      "type": "boolean"
-    },
-    {
-      "name": "open",
-      "type": "boolean"
-    },
-    {
-      "name": "defaultOpen",
-      "type": "boolean"
-    },
-    {
-      "name": "autocomplete",
-      "type": "string"
-    },
-    {
-      "name": "name",
-      "type": "string"
-    },
-    {
-      "name": "required",
-      "type": "boolean"
-    },
-    {
-      "name": "icon",
-      "type": "string"
-    },
-    {
-      "name": "leading",
-      "type": "boolean"
-    },
-    {
-      "name": "leadingIcon",
-      "type": "string"
-    },
-    {
-      "name": "trailing",
-      "type": "boolean"
-    },
-    {
-      "name": "loading",
-      "type": "boolean"
-    },
-    {
-      "name": "loadingIcon",
-      "type": "string"
-    },
-    {
-      "name": "ui",
-      "type": {
-        "values": [
-          "arrow",
-          "base",
-          "content",
-          "empty",
-          "group",
-          "item",
-          "itemLabel",
-          "itemLeadingAvatar",
-          "itemLeadingAvatarSize",
-          "itemLeadingChip",
-          "itemLeadingChipSize",
-          "itemLeadingIcon",
-          "itemTrailing",
-          "itemTrailingIcon",
-          "label",
-          "leading",
-          "leadingAvatar",
-          "leadingAvatarSize",
-          "leadingIcon",
-          "placeholder",
-          "separator",
-          "trailing",
-          "trailingIcon",
-          "value",
-          "viewport"
-        ]
-      }
-    }
-  ],
-  Switch: [
-    {
-      "name": "color",
-      "type": [
-        "error",
-        "primary",
-        "secondary",
-        "success",
-        "info",
-        "warning",
-        "neutral"
-      ]
-    },
-    {
-      "name": "size",
-      "type": [
-        "xs",
-        "sm",
-        "md",
-        "lg",
-        "xl"
-      ]
-    },
-    {
-      "name": "loading",
-      "type": "boolean"
-    },
-    {
-      "name": "loadingIcon",
-      "type": "string"
-    },
-    {
-      "name": "checkedIcon",
-      "type": "string"
-    },
-    {
-      "name": "uncheckedIcon",
-      "type": "string"
-    },
-    {
-      "name": "label",
-      "type": "string"
-    },
-    {
-      "name": "description",
-      "type": "string"
-    },
-    {
-      "name": "defaultValue",
-      "type": "boolean"
-    },
-    {
-      "name": "disabled",
-      "type": "boolean"
-    },
-    {
-      "name": "id",
-      "type": "string"
-    },
-    {
-      "name": "name",
-      "type": "string"
-    },
-    {
-      "name": "required",
-      "type": "boolean"
-    },
-    {
-      "name": "value",
-      "type": "string"
-    },
-    {
-      "name": "modelValue",
-      "type": "boolean"
-    },
-    {
-      "name": "ui",
-      "type": {
-        "values": [
-          "base",
-          "container",
-          "description",
-          "icon",
-          "label",
-          "root",
-          "thumb",
-          "wrapper"
-        ]
-      }
-    }
-  ],
-  Tabs: [
-    {
-      "name": "color",
-      "type": [
-        "error",
-        "primary",
-        "secondary",
-        "success",
-        "info",
-        "warning",
-        "neutral"
-      ]
-    },
-    {
-      "name": "variant",
-      "type": [
-        "pill",
-        "link"
-      ]
-    },
-    {
-      "name": "size",
-      "type": [
-        "sm",
-        "xs",
-        "md",
-        "lg",
-        "xl"
-      ]
-    },
-    {
-      "name": "orientation",
-      "type": [
-        "horizontal",
-        "vertical"
-      ]
-    },
-    {
-      "name": "content",
-      "type": "boolean"
-    },
-    {
-      "name": "labelKey",
-      "type": "string"
-    },
-    {
-      "name": "activationMode",
-      "type": [
-        "automatic",
-        "manual"
-      ]
-    },
-    {
-      "name": "unmountOnHide",
-      "type": "boolean"
-    },
-    {
-      "name": "ui",
-      "type": {
-        "values": [
-          "content",
-          "indicator",
-          "label",
-          "leadingAvatar",
-          "leadingAvatarSize",
-          "leadingIcon",
-          "list",
-          "root",
-          "trailingBadge",
-          "trailingBadgeSize",
-          "trigger"
-        ]
-      }
-    }
-  ],
-  Tooltip: [
-    {
-      "name": "text",
-      "type": "string"
-    },
-    {
-      "name": "defaultOpen",
-      "type": "boolean"
-    },
-    {
-      "name": "open",
-      "type": "boolean"
-    },
-    {
-      "name": "disableHoverableContent",
-      "type": "boolean"
-    },
-    {
-      "name": "disableClosingTrigger",
-      "type": "boolean"
-    },
-    {
-      "name": "disabled",
-      "type": "boolean"
-    },
-    {
-      "name": "ignoreNonKeyboardFocus",
-      "type": "boolean"
-    },
-    {
-      "name": "ui",
-      "type": {
-        "values": [
-          "arrow",
-          "content",
-          "kbds",
-          "kbdsSize",
-          "text"
-        ]
-      }
-    }
-  ]
+	Accordion: [
+		{
+			name: 'trailingIcon',
+			type: 'string',
+		},
+		{
+			name: 'labelKey',
+			type: 'string',
+		},
+		{
+			name: 'collapsible',
+			type: 'boolean',
+		},
+		{
+			name: 'type',
+			type: [
+				'single',
+				'multiple',
+			],
+		},
+		{
+			name: 'disabled',
+			type: 'boolean',
+		},
+		{
+			name: 'unmountOnHide',
+			type: 'boolean',
+		},
+		{
+			name: 'ui',
+			type: {
+				values: [
+					'body',
+					'content',
+					'header',
+					'item',
+					'label',
+					'leadingIcon',
+					'root',
+					'trailingIcon',
+					'trigger',
+				],
+			},
+		},
+	],
+	Alert: [
+		{
+			name: 'title',
+			type: 'string',
+		},
+		{
+			name: 'description',
+			type: 'string',
+		},
+		{
+			name: 'icon',
+			type: 'string',
+		},
+		{
+			name: 'color',
+			type: [
+				'error',
+				'primary',
+				'secondary',
+				'success',
+				'info',
+				'warning',
+				'neutral',
+			],
+		},
+		{
+			name: 'variant',
+			type: [
+				'solid',
+				'outline',
+				'soft',
+				'subtle',
+			],
+		},
+		{
+			name: 'orientation',
+			type: [
+				'vertical',
+				'horizontal',
+			],
+		},
+		{
+			name: 'closeIcon',
+			type: 'string',
+		},
+		{
+			name: 'ui',
+			type: {
+				values: [
+					'actions',
+					'avatar',
+					'avatarSize',
+					'close',
+					'description',
+					'icon',
+					'root',
+					'title',
+					'wrapper',
+				],
+			},
+		},
+	],
+	Avatar: [
+		{
+			name: 'src',
+			type: 'string',
+		},
+		{
+			name: 'alt',
+			type: 'string',
+		},
+		{
+			name: 'icon',
+			type: 'string',
+		},
+		{
+			name: 'text',
+			type: 'string',
+		},
+		{
+			name: 'size',
+			type: [
+				'md',
+				'3xs',
+				'2xs',
+				'xs',
+				'sm',
+				'lg',
+				'xl',
+				'2xl',
+				'3xl',
+			],
+		},
+		{
+			name: 'ui',
+			type: {
+				values: [
+					'fallback',
+					'icon',
+					'image',
+					'root',
+				],
+			},
+		},
+	],
+	Badge: [
+		{
+			name: 'color',
+			type: [
+				'error',
+				'primary',
+				'secondary',
+				'success',
+				'info',
+				'warning',
+				'neutral',
+			],
+		},
+		{
+			name: 'variant',
+			type: [
+				'solid',
+				'outline',
+				'soft',
+				'subtle',
+			],
+		},
+		{
+			name: 'size',
+			type: [
+				'md',
+				'xs',
+				'sm',
+				'lg',
+				'xl',
+			],
+		},
+		{
+			name: 'square',
+			type: 'boolean',
+		},
+		{
+			name: 'icon',
+			type: 'string',
+		},
+		{
+			name: 'leading',
+			type: 'boolean',
+		},
+		{
+			name: 'leadingIcon',
+			type: 'string',
+		},
+		{
+			name: 'trailing',
+			type: 'boolean',
+		},
+		{
+			name: 'trailingIcon',
+			type: 'string',
+		},
+		{
+			name: 'ui',
+			type: {
+				values: [
+					'base',
+					'label',
+					'leadingAvatar',
+					'leadingAvatarSize',
+					'leadingIcon',
+					'trailingIcon',
+				],
+			},
+		},
+	],
+	Breadcrumb: [
+		{
+			name: 'separatorIcon',
+			type: 'string',
+		},
+		{
+			name: 'labelKey',
+			type: 'string',
+		},
+		{
+			name: 'ui',
+			type: {
+				values: [
+					'item',
+					'link',
+					'linkLabel',
+					'linkLeadingAvatar',
+					'linkLeadingAvatarSize',
+					'linkLeadingIcon',
+					'list',
+					'root',
+					'separator',
+					'separatorIcon',
+				],
+			},
+		},
+	],
+	Button: [
+		{
+			name: 'label',
+			type: 'string',
+		},
+		{
+			name: 'color',
+			type: [
+				'error',
+				'primary',
+				'secondary',
+				'success',
+				'info',
+				'warning',
+				'neutral',
+			],
+		},
+		{
+			name: 'activeColor',
+			type: [
+				'error',
+				'primary',
+				'secondary',
+				'success',
+				'info',
+				'warning',
+				'neutral',
+			],
+		},
+		{
+			name: 'variant',
+			type: [
+				'link',
+				'solid',
+				'outline',
+				'soft',
+				'subtle',
+				'ghost',
+			],
+		},
+		{
+			name: 'activeVariant',
+			type: [
+				'link',
+				'solid',
+				'outline',
+				'soft',
+				'subtle',
+				'ghost',
+			],
+		},
+		{
+			name: 'size',
+			type: [
+				'md',
+				'xs',
+				'sm',
+				'lg',
+				'xl',
+			],
+		},
+		{
+			name: 'square',
+			type: 'boolean',
+		},
+		{
+			name: 'block',
+			type: 'boolean',
+		},
+		{
+			name: 'loadingAuto',
+			type: 'boolean',
+		},
+		{
+			name: 'icon',
+			type: 'string',
+		},
+		{
+			name: 'leading',
+			type: 'boolean',
+		},
+		{
+			name: 'leadingIcon',
+			type: 'string',
+		},
+		{
+			name: 'trailing',
+			type: 'boolean',
+		},
+		{
+			name: 'trailingIcon',
+			type: 'string',
+		},
+		{
+			name: 'loading',
+			type: 'boolean',
+		},
+		{
+			name: 'loadingIcon',
+			type: 'string',
+		},
+		{
+			name: 'type',
+			type: [
+				'reset',
+				'submit',
+				'button',
+			],
+		},
+		{
+			name: 'disabled',
+			type: 'boolean',
+		},
+		{
+			name: 'active',
+			type: 'boolean',
+		},
+		{
+			name: 'ui',
+			type: {
+				values: [
+					'base',
+					'label',
+					'leadingAvatar',
+					'leadingAvatarSize',
+					'leadingIcon',
+					'trailingIcon',
+				],
+			},
+		},
+	],
+	Calendar: [
+		{
+			name: 'nextYearIcon',
+			type: 'string',
+		},
+		{
+			name: 'nextMonthIcon',
+			type: 'string',
+		},
+		{
+			name: 'prevYearIcon',
+			type: 'string',
+		},
+		{
+			name: 'prevMonthIcon',
+			type: 'string',
+		},
+		{
+			name: 'color',
+			type: [
+				'error',
+				'primary',
+				'secondary',
+				'success',
+				'info',
+				'warning',
+				'neutral',
+			],
+		},
+		{
+			name: 'size',
+			type: [
+				'md',
+				'xs',
+				'sm',
+				'lg',
+				'xl',
+			],
+		},
+		{
+			name: 'range',
+			type: 'boolean',
+		},
+		{
+			name: 'multiple',
+			type: 'boolean',
+		},
+		{
+			name: 'monthControls',
+			type: 'boolean',
+		},
+		{
+			name: 'yearControls',
+			type: 'boolean',
+		},
+		{
+			name: 'allowNonContiguousRanges',
+			type: 'boolean',
+		},
+		{
+			name: 'pagedNavigation',
+			type: 'boolean',
+		},
+		{
+			name: 'preventDeselect',
+			type: 'boolean',
+		},
+		{
+			name: 'weekdayFormat',
+			type: [
+				'narrow',
+				'short',
+				'long',
+			],
+		},
+		{
+			name: 'fixedWeeks',
+			type: 'boolean',
+		},
+		{
+			name: 'disabled',
+			type: 'boolean',
+		},
+		{
+			name: 'readonly',
+			type: 'boolean',
+		},
+		{
+			name: 'initialFocus',
+			type: 'boolean',
+		},
+		{
+			name: 'disableDaysOutsideCurrentView',
+			type: 'boolean',
+		},
+		{
+			name: 'fixedDate',
+			type: [
+				'start',
+				'end',
+			],
+		},
+		{
+			name: 'ui',
+			type: {
+				values: [
+					'body',
+					'cell',
+					'cellTrigger',
+					'grid',
+					'gridBody',
+					'gridRow',
+					'gridWeekDaysRow',
+					'headCell',
+					'header',
+					'heading',
+					'root',
+				],
+			},
+		},
+	],
+	Card: [
+		{
+			name: 'variant',
+			type: [
+				'solid',
+				'outline',
+				'soft',
+				'subtle',
+			],
+		},
+		{
+			name: 'ui',
+			type: {
+				values: [
+					'body',
+					'footer',
+					'header',
+					'root',
+				],
+			},
+		},
+	],
+	Checkbox: [
+		{
+			name: 'label',
+			type: 'string',
+		},
+		{
+			name: 'description',
+			type: 'string',
+		},
+		{
+			name: 'color',
+			type: [
+				'error',
+				'primary',
+				'secondary',
+				'success',
+				'info',
+				'warning',
+				'neutral',
+			],
+		},
+		{
+			name: 'variant',
+			type: [
+				'card',
+				'list',
+			],
+		},
+		{
+			name: 'size',
+			type: [
+				'xs',
+				'sm',
+				'md',
+				'lg',
+				'xl',
+			],
+		},
+		{
+			name: 'indicator',
+			type: [
+				'start',
+				'end',
+				'hidden',
+			],
+		},
+		{
+			name: 'icon',
+			type: 'string',
+		},
+		{
+			name: 'indeterminateIcon',
+			type: 'string',
+		},
+		{
+			name: 'disabled',
+			type: 'boolean',
+		},
+		{
+			name: 'name',
+			type: 'string',
+		},
+		{
+			name: 'required',
+			type: 'boolean',
+		},
+		{
+			name: 'id',
+			type: 'string',
+		},
+		{
+			name: 'ui',
+			type: {
+				values: [
+					'base',
+					'container',
+					'description',
+					'icon',
+					'indicator',
+					'label',
+					'root',
+					'wrapper',
+				],
+			},
+		},
+	],
+	Chip: [
+		{
+			name: 'color',
+			type: [
+				'error',
+				'primary',
+				'secondary',
+				'success',
+				'info',
+				'warning',
+				'neutral',
+			],
+		},
+		{
+			name: 'size',
+			type: [
+				'xs',
+				'sm',
+				'md',
+				'lg',
+				'xl',
+				'3xs',
+				'2xs',
+				'2xl',
+				'3xl',
+			],
+		},
+		{
+			name: 'position',
+			type: [
+				'top-right',
+				'bottom-right',
+				'top-left',
+				'bottom-left',
+			],
+		},
+		{
+			name: 'inset',
+			type: 'boolean',
+		},
+		{
+			name: 'standalone',
+			type: 'boolean',
+		},
+		{
+			name: 'show',
+			type: 'boolean',
+		},
+		{
+			name: 'ui',
+			type: {
+				values: [
+					'base',
+					'root',
+				],
+			},
+		},
+	],
+	DropdownMenu: [
+		{
+			name: 'size',
+			type: [
+				'sm',
+				'md',
+				'xs',
+				'lg',
+				'xl',
+			],
+		},
+		{
+			name: 'checkedIcon',
+			type: 'string',
+		},
+		{
+			name: 'loadingIcon',
+			type: 'string',
+		},
+		{
+			name: 'disabled',
+			type: 'boolean',
+		},
+		{
+			name: 'defaultOpen',
+			type: 'boolean',
+		},
+		{
+			name: 'open',
+			type: 'boolean',
+		},
+		{
+			name: 'modal',
+			type: 'boolean',
+		},
+		{
+			name: 'ui',
+			type: {
+				values: [
+					'arrow',
+					'content',
+					'group',
+					'item',
+					'itemLabel',
+					'itemLabelExternalIcon',
+					'itemLeadingAvatar',
+					'itemLeadingAvatarSize',
+					'itemLeadingIcon',
+					'itemTrailing',
+					'itemTrailingIcon',
+					'itemTrailingKbds',
+					'itemTrailingKbdsSize',
+					'label',
+					'separator',
+					'viewport',
+				],
+			},
+		},
+	],
+	Input: [
+		{
+			name: 'id',
+			type: 'string',
+		},
+		{
+			name: 'name',
+			type: 'string',
+		},
+		{
+			name: 'placeholder',
+			type: 'string',
+		},
+		{
+			name: 'color',
+			type: [
+				'error',
+				'primary',
+				'secondary',
+				'success',
+				'info',
+				'warning',
+				'neutral',
+			],
+		},
+		{
+			name: 'variant',
+			type: [
+				'outline',
+				'soft',
+				'subtle',
+				'ghost',
+				'none',
+			],
+		},
+		{
+			name: 'size',
+			type: [
+				'xs',
+				'sm',
+				'md',
+				'lg',
+				'xl',
+			],
+		},
+		{
+			name: 'required',
+			type: 'boolean',
+		},
+		{
+			name: 'autocomplete',
+			type: 'string',
+		},
+		{
+			name: 'autofocus',
+			type: 'boolean',
+		},
+		{
+			name: 'disabled',
+			type: 'boolean',
+		},
+		{
+			name: 'highlight',
+			type: 'boolean',
+		},
+		{
+			name: 'icon',
+			type: 'string',
+		},
+		{
+			name: 'leading',
+			type: 'boolean',
+		},
+		{
+			name: 'leadingIcon',
+			type: 'string',
+		},
+		{
+			name: 'trailing',
+			type: 'boolean',
+		},
+		{
+			name: 'trailingIcon',
+			type: 'string',
+		},
+		{
+			name: 'loading',
+			type: 'boolean',
+		},
+		{
+			name: 'loadingIcon',
+			type: 'string',
+		},
+		{
+			name: 'ui',
+			type: {
+				values: [
+					'base',
+					'leading',
+					'leadingAvatar',
+					'leadingAvatarSize',
+					'leadingIcon',
+					'root',
+					'trailing',
+					'trailingIcon',
+				],
+			},
+		},
+	],
+	Modal: [
+		{
+			name: 'title',
+			type: 'string',
+		},
+		{
+			name: 'description',
+			type: 'string',
+		},
+		{
+			name: 'overlay',
+			type: 'boolean',
+		},
+		{
+			name: 'transition',
+			type: 'boolean',
+		},
+		{
+			name: 'fullscreen',
+			type: 'boolean',
+		},
+		{
+			name: 'closeIcon',
+			type: 'string',
+		},
+		{
+			name: 'dismissible',
+			type: 'boolean',
+		},
+		{
+			name: 'open',
+			type: 'boolean',
+		},
+		{
+			name: 'defaultOpen',
+			type: 'boolean',
+		},
+		{
+			name: 'modal',
+			type: 'boolean',
+		},
+		{
+			name: 'ui',
+			type: {
+				values: [
+					'body',
+					'close',
+					'content',
+					'description',
+					'footer',
+					'header',
+					'overlay',
+					'title',
+					'wrapper',
+				],
+			},
+		},
+	],
+	Progress: [
+		{
+			name: 'status',
+			type: 'boolean',
+		},
+		{
+			name: 'inverted',
+			type: 'boolean',
+		},
+		{
+			name: 'size',
+			type: [
+				'md',
+				'xs',
+				'sm',
+				'lg',
+				'xl',
+				'2xs',
+				'2xl',
+			],
+		},
+		{
+			name: 'color',
+			type: [
+				'error',
+				'primary',
+				'secondary',
+				'success',
+				'info',
+				'warning',
+				'neutral',
+			],
+		},
+		{
+			name: 'orientation',
+			type: [
+				'horizontal',
+				'vertical',
+			],
+		},
+		{
+			name: 'animation',
+			type: [
+				'carousel',
+				'carousel-inverse',
+				'swing',
+				'elastic',
+			],
+		},
+		{
+			name: 'ui',
+			type: {
+				values: [
+					'base',
+					'indicator',
+					'root',
+					'status',
+					'step',
+					'steps',
+				],
+			},
+		},
+	],
+	Select: [
+		{
+			name: 'id',
+			type: 'string',
+		},
+		{
+			name: 'placeholder',
+			type: 'string',
+		},
+		{
+			name: 'color',
+			type: [
+				'error',
+				'primary',
+				'secondary',
+				'success',
+				'info',
+				'warning',
+				'neutral',
+			],
+		},
+		{
+			name: 'variant',
+			type: [
+				'outline',
+				'soft',
+				'subtle',
+				'ghost',
+				'none',
+			],
+		},
+		{
+			name: 'size',
+			type: [
+				'sm',
+				'md',
+				'xs',
+				'lg',
+				'xl',
+			],
+		},
+		{
+			name: 'trailingIcon',
+			type: 'string',
+		},
+		{
+			name: 'selectedIcon',
+			type: 'string',
+		},
+		{
+			name: 'multiple',
+			type: 'boolean',
+		},
+		{
+			name: 'highlight',
+			type: 'boolean',
+		},
+		{
+			name: 'autofocus',
+			type: 'boolean',
+		},
+		{
+			name: 'disabled',
+			type: 'boolean',
+		},
+		{
+			name: 'open',
+			type: 'boolean',
+		},
+		{
+			name: 'defaultOpen',
+			type: 'boolean',
+		},
+		{
+			name: 'autocomplete',
+			type: 'string',
+		},
+		{
+			name: 'name',
+			type: 'string',
+		},
+		{
+			name: 'required',
+			type: 'boolean',
+		},
+		{
+			name: 'icon',
+			type: 'string',
+		},
+		{
+			name: 'leading',
+			type: 'boolean',
+		},
+		{
+			name: 'leadingIcon',
+			type: 'string',
+		},
+		{
+			name: 'trailing',
+			type: 'boolean',
+		},
+		{
+			name: 'loading',
+			type: 'boolean',
+		},
+		{
+			name: 'loadingIcon',
+			type: 'string',
+		},
+		{
+			name: 'ui',
+			type: {
+				values: [
+					'arrow',
+					'base',
+					'content',
+					'empty',
+					'group',
+					'item',
+					'itemLabel',
+					'itemLeadingAvatar',
+					'itemLeadingAvatarSize',
+					'itemLeadingChip',
+					'itemLeadingChipSize',
+					'itemLeadingIcon',
+					'itemTrailing',
+					'itemTrailingIcon',
+					'label',
+					'leading',
+					'leadingAvatar',
+					'leadingAvatarSize',
+					'leadingIcon',
+					'placeholder',
+					'separator',
+					'trailing',
+					'trailingIcon',
+					'value',
+					'viewport',
+				],
+			},
+		},
+	],
+	Switch: [
+		{
+			name: 'color',
+			type: [
+				'error',
+				'primary',
+				'secondary',
+				'success',
+				'info',
+				'warning',
+				'neutral',
+			],
+		},
+		{
+			name: 'size',
+			type: [
+				'xs',
+				'sm',
+				'md',
+				'lg',
+				'xl',
+			],
+		},
+		{
+			name: 'loading',
+			type: 'boolean',
+		},
+		{
+			name: 'loadingIcon',
+			type: 'string',
+		},
+		{
+			name: 'checkedIcon',
+			type: 'string',
+		},
+		{
+			name: 'uncheckedIcon',
+			type: 'string',
+		},
+		{
+			name: 'label',
+			type: 'string',
+		},
+		{
+			name: 'description',
+			type: 'string',
+		},
+		{
+			name: 'defaultValue',
+			type: 'boolean',
+		},
+		{
+			name: 'disabled',
+			type: 'boolean',
+		},
+		{
+			name: 'id',
+			type: 'string',
+		},
+		{
+			name: 'name',
+			type: 'string',
+		},
+		{
+			name: 'required',
+			type: 'boolean',
+		},
+		{
+			name: 'value',
+			type: 'string',
+		},
+		{
+			name: 'modelValue',
+			type: 'boolean',
+		},
+		{
+			name: 'ui',
+			type: {
+				values: [
+					'base',
+					'container',
+					'description',
+					'icon',
+					'label',
+					'root',
+					'thumb',
+					'wrapper',
+				],
+			},
+		},
+	],
+	Tabs: [
+		{
+			name: 'color',
+			type: [
+				'error',
+				'primary',
+				'secondary',
+				'success',
+				'info',
+				'warning',
+				'neutral',
+			],
+		},
+		{
+			name: 'variant',
+			type: [
+				'pill',
+				'link',
+			],
+		},
+		{
+			name: 'size',
+			type: [
+				'sm',
+				'xs',
+				'md',
+				'lg',
+				'xl',
+			],
+		},
+		{
+			name: 'orientation',
+			type: [
+				'horizontal',
+				'vertical',
+			],
+		},
+		{
+			name: 'content',
+			type: 'boolean',
+		},
+		{
+			name: 'labelKey',
+			type: 'string',
+		},
+		{
+			name: 'activationMode',
+			type: [
+				'automatic',
+				'manual',
+			],
+		},
+		{
+			name: 'unmountOnHide',
+			type: 'boolean',
+		},
+		{
+			name: 'ui',
+			type: {
+				values: [
+					'content',
+					'indicator',
+					'label',
+					'leadingAvatar',
+					'leadingAvatarSize',
+					'leadingIcon',
+					'list',
+					'root',
+					'trailingBadge',
+					'trailingBadgeSize',
+					'trigger',
+				],
+			},
+		},
+	],
+	Tooltip: [
+		{
+			name: 'text',
+			type: 'string',
+		},
+		{
+			name: 'defaultOpen',
+			type: 'boolean',
+		},
+		{
+			name: 'open',
+			type: 'boolean',
+		},
+		{
+			name: 'disableHoverableContent',
+			type: 'boolean',
+		},
+		{
+			name: 'disableClosingTrigger',
+			type: 'boolean',
+		},
+		{
+			name: 'disabled',
+			type: 'boolean',
+		},
+		{
+			name: 'ignoreNonKeyboardFocus',
+			type: 'boolean',
+		},
+		{
+			name: 'ui',
+			type: {
+				values: [
+					'arrow',
+					'content',
+					'kbds',
+					'kbdsSize',
+					'text',
+				],
+			},
+		},
+	],
 };
 
 export default data;

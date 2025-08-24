@@ -122,10 +122,13 @@ const isNavigationOpen = ref(false);
 				icon="i-lucide-menu"
 				color="neutral"
 				variant="soft"
-				@click="isNavigationOpen = true"
 				class="md:hidden"
+				@click="isNavigationOpen = true"
 			/>
-			<USlideover side="left" v-model:open="isNavigationOpen">
+			<USlideover
+				v-model:open="isNavigationOpen"
+				side="left"
+			>
 				<template #header>
 					<div class="flex items-center justify-between w-full">
 						<h3 class="text-xl font-medium">
@@ -201,23 +204,22 @@ const isNavigationOpen = ref(false);
 		v-model:open="isThemeConfigOpen"
 		side="right"
 		:width="500"
-    :overlay="false"
-
+		:overlay="false"
 	>
-  <template #header>
-    <div class="flex items-center justify-between w-full">
-      <h3 class="text-xl font-medium">
-        {{ $t('header.themeConfig') }}
-      </h3>
-      <UButton
-        icon="i-lucide-x"
-        color="neutral"
-        variant="ghost"
-        size="sm"
-        @click="isThemeConfigOpen = false"
-      />
-    </div>
-  </template>
+		<template #header>
+			<div class="flex items-center justify-between w-full">
+				<h3 class="text-xl font-medium">
+					{{ $t('header.themeConfig') }}
+				</h3>
+				<UButton
+					icon="i-lucide-x"
+					color="neutral"
+					variant="ghost"
+					size="sm"
+					@click="isThemeConfigOpen = false"
+				/>
+			</div>
+		</template>
 
 		<template #body>
 			<VariableConfigurator

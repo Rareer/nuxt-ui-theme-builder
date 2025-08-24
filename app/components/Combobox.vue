@@ -2,14 +2,14 @@
 import { fa } from 'zod/v4/locales';
 
 const props = defineProps<{
-	modelValue: string[],
+	modelValue: string[];
 }>();
 
 const emit = defineEmits(['update:modelValue']);
 const { getAllClasses } = useTailwindClasses();
 const currentInput = ref('');
-const label = ref('')
-const suggestions = computed(() => getAllClasses().map((s) => ({label: s.value})));
+const label = ref('');
+const suggestions = computed(() => getAllClasses().map(s => ({ label: s.value })));
 
 const selectSuggestion = (s: string | undefined) => {
 	const input = s?.trim();
@@ -25,7 +25,6 @@ const removeItem = (s: string) => {
 const updateSearchTerm = (val: string) => {
 	currentInput.value = val;
 };
-
 </script>
 
 <template>
@@ -59,37 +58,37 @@ const updateSearchTerm = (val: string) => {
 			/>
 
 			<template #content>
-			<UCommandPalette
-				v-model="label"
-				placeholder="Search or type class..."
-				:groups="[{ id: 'labels', items: suggestions }]"
-				:search-term="currentInput"
-				:multiple="false"
-				@update:search-term="updateSearchTerm($event)"
-				@keydown.enter="selectSuggestion(currentInput)"
-				@keydown.space="selectSuggestion(currentInput)"
-				@submit="selectSuggestion(currentInput)"
-				:ui="{ input: '[&>input]:h-8 [&>input]:text-sm', content: 'max-h-[100px] overflow-y-auto' }"
-			>
-				<template #empty>
-					<div class="p-4 text-center text-sm text-gray-500">
-						Type your custom class and hit Enter.
-					</div>
-				</template>
-				<template #item="{ item }">
-					<UButton
-						block
-						class="justify-start"
-						color="neutral"
-						variant="link"
-						size="xs"
-						@click="selectSuggestion(item.label)"
-					>
-						{{ item.label }}
-					</UButton>
-				</template>
-			</UCommandPalette>
+				<UCommandPalette
+					v-model="label"
+					placeholder="Search or type class..."
+					:groups="[{ id: 'labels', items: suggestions }]"
+					:search-term="currentInput"
+					:multiple="false"
+					:ui="{ input: '[&>input]:h-8 [&>input]:text-sm', content: 'max-h-[100px] overflow-y-auto' }"
+					@update:search-term="updateSearchTerm($event)"
+					@keydown.enter="selectSuggestion(currentInput)"
+					@keydown.space="selectSuggestion(currentInput)"
+					@submit="selectSuggestion(currentInput)"
+				>
+					<template #empty>
+						<div class="p-4 text-center text-sm text-gray-500">
+							Type your custom class and hit Enter.
+						</div>
+					</template>
+					<template #item="{ item }">
+						<UButton
+							block
+							class="justify-start"
+							color="neutral"
+							variant="link"
+							size="xs"
+							@click="selectSuggestion(item.label)"
+						>
+							{{ item.label }}
+						</UButton>
+					</template>
+				</UCommandPalette>
 			</template>
-	</UPopover>
+		</UPopover>
 	</div>
 </template>
