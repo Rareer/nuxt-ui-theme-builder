@@ -38,11 +38,11 @@ const accordionDemo = [
 // Extra Komponenten: Dropdown, Pagination, Table, Progress, Slider
 const dropdownItems = [
 	[
-		{ label: 'Bearbeiten', icon: 'i-lucide-pencil', click: () => console.log('Bearbeiten') },
-		{ label: 'Teilen', icon: 'i-lucide-share', click: () => console.log('Teilen') },
+		{ label: 'Bearbeiten', icon: 'i-lucide-pencil'},
+		{ label: 'Teilen', icon: 'i-lucide-share'},
 	],
 	[
-		{ label: 'Löschen', icon: 'i-lucide-trash', color: 'error', click: () => console.log('Löschen') },
+		{ label: 'Löschen', icon: 'i-lucide-trash', color: 'error'},
 	],
 ];
 
@@ -108,9 +108,6 @@ const faqItems = [
 	},
 ];
 
-function submitForm() {
-	console.log('Form submitted:', { ...form });
-}
 </script>
 
 <template>

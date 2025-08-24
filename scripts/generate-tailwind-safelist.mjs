@@ -231,5 +231,3 @@ const content = lines.join('\n') + '\n'
 const outPath = resolve('app/assets/css/safelist.css')
 mkdirSync(dirname(outPath), { recursive: true })
 writeFileSync(outPath, content)
-
-console.log(`Generated ${outPath} with ${lines.length} @source inline pattern blocks`) 
