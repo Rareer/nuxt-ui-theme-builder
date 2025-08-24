@@ -122,7 +122,6 @@ const isNavigationOpen = ref(false);
 				icon="i-lucide-menu"
 				color="neutral"
 				variant="soft"
-				:title="$t('header.toggleNavigation')"
 				@click="isNavigationOpen = true"
 				class="md:hidden"
 			/>

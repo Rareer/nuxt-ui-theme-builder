@@ -66,7 +66,6 @@ export default defineNuxtConfig({
 		experimental: {
 			localeDetector: 'localeDetector.ts'
 		},
-		langDir: 'locales',
 	},
 	site: { 
 		url: 'https://www.nuxtlify.com', 
