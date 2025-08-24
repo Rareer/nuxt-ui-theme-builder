@@ -204,11 +204,15 @@
       "send": "Absenden"
     },
     "footer": {
-      "copyright": "© {year} Nuxtify. Alle Rechte vorbehalten.",
+      "copyright": " {year} Nuxtify. Alle Rechte vorbehalten.",
       "nuxt3": "Nuxt 3",
       "tailwind": "Tailwind CSS",
       "nuxtui": "Nuxt UI",
       "composable": "Composable Design"
     }
+  },
+  "fontSelector": {
+    "current": "Aktuell:",
+    "empty": "Keine Treffer."
   }
 }
