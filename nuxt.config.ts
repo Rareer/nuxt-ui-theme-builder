@@ -12,6 +12,7 @@ export default defineNuxtConfig({
 		'@pinia/nuxt',
 		'@nuxtjs/i18n',
 		'@nuxtjs/seo',
+		'@nuxtjs/sitemap',
 	],
 	components: {
 		dirs: [
@@ -67,4 +68,8 @@ export default defineNuxtConfig({
 		},
 		langDir: 'locales',
 	},
+	site: { 
+		url: 'https://www.nuxtlify.com', 
+		name: 'Theme Builder for Nuxt UI' 
+		}, 
 });
