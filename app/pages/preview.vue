@@ -38,11 +38,11 @@ const accordionDemo = [
 // Extra Komponenten: Dropdown, Pagination, Table, Progress, Slider
 const dropdownItems = [
 	[
-		{ label: 'Bearbeiten', icon: 'i-lucide-pencil'},
-		{ label: 'Teilen', icon: 'i-lucide-share'},
+		{ label: 'Bearbeiten', icon: 'i-lucide-pencil' },
+		{ label: 'Teilen', icon: 'i-lucide-share' },
 	],
 	[
-		{ label: 'Löschen', icon: 'i-lucide-trash', color: 'error'},
+		{ label: 'Löschen', icon: 'i-lucide-trash', color: 'error' },
 	],
 ];
 
@@ -77,21 +77,20 @@ function notify(title: string, description: string, color: 'info' | 'success' | 
 
 // Breadcrumbs
 const breadcrumbLinks = ref([
-  {
-    label: 'Home',
-    icon: 'i-lucide-house'
-  },
-  {
-    label: 'Components',
-    icon: 'i-lucide-box',
-    to: '/components'
-  },
-  {
-    label: 'Breadcrumb',
-    icon: 'i-lucide-link',
-    to: '/components/breadcrumb'
-  }
-])
+	{
+		label: 'Home',
+		icon: 'i-lucide-house',
+	},
+	{
+		label: 'Components',
+		icon: 'i-lucide-box',
+	},
+	{
+		label: 'Breadcrumb',
+		icon: 'i-lucide-link',
+		to: '/components/UBreadcrumb',
+	},
+]);
 
 const faqItems = [
 	{
@@ -107,7 +106,6 @@ const faqItems = [
 		content: 'Ja! Alle Komponenten lassen sich via Props, Slots und Tailwind anpassen.',
 	},
 ];
-
 </script>
 
 <template>
@@ -493,16 +491,42 @@ const faqItems = [
 					</template>
 					<div class="flex flex-wrap gap-2">
 						<UChip color="primary">
-							<UButton color="neutral" variant="soft">Primary</UButton>
+							<UButton
+								color="neutral"
+								variant="soft"
+							>
+								Primary
+							</UButton>
 						</UChip>
 						<UChip color="secondary">
-							<UButton color="neutral" variant="soft">Secondary</UButton>
+							<UButton
+								color="neutral"
+								variant="soft"
+							>
+								Secondary
+							</UButton>
 						</UChip>
-						<UChip color="primary" inset>
-							<UButton color="neutral" variant="soft">Inset</UButton>
+						<UChip
+							color="primary"
+							inset
+						>
+							<UButton
+								color="neutral"
+								variant="soft"
+							>
+								Inset
+							</UButton>
 						</UChip>
-						<UChip color="success" standalone>
-							<UButton color="neutral" variant="soft">Standalone</UButton>
+						<UChip
+							color="success"
+							standalone
+						>
+							<UButton
+								color="neutral"
+								variant="soft"
+							>
+								Standalone
+							</UButton>
 						</UChip>
 					</div>
 				</UCard>

@@ -1,4 +1,3 @@
-
 <script setup lang="ts">
 import type { ThemeVariable } from '../constants/theme';
 import type { Color } from '../types/color';
@@ -46,14 +45,14 @@ watch(currentMode, (mode) => {
 
 // Setzt den Light/Dark-Modus sowohl im Store (Editiermodus) als auch im globalen Nuxt Color Mode
 function setMode(mode: 'light' | 'dark') {
-    if (currentMode.value === mode) return;
-    // Update store edit mode
-    themeStore.setEditMode(mode);
-    // Sync Nuxt color mode preference for global UI theme
-    try {
-        colorMode.preference = mode as any;
-    }
-    catch {}
+	if (currentMode.value === mode) return;
+	// Update store edit mode
+	themeStore.setEditMode(mode);
+	// Sync Nuxt color mode preference for global UI theme
+	try {
+		colorMode.preference = mode as any;
+	}
+	catch {}
 }
 
 function hydrateSelectedColorsFromMode(mode: 'light' | 'dark') {
@@ -92,7 +91,7 @@ const cssVariablesByCategory = computed(() => {
 // Farboptionen für die Dropdown-Menüs
 const colorOptions = computed(() => {
 	const options: Array<{ label: string; value: string; disabled?: boolean }> = [];
-    // Eigene Farben Header
+	// Eigene Farben Header
 	if (colorStore.colors.length > 0) {
 		options.push({
 			label: `--- ${t('variableConfigurator.customColorsHeader')} ---`,
@@ -351,7 +350,6 @@ watch(selectedColors, (newValues) => {
 				</div>
 			</div>
 		</div>
-	
 
 		<!-- CSS-Variablen Sektion -->
 		<div class="space-y-6">
@@ -401,8 +399,8 @@ watch(selectedColors, (newValues) => {
 								<div class="space-y-3">
 									<!-- Typ-Auswahl -->
 									<URadioGroup
-										v-model="variable.type"
 										v-if="variable.type === 'color-reference'"
+										v-model="variable.type"
 										:items="[{ label: t('variableConfigurator.colorRef'), value: 'color-reference' }, { label: t('variableConfigurator.directValue'), value: 'direct-value' }]"
 										@update:model-value="updateCssVariable(variable)"
 									/>

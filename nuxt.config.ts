@@ -1,11 +1,4 @@
 export default defineNuxtConfig({
-	ssr: true,
-	icon: {
-		customCollections: [{
-			prefix: 'custom',
-			dir: './app/assets/icons'
-		}],
-	},
 	modules: [
 		'@nuxt/ui',
 		'@nuxt/eslint',
@@ -14,19 +7,38 @@ export default defineNuxtConfig({
 		'@nuxtjs/seo',
 		'@nuxtjs/sitemap',
 	],
+
+	ssr: true,
+
 	components: {
 		dirs: [
 			'~/components',
 		],
 		global: true,
 	},
+
 	devtools: {
 		enabled: true,
 	},
 
 	css: ['~/assets/css/main.css'],
 
+	site: {
+		url: 'https://www.nuxtlify.com',
+		name: 'Theme Builder for Nuxt UI',
+	},
+
 	compatibilityDate: '2025-07-16',
+
+	nitro: {
+		prerender: {
+			autoSubfolderIndex: false,
+			crawlLinks: true,
+			routes: [
+				'/',
+			],
+		},
+	},
 
 	eslint: {
 		config: {
@@ -63,12 +75,17 @@ export default defineNuxtConfig({
 			alwaysRedirect: false,
 			fallbackLocale: 'en',
 		},
+
 		experimental: {
-			localeDetector: 'localeDetector.ts'
+			localeDetector: 'localeDetector.ts',
 		},
 	},
-	site: { 
-		url: 'https://www.nuxtlify.com', 
-		name: 'Theme Builder for Nuxt UI' 
-		}, 
+
+	icon: {
+		customCollections: [{
+			prefix: 'custom',
+			dir: './app/assets/icons',
+		}],
+	},
+
 });

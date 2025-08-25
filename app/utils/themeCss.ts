@@ -28,7 +28,6 @@ export function buildThemeCssVariables(
 		// Alias for 500 shade to support text color usage like --ui-[variable]-color-500
 		result[`--ui-${variable}-color-500`] = `var(--ui-color-${normalized}-500)`;
 
-
 		SHADES.forEach((shade) => {
 			// Old semantic shade alias (kept for compatibility)
 			result[`--ui-${variable}-${shade}`] = `var(--ui-color-${normalized}-${shade})`;

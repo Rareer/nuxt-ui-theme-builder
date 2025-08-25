@@ -79,74 +79,75 @@ function generateAppConfigContent(
 	configContent += `    },
 `;
 
-    // Helper: map component name like "UButton" -> "button"
-    const mapComponentKey = (name: string) => {
-        let n = name || ''
-        if (n.startsWith('U')) n = n.slice(1)
-        return n.length ? n[0].toLowerCase() + n.slice(1) : n
-    }
+	// Helper: map component name like "UButton" -> "button"
+	const mapComponentKey = (name: string) => {
+		let n = name || '';
+		if (n.startsWith('U')) n = n.slice(1);
+		return n.length ? n[0].toLowerCase() + n.slice(1) : n;
+	};
 
-    // Serialize each component as sibling under ui, skipping empty ones
-    const entries = Object.entries(byComponent || {});
-    entries.forEach(([componentName, cfg]) => {
-        const key = mapComponentKey(componentName)
+	// Serialize each component as sibling under ui, skipping empty ones
+	const entries = Object.entries(byComponent || {});
+	entries.forEach(([componentName, cfg]) => {
+		const key = mapComponentKey(componentName);
 
-        // Build slots content
-        const slotLines: string[] = []
-        if (cfg && cfg.defaults) {
-            for (const [slot, arr] of Object.entries(cfg.defaults)) {
-                if (Array.isArray(arr) && arr.length) {
-                    const cls = (arr as string[]).join(' ').replace(/`/g, '\\`')
-                    slotLines.push(`        ${slot}: \`${cls}\`,`)
-                }
-            }
-        }
+		// Build slots content
+		const slotLines: string[] = [];
+		if (cfg && cfg.defaults) {
+			for (const [slot, arr] of Object.entries(cfg.defaults)) {
+				if (Array.isArray(arr) && arr.length) {
+					const cls = (arr as string[]).join(' ').replace(/`/g, '\\`');
+					slotLines.push(`        ${slot}: \`${cls}\`,`);
+				}
+			}
+		}
 
-        // Build variants content
-        const variantPropBlocks: string[] = []
-        if (cfg && cfg.props) {
-            for (const [propName, options] of Object.entries(cfg.props)) {
-                let optionBuffer = ''
-                for (const [optionName, slots] of Object.entries(options as Record<string, any>)) {
-                    const slotEntries = Object.entries(slots as Record<string, string[]>)
-                        .filter(([_, arr]) => Array.isArray(arr) && (arr as string[]).length)
-                    if (!slotEntries.length) continue
-                    if (slotEntries.length === 1 && slotEntries[0][0] === 'base') {
-                        const cls = (slotEntries[0][1] as string[]).join(' ').replace(/`/g, '\\`')
-                        optionBuffer += `        ${optionName}: \`${cls}\`,\n`
-                    } else {
-                        optionBuffer += `        ${optionName}: {\n`
-                        for (const [slot, arr] of slotEntries) {
-                            const cls = (arr as string[]).join(' ').replace(/`/g, '\\`')
-                            optionBuffer += `          ${slot}: \`${cls}\`,\n`
-                        }
-                        optionBuffer += `        },\n`
-                    }
-                }
-                if (optionBuffer) {
-                    variantPropBlocks.push(`      ${propName}: {\n${optionBuffer}      },`)
-                }
-            }
-        }
+		// Build variants content
+		const variantPropBlocks: string[] = [];
+		if (cfg && cfg.props) {
+			for (const [propName, options] of Object.entries(cfg.props)) {
+				let optionBuffer = '';
+				for (const [optionName, slots] of Object.entries(options as Record<string, any>)) {
+					const slotEntries = Object.entries(slots as Record<string, string[]>)
+						.filter(([_, arr]) => Array.isArray(arr) && (arr as string[]).length);
+					if (!slotEntries.length) continue;
+					if (slotEntries.length === 1 && slotEntries[0][0] === 'base') {
+						const cls = (slotEntries[0][1] as string[]).join(' ').replace(/`/g, '\\`');
+						optionBuffer += `        ${optionName}: \`${cls}\`,\n`;
+					}
+					else {
+						optionBuffer += `        ${optionName}: {\n`;
+						for (const [slot, arr] of slotEntries) {
+							const cls = (arr as string[]).join(' ').replace(/`/g, '\\`');
+							optionBuffer += `          ${slot}: \`${cls}\`,\n`;
+						}
+						optionBuffer += `        },\n`;
+					}
+				}
+				if (optionBuffer) {
+					variantPropBlocks.push(`      ${propName}: {\n${optionBuffer}      },`);
+				}
+			}
+		}
 
-        // Skip entirely if nothing to output
-        if (slotLines.length === 0 && variantPropBlocks.length === 0) return
+		// Skip entirely if nothing to output
+		if (slotLines.length === 0 && variantPropBlocks.length === 0) return;
 
-        // Start component block
-        configContent += `    ${key}: {\n`
-        // slots (only if any)
-        if (slotLines.length) {
-            configContent += `      slots: {\n${slotLines.join('\n')}\n      },\n`
-        }
-        // variants (only if any)
-        if (variantPropBlocks.length) {
-            configContent += `      variants: {\n${variantPropBlocks.join('\n')}\n      }\n`
-        }
-        configContent += `    },\n`
-    });
+		// Start component block
+		configContent += `    ${key}: {\n`;
+		// slots (only if any)
+		if (slotLines.length) {
+			configContent += `      slots: {\n${slotLines.join('\n')}\n      },\n`;
+		}
+		// variants (only if any)
+		if (variantPropBlocks.length) {
+			configContent += `      variants: {\n${variantPropBlocks.join('\n')}\n      }\n`;
+		}
+		configContent += `    },\n`;
+	});
 
-    // Close the structure
-    configContent += `  }
+	// Close the structure
+	configContent += `  }
 });
 `;
 
@@ -170,8 +171,8 @@ function generateCssContent(params: {
 		// Exclude semantic vars (--ui-[var], --ui-[var]-[shade], --ui-[var]-color-[shade])
 		// and the new aliases (--ui-color-[var]-[shade]) from export
 		.filter(([key]) => !(
-			/^--ui-(primary|secondary|success|neutral|info|warning|error)(?:-\d+|-color-\d+)?$/.test(key) ||
-			/^--ui-color-(primary|secondary|success|neutral|info|warning|error)-\d+$/.test(key)
+			/^--ui-(primary|secondary|success|neutral|info|warning|error)(?:-\d+|-color-\d+)?$/.test(key)
+			|| /^--ui-color-(primary|secondary|success|neutral|info|warning|error)-\d+$/.test(key)
 		))
 		.map(([key, value]) => `  ${key}: ${value};`)
 		.join('\n');
