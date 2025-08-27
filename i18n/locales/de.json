@@ -77,8 +77,8 @@
     "defaultPrompt": "Entwirf ein modernes, weiches, barrierefreies Theme mit beruhigendem Primär- und lebhaftem Akzent. Erzeuge Zuordnungen für LIGHT und DARK Mode. Für den DARK Mode wähle Grundfarben, die explizit für dunkle UIs geeignet sind und farbschematisch zum LIGHT-Mode passen (gleiche Familie, für Kontrast angepasst). Liefere nur Theme-Variablen und Mappings."
   },
   "index": {
-    "heroTitle": "Theme Builder für NuxtUI",
-    "heroSubtitle": "Erstellen Sie wunderschöne, anpassbare Themes für Ihre NuxtUI Komponenten. Definieren Sie eigene Farben und customizen Sie alle Varianten nach Ihren Wünschen.",
+    "heroTitle": "Theme Builder für Nuxt UI",
+    "heroSubtitle": "Erstellen Sie wunderschöne, anpassbare Themes für Ihre Nuxt UI Komponenten. Definieren Sie eigene Farben und customizen Sie alle Varianten nach Ihren Wünschen.",
     "btnManageColors": "Farben verwalten",
     "btnCustomizeComponents": "Komponenten anpassen",
     "featureColorsTitle": "Eigene Farben",
@@ -91,10 +91,10 @@
     "gettingStartedTitle": "Erste Schritte",
     "gettingStartedSubtitle": "Beginnen Sie mit der Erstellung Ihrer eigenen Farbpalette oder erkunden Sie die verfügbaren Komponenten.",
     "bulletUnlimitedColors": "Unbegrenzte Farben",
-    "bulletAllComponents": "Alle NuxtUI Komponenten",
+    "bulletAllComponents": "Alle Nuxt UI Komponenten",
     "bulletLivePreview": "Live Vorschau",
-    "headTitle": "Theme Builder für NuxtUI - Startseite",
-    "headDescription": "Erstellen Sie wunderschöne, anpassbare Themes für Ihre NuxtUI Komponenten."
+    "headTitle": "Theme Builder für Nuxt UI - Startseite",
+    "headDescription": "Erstellen Sie wunderschöne, anpassbare Themes für Ihre Nuxt UI Komponenten."
   },
   "pricing": {
     "title": "Preise"

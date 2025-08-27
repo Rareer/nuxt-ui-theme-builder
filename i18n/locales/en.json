@@ -77,8 +77,8 @@
     "defaultPrompt": "Design a modern, soft, accessible theme with a calming primary and a vibrant accent. Generate both LIGHT and DARK mode mappings. For DARK mode, choose base colors that are explicitly suitable for dark UIs and stay harmonized with the LIGHT palette (same family, different tuning for contrast). Return only theme variables and mappings."
   },
   "index": {
-    "heroTitle": "Theme Builder for NuxtUI",
-    "heroSubtitle": "Create beautiful, customizable themes for your NuxtUI components. Define your own colors and customize all variants to your liking.",
+    "heroTitle": "Theme Builder for Nuxt UI",
+    "heroSubtitle": "Create beautiful, customizable themes for your Nuxt UI components. Define your own colors and customize all variants to your liking.",
     "btnManageColors": "Manage colors",
     "btnCustomizeComponents": "Customize components",
     "featureColorsTitle": "Custom colors",
@@ -91,10 +91,10 @@
     "gettingStartedTitle": "Getting started",
     "gettingStartedSubtitle": "Start by creating your own color palette or explore the available components.",
     "bulletUnlimitedColors": "Unlimited colors",
-    "bulletAllComponents": "All NuxtUI components",
+    "bulletAllComponents": "All Nuxt UI components",
     "bulletLivePreview": "Live preview",
-    "headTitle": "Theme Builder for NuxtUI - Home",
-    "headDescription": "Create beautiful, customizable themes for your NuxtUI components."
+    "headTitle": "Theme Builder for Nuxt UI - Home",
+    "headDescription": "Create beautiful, customizable themes for your Nuxt UI components."
   },
   "pricing": {
     "title": "Pricing"
