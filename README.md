@@ -4,7 +4,7 @@
 > Not officially affiliated with Nuxt.
 
 Production environment on
-https://nuxtlify.vercel.app
+https://nuxtlify.com
 
 ## Features
 - 🤖 Generate color themes with AI

@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "Theme Builder"
+    "name": "Nxtlify"
   },
   "colorListing": {
     "addColor": "Add color",
@@ -171,7 +171,7 @@
     "moreInfo": "More info",
     "themingPreviewTitle": "Theming Preview",
     "themingPreviewDesc": "Adjust variables and see the effect immediately here.",
-    "heroTitle": "Welcome to Nuxtlify",
+    "heroTitle": "Welcome to Nxtlify",
     "heroSubtitle": "The modern solution for your web projects – fast, beautiful and modular thanks to Nuxt UI.",
     "btnGetStarted": "Get started",
     "btnLearnMore": "Learn more",
