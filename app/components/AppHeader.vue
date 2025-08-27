@@ -153,7 +153,7 @@ const isNavigationOpen = ref(false);
 			<UButton
 				icon="i-lucide-sparkles"
 				color="primary"
-				variant="soft"
+				variant="outline"
 				:title="$t('header.generateWithAI')"
 				@click="openAIModal"
 			/>
@@ -161,7 +161,7 @@ const isNavigationOpen = ref(false);
 			<UButton
 				icon="i-lucide-palette"
 				color="primary"
-				variant="soft"
+				variant="solid"
 				:title="$t('header.themeConfig')"
 				@click="isThemeConfigOpen = true"
 			/>
@@ -169,14 +169,14 @@ const isNavigationOpen = ref(false);
 			<UButton
 				:icon="colorMode.value === 'dark' ? 'i-lucide-sun' : 'i-lucide-moon'"
 				color="neutral"
-				variant="soft"
+				variant="outline"
 				:title="$t('header.toggleDark')"
 				@click="toggleDark"
 			/>
 			<UButton
 				icon="i-custom-discord"
 				color="neutral"
-				variant="soft"
+				variant="outline"
 				to="https://discord.gg/uZZTfqc8"
 				target="_blank"
 				:title="$t('header.discord')"
