@@ -250,10 +250,9 @@ watch(selectedColors, (newValues) => {
 <template>
 	<div class="space-y-8">
 		<!-- Mode Toggle -->
-		<div class="flex items-center justify-between">
+		<div class="flex flex-col gap-2">
 			<div class="flex items-center gap-2">
-				<span class="text-sm text-neutral-500">Mode:</span>
-				<div class="inline-flex rounded-md overflow-hidden ring-1 ring-gray-200">
+				<UButtonGroup>
 					<UButton
 						:color="currentMode === 'light' ? 'primary' : 'neutral'"
 						variant="soft"
@@ -270,7 +269,7 @@ watch(selectedColors, (newValues) => {
 					>
 						Dark
 					</UButton>
-				</div>
+				</UButtonGroup>
 			</div>
 			<!-- Actions: Save, Load, Export -->
 			<div class="flex items-center gap-2">
