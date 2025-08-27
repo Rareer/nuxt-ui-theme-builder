@@ -14,6 +14,10 @@ useHead(() => ({
 	<div class="max-w-6xl mx-auto px-4 py-12">
 		<!-- Hero Section -->
 		<div class="text-center mb-16">
+			<UIcon
+				name="i-custom-nuxtlify"
+				class="text-8xl bg-gradient-to-r from-primary-500 to-primary-700 mb-6"
+			/>
 			<h1 class="text-5xl font-bold mb-6 bg-gradient-to-r from-primary-500 to-primary-700 bg-clip-text text-transparent">
 				{{ $t('index.heroTitle') }}
 			</h1>
