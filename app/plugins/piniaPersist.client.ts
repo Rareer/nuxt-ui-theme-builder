@@ -6,6 +6,9 @@ function createLocalStoragePlugin() {
 
 		const key = `store:${store.$id}`;
 
+		// Skip stores that have custom persistence
+		if (store.$id === 'componentUiConfig') return;
+
 		try {
 			const saved = localStorage.getItem(key);
 			if (saved) {

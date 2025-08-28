@@ -109,7 +109,8 @@ const faqItems = [
 </script>
 
 <template>
-	<UContainer class="space-y-24 py-16">
+	<AutoUi>
+		<UContainer class="space-y-24 py-16">
 		<!-- Komponenten-Vorschau Grid -->
 		<section>
 			<h2 class="text-2xl font-semibold mb-6 text-center">
@@ -124,27 +125,21 @@ const faqItems = [
 						</div>
 					</template>
 					<div class="flex flex-wrap gap-3">
-						<UButton color="primary">
-							Primary
-						</UButton>
-						<UButton variant="soft">
-							Soft
-						</UButton>
-						<UButton variant="outline">
-							Outline
-						</UButton>
-						<UButton
-							color="success"
-							icon="i-lucide-check-circle"
-						>
-							Success
-						</UButton>
-						<UButton
-							color="warning"
-							icon="i-lucide-triangle-alert"
-						>
-							Warn
-						</UButton>
+						<AutoUi>
+							<UButton color="primary">Primary</UButton>
+						</AutoUi>
+						<AutoUi>
+							<UButton color="primary" variant="soft">Soft</UButton>
+						</AutoUi>
+						<AutoUi>
+							<UButton color="primary" variant="outline">Outline</UButton>
+						</AutoUi>
+						<AutoUi>
+							<UButton color="success" icon="i-lucide-check-circle">Success</UButton>
+						</AutoUi>
+						<AutoUi>
+							<UButton color="warning" icon="i-lucide-triangle-alert">Warn</UButton>
+						</AutoUi>
 					</div>
 				</UCard>
 
@@ -156,27 +151,24 @@ const faqItems = [
 						</div>
 					</template>
 					<div class="flex flex-wrap gap-2">
-						<UBadge color="primary">
-							Primary
-						</UBadge>
-						<UBadge color="secondary">
-							Secondary
-						</UBadge>
-						<UBadge color="neutral">
-							Neutral
-						</UBadge>
-						<UBadge color="success">
-							Success
-						</UBadge>
-						<UBadge color="warning">
-							Warning
-						</UBadge>
-						<UBadge
-							color="error"
-							variant="soft"
-						>
-							Soft
-						</UBadge>
+						<AutoUi>
+							<UBadge color="primary">Primary</UBadge>
+						</AutoUi>
+						<AutoUi>
+							<UBadge color="secondary">Secondary</UBadge>
+						</AutoUi>
+						<AutoUi>
+							<UBadge color="neutral">Neutral</UBadge>
+						</AutoUi>
+						<AutoUi>
+							<UBadge color="success">Success</UBadge>
+						</AutoUi>
+						<AutoUi>
+							<UBadge color="warning">Warning</UBadge>
+						</AutoUi>
+						<AutoUi>
+							<UBadge color="error" variant="soft">Soft</UBadge>
+						</AutoUi>
 					</div>
 				</UCard>
 
@@ -187,13 +179,15 @@ const faqItems = [
 							Alert
 						</div>
 					</template>
-					<UAlert
-						color="info"
-						variant="soft"
-						icon="i-lucide-info"
-						:title="$t('preview.themingPreviewTitle')"
-						:description="$t('preview.themingPreviewDesc')"
-					/>
+					<AutoUi>
+						<UAlert
+							color="info"
+							variant="soft"
+							icon="i-lucide-info"
+							:title="$t('preview.themingPreviewTitle')"
+							:description="$t('preview.themingPreviewDesc')"
+						/>
+					</AutoUi>
 				</UCard>
 
 				<!-- Avatars -->
@@ -204,15 +198,21 @@ const faqItems = [
 						</div>
 					</template>
 					<div class="flex items-center gap-4">
-						<UAvatar src="https://i.pravatar.cc/100?img=11" />
-						<UAvatar
-							src="https://i.pravatar.cc/100?img=12"
-							size="lg"
-						/>
-						<UAvatar
-							src="https://i.pravatar.cc/100?img=13"
-							size="sm"
-						/>
+						<AutoUi>
+							<UAvatar src="https://i.pravatar.cc/100?img=11" />
+						</AutoUi>
+						<AutoUi>
+							<UAvatar
+								src="https://i.pravatar.cc/100?img=12"
+								size="lg"
+							/>
+						</AutoUi>
+						<AutoUi>
+							<UAvatar
+								src="https://i.pravatar.cc/100?img=13"
+								size="sm"
+							/>
+						</AutoUi>
 					</div>
 				</UCard>
 
@@ -224,22 +224,28 @@ const faqItems = [
 						</div>
 					</template>
 					<div class="space-y-3">
-						<UInput
-							v-model="inputText"
-							:placeholder="$t('preview.enterText')"
-							class="w-full"
-						/>
-						<USelect
-							v-model="selectedItem"
-							:items="selectItems"
-							:placeholder="$t('preview.select')"
-							class="w-full"
-						/>
-						<UTextarea
-							v-model="textareaText"
-							:placeholder="$t('preview.multiline')"
-							class="w-full"
-						/>
+						<AutoUi>
+							<UInput
+								v-model="inputText"
+								:placeholder="$t('preview.enterText')"
+								class="w-full"
+							/>
+						</AutoUi>
+						<AutoUi>
+							<USelect
+								v-model="selectedItem"
+								:items="selectItems"
+								:placeholder="$t('preview.select')"
+								class="w-full"
+							/>
+						</AutoUi>
+						<AutoUi>
+							<UTextarea
+								v-model="textareaText"
+								:placeholder="$t('preview.multiline')"
+								class="w-full"
+							/>
+						</AutoUi>
 					</div>
 				</UCard>
 
@@ -252,23 +258,31 @@ const faqItems = [
 					</template>
 					<div class="flex flex-col gap-4">
 						<div class="flex items-center gap-3">
-							<USwitch v-model="isOn" />
+							<AutoUi>
+								<USwitch v-model="isOn" />
+							</AutoUi>
 							<span class="text-sm text-gray-600">{{ isOn ? $t('preview.on') : $t('preview.off') }}</span>
 						</div>
 						<div class="flex flex-col gap-2">
-							<UCheckbox
-								v-model="checkA"
-								:label="$t('preview.subscribeNewsletter')"
-							/>
-							<UCheckbox
-								v-model="checkB"
-								:label="$t('preview.acceptTOS')"
-							/>
+							<AutoUi>
+								<UCheckbox
+									v-model="checkA"
+									:label="$t('preview.subscribeNewsletter')"
+								/>
+							</AutoUi>
+							<AutoUi>
+								<UCheckbox
+									v-model="checkB"
+									:label="$t('preview.acceptTOS')"
+								/>
+							</AutoUi>
 						</div>
-						<URadioGroup
-							v-model="selectedOption"
-							:options="radioOptions"
-						/>
+						<AutoUi>
+							<URadioGroup
+								v-model="selectedOption"
+								:options="radioOptions"
+							/>
+						</AutoUi>
 					</div>
 				</UCard>
 
@@ -279,11 +293,13 @@ const faqItems = [
 							Tabs
 						</div>
 					</template>
-					<UTabs
-						v-model="activeTab"
-						:items="tabItems"
-						color="neutral"
-					/>
+					<AutoUi>
+						<UTabs
+							v-model="activeTab"
+							:items="tabItems"
+							color="neutral"
+						/>
+					</AutoUi>
 				</UCard>
 
 				<!-- Accordion -->
@@ -293,7 +309,9 @@ const faqItems = [
 							Accordion
 						</div>
 					</template>
-					<UAccordion :items="accordionDemo" />
+					<AutoUi>
+						<UAccordion :items="accordionDemo" />
+					</AutoUi>
 				</UCard>
 
 				<!-- Modal -->
@@ -304,15 +322,18 @@ const faqItems = [
 						</div>
 					</template>
 					<div class="flex items-center gap-3">
-						<UButton
-							icon="i-lucide-layers"
-							@click="isModalOpen = true"
-						>
-							{{ $t('preview.open') }}
-						</UButton>
+						<AutoUi>
+							<UButton
+								icon="i-lucide-layers"
+								@click="isModalOpen = true"
+							>
+								{{ $t('preview.open') }}
+							</UButton>
+						</AutoUi>
 						<span class="text-sm text-gray-600">{{ $t('preview.dialogWithStyles') }}</span>
 					</div>
-					<UModal v-model:open="isModalOpen">
+					<AutoUi>
+						<UModal v-model:open="isModalOpen">
 						<template #header>
 							<div class="flex items-center gap-2">
 								<UIcon name="i-lucide-sparkles" />
@@ -326,21 +347,26 @@ const faqItems = [
 						</template>
 						<template #footer>
 							<div class="flex justify-end gap-2">
-								<UButton
-									variant="soft"
-									@click="isModalOpen = false"
-								>
-									{{ $t('preview.close') }}
-								</UButton>
-								<UButton
-									color="primary"
-									@click="isModalOpen = false"
-								>
-									{{ $t('preview.ok') }}
-								</UButton>
+								<AutoUi>
+									<UButton
+										variant="soft"
+										@click="isModalOpen = false"
+									>
+										{{ $t('preview.close') }}
+									</UButton>
+								</AutoUi>
+								<AutoUi>
+									<UButton
+										color="primary"
+										@click="isModalOpen = false"
+									>
+										{{ $t('preview.ok') }}
+									</UButton>
+								</AutoUi>
 							</div>
 						</template>
-					</UModal>
+						</UModal>
+					</AutoUi>
 				</UCard>
 
 				<!-- Separator -->
@@ -355,7 +381,9 @@ const faqItems = [
 							<span>{{ $t('preview.top') }}</span>
 							<span>{{ $t('preview.bottom') }}</span>
 						</div>
-						<USeparator />
+						<AutoUi>
+							<USeparator />
+						</AutoUi>
 						<p class="text-sm text-gray-600 mt-2">
 							{{ $t('preview.separatesContent') }}
 						</p>
@@ -370,14 +398,18 @@ const faqItems = [
 						</div>
 					</template>
 					<div class="flex gap-3">
-						<UTooltip :text="$t('preview.moreInfo')">
-							<UButton
-								variant="outline"
-								icon="i-lucide-circle-help"
-							>
-								{{ $t('preview.hover') }}
-							</UButton>
-						</UTooltip>
+						<AutoUi>
+							<UTooltip :text="$t('preview.moreInfo')">
+								<AutoUi>
+									<UButton
+										variant="outline"
+										icon="i-lucide-circle-help"
+									>
+										{{ $t('preview.hover') }}
+									</UButton>
+								</AutoUi>
+							</UTooltip>
+						</AutoUi>
 					</div>
 				</UCard>
 
@@ -388,19 +420,23 @@ const faqItems = [
 							Popover
 						</div>
 					</template>
-					<UPopover>
-						<UButton
-							variant="soft"
-							icon="i-lucide-chevron-down"
-						>
-							{{ $t('preview.open') }}
-						</UButton>
-						<template #content>
-							<div class="p-3 text-sm text-gray-600 w-56">
-								{{ $t('preview.popoverContent') }}
-							</div>
-						</template>
-					</UPopover>
+					<AutoUi>
+						<UPopover>
+							<AutoUi>
+								<UButton
+									variant="soft"
+									icon="i-lucide-chevron-down"
+								>
+									{{ $t('preview.open') }}
+								</UButton>
+							</AutoUi>
+							<template #content>
+								<div class="p-3 text-sm text-gray-600 w-56">
+									{{ $t('preview.popoverContent') }}
+								</div>
+							</template>
+						</UPopover>
+					</AutoUi>
 				</UCard>
 
 				<!-- DropdownMenu -->
@@ -410,14 +446,18 @@ const faqItems = [
 							DropdownMenu
 						</div>
 					</template>
-					<UDropdownMenu :items="dropdownItems">
-						<UButton
-							icon="i-lucide-ellipsis-vertical"
-							variant="outline"
-						>
-							{{ $t('actions.actions') }}
-						</UButton>
-					</UDropdownMenu>
+					<AutoUi>
+						<UDropdownMenu :items="dropdownItems">
+							<AutoUi>
+								<UButton
+									icon="i-lucide-ellipsis-vertical"
+									variant="outline"
+								>
+									{{ $t('actions.actions') }}
+								</UButton>
+							</AutoUi>
+						</UDropdownMenu>
+					</AutoUi>
 				</UCard>
 
 				<!-- Pagination -->
@@ -428,10 +468,12 @@ const faqItems = [
 						</div>
 					</template>
 					<div class="flex justify-center">
-						<UPagination
-							v-model:page="page"
-							:page-count="10"
-						/>
+						<AutoUi>
+							<UPagination
+								v-model:page="page"
+								:page-count="10"
+							/>
+						</AutoUi>
 					</div>
 				</UCard>
 
@@ -442,11 +484,13 @@ const faqItems = [
 							Table
 						</div>
 					</template>
-					<UTable
-						:columns="tableColumns"
-						:rows="tableRows"
-						class="max-w-full overflow-auto"
-					/>
+					<AutoUi>
+						<UTable
+							:columns="tableColumns"
+							:rows="tableRows"
+							class="max-w-full overflow-auto"
+						/>
+					</AutoUi>
 				</UCard>
 
 				<!-- Progress -->
@@ -457,14 +501,18 @@ const faqItems = [
 						</div>
 					</template>
 					<div class="space-y-3">
-						<UProgress :value="progress" />
-						<UButton
-							size="sm"
-							variant="soft"
-							@click="progress = (progress + 10) % 110"
-						>
-							{{ $t('actions.increase') }}
-						</UButton>
+						<AutoUi>
+							<UProgress :value="progress" />
+						</AutoUi>
+						<AutoUi>
+							<UButton
+								size="sm"
+								variant="soft"
+								@click="progress = (progress + 10) % 110"
+							>
+								{{ $t('actions.increase') }}
+							</UButton>
+						</AutoUi>
 					</div>
 				</UCard>
 
@@ -476,9 +524,15 @@ const faqItems = [
 						</div>
 					</template>
 					<div class="space-y-2">
-						<USkeleton class="h-6 w-1/3" />
-						<USkeleton class="h-4 w-2/3" />
-						<USkeleton class="h-4 w-1/2" />
+						<AutoUi>
+							<USkeleton class="h-6 w-1/3" />
+						</AutoUi>
+						<AutoUi>
+							<USkeleton class="h-4 w-2/3" />
+						</AutoUi>
+						<AutoUi>
+							<USkeleton class="h-4 w-1/2" />
+						</AutoUi>
 					</div>
 				</UCard>
 
@@ -490,44 +544,60 @@ const faqItems = [
 						</div>
 					</template>
 					<div class="flex flex-wrap gap-2">
-						<UChip color="primary">
-							<UButton
-								color="neutral"
-								variant="soft"
+						<AutoUi>
+							<UChip color="primary">
+								<AutoUi>
+									<UButton
+										color="neutral"
+										variant="soft"
+									>
+										Primary
+										</UButton>
+								</AutoUi>
+							</UChip>
+						</AutoUi>
+						<AutoUi>
+							<UChip color="secondary">
+								<AutoUi>
+									<UButton
+										color="neutral"
+										variant="soft"
+									>
+										Secondary
+										</UButton>
+								</AutoUi>
+							</UChip>
+						</AutoUi>
+						<AutoUi>
+							<UChip
+								color="primary"
+								inset
 							>
-								Primary
-							</UButton>
-						</UChip>
-						<UChip color="secondary">
-							<UButton
-								color="neutral"
-								variant="soft"
+								<AutoUi>
+									<UButton
+										color="neutral"
+										variant="soft"
+									>
+										Inset
+										</UButton>
+								</AutoUi>
+							</UChip>
+						</AutoUi>
+						<AutoUi>
+							<UChip
+								color="success"
+								standalone
 							>
-								Secondary
-							</UButton>
-						</UChip>
-						<UChip
-							color="primary"
-							inset
-						>
-							<UButton
-								color="neutral"
-								variant="soft"
-							>
-								Inset
-							</UButton>
-						</UChip>
-						<UChip
-							color="success"
-							standalone
-						>
-							<UButton
-								color="neutral"
-								variant="soft"
-							>
-								Standalone
-							</UButton>
-						</UChip>
+								<AutoUi>
+									<UButton
+										color="neutral"
+										variant="soft"
+									>
+										Standalone
+										</UButton>
+								</AutoUi>
+							</UChip>
+						</AutoUi>
 					</div>
 				</UCard>
 
@@ -539,10 +609,12 @@ const faqItems = [
 						</div>
 					</template>
 					<div class="space-y-3">
-						<USlider
-							v-model="slider"
-							:max="100"
-						/>
+						<AutoUi>
+							<USlider
+								v-model="slider"
+								:max="100"
+							/>
+						</AutoUi>
 						<div class="text-sm text-gray-600">
 							{{ $t('preview.value') }}: {{ slider }}
 						</div>
@@ -557,26 +629,32 @@ const faqItems = [
 						</div>
 					</template>
 					<div class="flex gap-2">
-						<UButton
-							variant="soft"
-							@click="notify($t('preview.toastInfoTitle'), $t('preview.toastInfoDesc'), 'info')"
-						>
-							Info
-						</UButton>
-						<UButton
-							color="success"
-							variant="soft"
-							@click="notify($t('preview.toastSuccessTitle'), $t('preview.toastSuccessDesc'), 'success')"
-						>
-							Success
-						</UButton>
-						<UButton
-							color="error"
-							variant="soft"
-							@click="notify($t('preview.toastErrorTitle'), $t('preview.toastErrorDesc'), 'error')"
-						>
-							Error
-						</UButton>
+						<AutoUi>
+							<UButton
+								variant="soft"
+								@click="notify($t('preview.toastInfoTitle'), $t('preview.toastInfoDesc'), 'info')"
+							>
+								Info
+							</UButton>
+						</AutoUi>
+						<AutoUi>
+							<UButton
+								color="success"
+								variant="soft"
+								@click="notify($t('preview.toastSuccessTitle'), $t('preview.toastSuccessDesc'), 'success')"
+							>
+								Success
+							</UButton>
+						</AutoUi>
+						<AutoUi>
+							<UButton
+								color="error"
+								variant="soft"
+								@click="notify($t('preview.toastErrorTitle'), $t('preview.toastErrorDesc'), 'error')"
+							>
+								Error
+							</UButton>
+						</AutoUi>
 					</div>
 				</UCard>
 
@@ -587,7 +665,9 @@ const faqItems = [
 							Breadcrumbs
 						</div>
 					</template>
-					<UBreadcrumb :items="breadcrumbLinks" />
+					<AutoUi>
+						<UBreadcrumb :items="breadcrumbLinks" />
+					</AutoUi>
 				</UCard>
 
 				<!-- Avatar Group -->
@@ -597,22 +677,31 @@ const faqItems = [
 							Avatar Group
 						</div>
 					</template>
-					<UAvatarGroup>
-						<UAvatar
-							src="https://github.com/nuxt.png"
-							alt="Nuxt"
-						/>
-						<UAvatar
-							src="https://github.com/nuxt-labs.png"
-							alt="Nuxt Labs"
-						/>
-						<UAvatar
-							src="https://github.com/unjs.png"
-							alt="unjs"
-						/>
-					</UAvatarGroup>
+					<AutoUi>
+						<UAvatarGroup>
+							<AutoUi>
+								<UAvatar
+									src="https://github.com/nuxt.png"
+									alt="Nuxt"
+								/>
+							</AutoUi>
+							<AutoUi>
+								<UAvatar
+									src="https://github.com/nuxt-labs.png"
+									alt="Nuxt Labs"
+								/>
+							</AutoUi>
+							<AutoUi>
+								<UAvatar
+									src="https://github.com/unjs.png"
+									alt="unjs"
+								/>
+							</AutoUi>
+						</UAvatarGroup>
+					</AutoUi>
 				</UCard>
 			</div>
 		</section>
 	</UContainer>
+</AutoUi>
 </template>
