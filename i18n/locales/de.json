@@ -22,6 +22,7 @@
     "navigation": "Navigation",
     "home": "Startseite",
     "globals": "Globals",
+    "cssVariables": "CSS-Variablen",
     "customColors": "Eigene Farben",
     "preview": "Vorschau",
     "components": "Komponenten",

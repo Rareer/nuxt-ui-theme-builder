@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui';
+// Composable controlling Theme Config slideover open state
+const { open: openThemeConfig } = useThemeConfig();
 
 const { availableComponents } = useComponentPreviewConfig();
 const localePath = useLocalePath();
@@ -14,6 +16,12 @@ const items = computed<NavigationMenuItem[][]>(() => [
 			label: t('nav.home'),
 			icon: 'i-lucide-home',
 			to: localePath('/'),
+		},
+		{
+			label: t('nav.cssVariables'),
+			icon: 'i-lucide-brush',
+			to:'#',
+			onSelect: () => openThemeConfig(),
 		},
 		{
 			label: t('nav.customColors'),

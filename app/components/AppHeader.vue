@@ -3,7 +3,8 @@ import AIGenerateThemeModal from './AIGenerateThemeModal.vue';
 import { useSavedThemesStore } from '../store/savedThemes';
 
 const colorMode = useColorMode();
-const isThemeConfigOpen = ref(false);
+// Composable for Theme Config open state (non-persistent)
+const { isOpen: isThemeConfigOpen, open: openThemeConfig, close: closeThemeConfig } = useThemeConfig();
 
 const {
 	exportTheme,
@@ -159,11 +160,11 @@ const isNavigationOpen = ref(false);
 			/>
 			<!-- Theme Configuration Button -->
 			<UButton
-				icon="i-lucide-palette"
+				icon="i-lucide-brush"
 				color="primary"
 				variant="solid"
 				:title="$t('header.themeConfig')"
-				@click="isThemeConfigOpen = true"
+				@click="openThemeConfig()"
 			/>
 			<!-- Dark Mode Toggle -->
 			<UButton
@@ -216,7 +217,7 @@ const isNavigationOpen = ref(false);
 					color="neutral"
 					variant="ghost"
 					size="sm"
-					@click="isThemeConfigOpen = false"
+					@click="closeThemeConfig()"
 				/>
 			</div>
 		</template>

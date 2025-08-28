@@ -250,22 +250,24 @@ watch(selectedColors, (newValues) => {
 <template>
 	<div class="space-y-8">
 		<!-- Mode Toggle -->
-		<div class="flex flex-col gap-2">
+		<div class="flex flex-col gap-4">
 			<div class="flex items-center gap-2">
 				<UButtonGroup>
 					<UButton
 						:color="currentMode === 'light' ? 'primary' : 'neutral'"
 						variant="soft"
-						size="xs"
+						size="sm"
 						@click="setMode('light')"
+						icon="i-lucide-sun"
 					>
 						Light
 					</UButton>
 					<UButton
 						:color="currentMode === 'dark' ? 'primary' : 'neutral'"
 						variant="soft"
-						size="xs"
+						size="sm"
 						@click="setMode('dark')"
+						icon="i-lucide-moon"
 					>
 						Dark
 					</UButton>
@@ -277,7 +279,7 @@ watch(selectedColors, (newValues) => {
 					icon="i-lucide-bookmark"
 					color="neutral"
 					variant="soft"
-					size="xs"
+					size="sm"
 					@click="$emit('request-save')"
 				>
 					{{ t('actions.save') }}
@@ -286,7 +288,7 @@ watch(selectedColors, (newValues) => {
 					icon="i-lucide-folder-open"
 					color="neutral"
 					variant="soft"
-					size="xs"
+					size="sm"
 					@click="$emit('request-load')"
 				>
 					{{ t('actions.load') }}
@@ -295,7 +297,7 @@ watch(selectedColors, (newValues) => {
 					icon="i-lucide-download"
 					color="neutral"
 					variant="soft"
-					size="xs"
+					size="sm"
 					@click="$emit('request-export')"
 				>
 					{{ t('actions.export') }}
