@@ -58,36 +58,52 @@ const updateSearchTerm = (val: string) => {
 			/>
 
 			<template #content>
-				<UCommandPalette
-					v-model="label"
-					placeholder="Search or type class..."
-					:groups="[{ id: 'labels', items: suggestions }]"
-					:search-term="currentInput"
-					:multiple="false"
-					:ui="{ input: '[&>input]:h-8 [&>input]:text-sm', content: 'max-h-[100px] overflow-y-auto' }"
-					@update:search-term="updateSearchTerm($event)"
-					@keydown.enter="selectSuggestion(currentInput)"
-					@keydown.space="selectSuggestion(currentInput)"
-					@submit="selectSuggestion(currentInput)"
+				<div
+					class="w-72 max-w-full"
+					@keydown.enter.stop.prevent="selectSuggestion(currentInput)"
+					@keydown.space.stop.prevent="selectSuggestion(currentInput)"
 				>
-					<template #empty>
-						<div class="p-4 text-center text-sm text-gray-500">
-							Type your custom class and hit Enter.
-						</div>
-					</template>
-					<template #item="{ item }">
+					<UCommandPalette
+						v-model="label"
+						placeholder="Search or type class..."
+						:groups="[{ id: 'labels', items: suggestions }]"
+						:search-term="currentInput"
+						:multiple="false"
+						:ui="{ input: '[&>input]:h-8 [&>input]:text-sm', content: 'max-h-[100px] overflow-y-auto' }"
+						@update:search-term="updateSearchTerm($event)"
+						@submit="selectSuggestion(currentInput)"
+					>
+						<template #empty>
+							<div class="p-4 text-center text-sm text-gray-500">
+								Type your custom class and press Enter or click Add.
+							</div>
+						</template>
+						<template #item="{ item }">
+							<UButton
+								block
+								class="justify-start"
+								color="neutral"
+								variant="link"
+								size="xs"
+								@click="selectSuggestion(item.label)"
+							>
+								{{ item.label }}
+							</UButton>
+						</template>
+					</UCommandPalette>
+
+					<div class="mt-2 flex justify-end">
 						<UButton
-							block
-							class="justify-start"
+							icon="i-lucide-check"
+							size="sm"
 							color="neutral"
-							variant="link"
-							size="xs"
-							@click="selectSuggestion(item.label)"
+							variant="soft"
+							:disabled="!currentInput?.trim()"
+							@click="selectSuggestion(currentInput)"
 						>
-							{{ item.label }}
 						</UButton>
-					</template>
-				</UCommandPalette>
+					</div>
+				</div>
 			</template>
 		</UPopover>
 	</div>
