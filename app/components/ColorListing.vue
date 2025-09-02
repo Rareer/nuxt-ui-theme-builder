@@ -17,6 +17,8 @@ const colorToDelete = ref('');
 
 // Form data
 const baseColorHex = ref('#3B82F6'); // Default blue
+// Use a separate input model to avoid UColorPicker coercing partial input to #ffffff
+const baseColorInput = ref(baseColorHex.value);
 const newColor = reactive<Color>({
 	name: '',
 	values: {
@@ -52,6 +54,11 @@ const previewPalette = computed(() => {
 	return generateColorPalette(baseColorHex.value);
 });
 
+// Keep the input field in sync when the actual color changes elsewhere (picker/edit/reset)
+watch(baseColorHex, (val) => {
+	baseColorInput.value = val;
+});
+
 // Form validation
 const isFormValid = computed(() => {
 	return (
@@ -72,6 +79,14 @@ function resetForm() {
 	newColor.name = '';
 	baseColorHex.value = '#3B82F6';
 	isEditing.value = false;
+}
+
+// Commit input text to actual base color only if it's a valid hex
+function commitBaseColorFromInput() {
+	const v = baseColorInput.value?.trim();
+	if (v && isValidHexColor(v)) {
+		baseColorHex.value = v;
+	}
 }
 
 // Edit color
@@ -247,9 +262,12 @@ function deleteColor() {
 					<div class="flex flex-col gap-2">
 						<UColorPicker v-model="baseColorHex" />
 						<UInput
-							v-model="baseColorHex"
+							v-model="baseColorInput"
 							placeholder="#000000"
 							class="flex-1"
+							@blur="commitBaseColorFromInput"
+							@change="commitBaseColorFromInput"
+							@keyup.enter="commitBaseColorFromInput"
 						/>
 					</div>
 					<!-- Preview Generated Colors -->
