@@ -261,7 +261,7 @@ const faqItems = [
 							<AutoUi>
 								<USwitch v-model="isOn" />
 							</AutoUi>
-							<span class="text-sm text-gray-600">{{ isOn ? $t('preview.on') : $t('preview.off') }}</span>
+							<span class="text-sm">{{ isOn ? $t('preview.on') : $t('preview.off') }}</span>
 						</div>
 						<div class="flex flex-col gap-2">
 							<AutoUi>
@@ -330,7 +330,7 @@ const faqItems = [
 								{{ $t('preview.open') }}
 							</UButton>
 						</AutoUi>
-						<span class="text-sm text-gray-600">{{ $t('preview.dialogWithStyles') }}</span>
+						<span class="text-sm">{{ $t('preview.dialogWithStyles') }}</span>
 					</div>
 					<AutoUi>
 						<UModal v-model:open="isModalOpen">
@@ -341,7 +341,7 @@ const faqItems = [
 							</div>
 						</template>
 						<template #body>
-							<p class="text-sm text-gray-600">
+							<p class="text-sm">
 								{{ $t('preview.modalBodyText') }}
 							</p>
 						</template>
@@ -377,14 +377,14 @@ const faqItems = [
 						</div>
 					</template>
 					<div>
-						<div class="flex items-center justify-between text-sm text-gray-600 mb-2">
+						<div class="flex items-center justify-between text-sm mb-2">
 							<span>{{ $t('preview.top') }}</span>
 							<span>{{ $t('preview.bottom') }}</span>
 						</div>
 						<AutoUi>
 							<USeparator />
 						</AutoUi>
-						<p class="text-sm text-gray-600 mt-2">
+						<p class="text-sm mt-2">
 							{{ $t('preview.separatesContent') }}
 						</p>
 					</div>
@@ -431,7 +431,7 @@ const faqItems = [
 								</UButton>
 							</AutoUi>
 							<template #content>
-								<div class="p-3 text-sm text-gray-600 w-56">
+								<div class="p-3 text-sm w-56">
 									{{ $t('preview.popoverContent') }}
 								</div>
 							</template>
@@ -615,7 +615,7 @@ const faqItems = [
 								:max="100"
 							/>
 						</AutoUi>
-						<div class="text-sm text-gray-600">
+						<div class="text-sm">
 							{{ $t('preview.value') }}: {{ slider }}
 						</div>
 					</div>

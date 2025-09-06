@@ -13,6 +13,20 @@ const props = withDefaults(defineProps<{
 const slotsApi = useSlots();
 const store = useComponentUiConfigStore();
 
+// Cache to keep VNode identity stable across renders unless inputs change
+let cachedSource: VNode | null = null;
+let cachedUi: Record<string, any> | null = null;
+let cachedCloned: VNode | null = null;
+
+// Some components (overlays/teleports) are sensitive to wrapper boundaries.
+// Do not clone/wrap them to avoid breaking positioning or model bindings.
+const SKIP_COMPONENTS = new Set([
+  'UModal',
+  'UTooltip',
+  'UPopover',
+  'UDropdownMenu',
+]);
+
 function inferChild(): VNode | undefined {
   const list = slotsApi.default?.() || [];
   // pick first non-empty vnode
@@ -52,19 +66,39 @@ function inferSlots(component?: string): string[] {
   return s.size ? Array.from(s) : ['root'];
 }
 
-const rendered = computed(() => {
+function renderChild() {
   const child = inferChild();
   if (!child) return null;
   const componentName = inferComponentName(child);
   if (!componentName) return child; // nothing to do
+  if (SKIP_COMPONENTS.has(componentName)) return child;
   const selections = collectSelectionsFromVNode(child);
   const slots = inferSlots(componentName);
   const ui = buildUiObject(componentName, selections, slots);
   const prev = (child.props as any)?.ui || {};
-  return cloneVNode(child, { ui: { ...prev, ...ui } });
-});
+  const mergedUi = { ...prev, ...ui } as Record<string, any>;
+
+  // If source child and UI are unchanged, return cached VNode to keep el identity
+  const uiStable = JSON.stringify(mergedUi);
+  const cachedUiStable = cachedUi ? JSON.stringify(cachedUi) : null;
+  if (cachedSource === child && cachedCloned && cachedUiStable === uiStable) {
+    return cachedCloned;
+  }
+
+  // Preserve original ref, key and children
+  const props = { ...(child.props as any), ui: mergedUi } as Record<string, any>;
+  if ((child as any).ref) props.ref = (child as any).ref;
+  const cloned = cloneVNode(child, props, (child as any).children);
+  // ensure key consistency
+  (cloned as any).key = (child as any).key;
+
+  cachedSource = child;
+  cachedUi = mergedUi;
+  cachedCloned = cloned;
+  return cloned;
+}
 </script>
 
 <template>
-  <RenderFn :render="() => rendered" />
+  <RenderFn :render="renderChild" />
 </template>
