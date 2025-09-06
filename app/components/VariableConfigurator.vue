@@ -400,7 +400,6 @@ watch(selectedColors, (newValues) => {
 								<div class="space-y-3">
 									<!-- Typ-Auswahl -->
 									<URadioGroup
-										v-if="variable.type === 'color-reference'"
 										v-model="variable.type"
 										:items="[{ label: t('variableConfigurator.colorRef'), value: 'color-reference' }, { label: t('variableConfigurator.directValue'), value: 'direct-value' }]"
 										@update:model-value="updateCssVariable(variable)"
