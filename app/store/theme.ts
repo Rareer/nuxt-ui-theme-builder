@@ -214,6 +214,21 @@ export const useThemeStore = defineStore('theme', {
 			else { clearFor('light'); clearFor('dark'); }
 		},
 
+		// Wenn eine benutzerdefinierte Farbe gelöscht wurde, entferne alle Referenzen
+		// in den Theme-Mappings (z. B. primary, secondary, ...), sodass sie auf den Default (null) zurückfallen
+		resetMappingsForDeletedColor(colorName: string) {
+			const normalized = normalizeColorName(colorName);
+			const modes: ThemeMode[] = ['light', 'dark'];
+			const vars = this.getThemeVariables;
+			modes.forEach((m) => {
+				vars.forEach((v) => {
+					if ((this.mappings[m]?.[v] ?? null) === normalized) {
+						this.mappings[m][v] = null;
+					}
+				});
+			});
+		},
+
 		// Setzt den Wert einer CSS-Variable
 		setCssVariableValue(name: string, value: string, mode?: ThemeMode) {
 			const m = mode || this.editMode;

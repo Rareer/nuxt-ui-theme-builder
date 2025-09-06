@@ -1,6 +1,7 @@
 import type { Color } from '../types/color';
 
 import { defineStore } from 'pinia';
+import { useThemeStore } from './theme';
 
 interface ColorsState {
 	colors: Color[];
@@ -54,6 +55,17 @@ export const useColorsStore = defineStore('colors', {
 			const index = this.colors.findIndex(color => color.name === name);
 			if (index !== -1) {
 				this.colors.splice(index, 1);
+
+				// Inform theme store so any role (e.g. primary) referencing this color falls back to default
+				try {
+					const theme = useThemeStore();
+					theme.resetMappingsForDeletedColor(name);
+					// persist updated theme state if desired
+					theme.saveToLocalStorage?.();
+				}
+				catch (e) {
+					console.warn('[colors] Failed to reset theme mappings after color deletion:', e);
+				}
 
 				// If this was the selected color, clear the selection
 				if (this.selectedColor?.name === name) {
