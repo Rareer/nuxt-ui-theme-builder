@@ -68,8 +68,8 @@ function uiForPreviewOption(opt: string): Record<string, string> {
   return buildUiObject(props.component, selections, uiSlots.value);
 }
 
-// Child renderer (for optional declarative child)
-const { renderedChildFn } = useChildRenderer({ childSpec, childModelCfg });
+// Child renderer(s) (for optional declarative children)
+const { renderedChildrenFns } = useChildRenderer({ childSpec, childModelCfg });
 
 // Indicators and reset handlers for collapsibles
 const hasAnyDefault = computed(() => models.hasAnyDefault());
@@ -95,8 +95,9 @@ function resetOption(propName: string, opt: string) { models.resetOption(propNam
 						:ui="uiForPreviewOption(opt)"
 					>
 						<RenderFn
-							v-if="renderedChildFn"
-							:render="renderedChildFn"
+							v-for="(childFn, idx) in renderedChildrenFns"
+							:key="idx"
+							:render="childFn"
 						/>
 						<template
 							v-for="(content, slotName) in slotsContent"
@@ -116,8 +117,9 @@ function resetOption(propName: string, opt: string) { models.resetOption(propNam
 				:ui="uiObject"
 			>
 				<RenderFn
-					v-if="renderedChildFn"
-					:render="renderedChildFn"
+					v-for="(childFn, idx) in renderedChildrenFns"
+					:key="idx"
+					:render="childFn"
 				/>
 				<template
 					v-for="(content, slotName) in slotsContent"

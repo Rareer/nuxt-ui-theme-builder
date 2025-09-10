@@ -1,7 +1,7 @@
 import { computed, h, ref, resolveComponent, type Ref } from 'vue';
 
 export function useChildRenderer(params: {
-  childSpec: Ref<any | undefined>;
+  childSpec: Ref<any | any[] | undefined>;
   childModelCfg: Ref<{ value: any; prop?: string; event?: string } | undefined>;
 }) {
   const childModelValue = ref<any>();
@@ -54,10 +54,12 @@ export function useChildRenderer(params: {
     return () => spec;
   }
 
-  const renderedChildFn = computed<(() => any) | null>(() => {
-    if (params.childSpec.value === undefined) return null;
-    return renderChild(params.childSpec.value);
+  const renderedChildrenFns = computed<(() => any)[]>(() => {
+    const spec = params.childSpec.value;
+    if (spec === undefined || spec === null) return [];
+    if (Array.isArray(spec)) return spec.map(s => renderChild(s));
+    return [renderChild(spec)];
   });
 
-  return { childModelValue, renderedChildFn } as const;
+  return { childModelValue, renderedChildrenFns } as const;
 }
