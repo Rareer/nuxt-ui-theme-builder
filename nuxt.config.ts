@@ -24,6 +24,12 @@ export default defineNuxtConfig({
 		global: true,
 	},
 
+	// Configure sitemap to include dynamic component routes from our API source
+	sitemap: {
+		// Existing routes are automatically discovered; add our dynamic URLs source
+		sources: ['/api/sitemap-dynamic'],
+	},
+
 	devtools: {
 		enabled: true,
 	},
