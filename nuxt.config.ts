@@ -1,25 +1,26 @@
 export default defineNuxtConfig({
 	app: {
-		head: {
-			link: [
-			{ rel: 'icon', type: 'image/svg+xml', href: '/nuxtlify-icon.svg' },
-			]
-		}
+	head: {
+	link: [
+	{ rel: 'icon', type: 'image/svg+xml', href: '/nuxtlify-icon.svg' },
+	]
+	}
 	},
 	modules: [
-		'@nuxt/ui',
-		'@nuxt/eslint',
-		'@pinia/nuxt',
-		'@nuxtjs/i18n',
-		'@nuxtjs/seo',
-		'@nuxtjs/sitemap',
+	'@nuxt/ui',
+	'@nuxt/eslint',
+	'@pinia/nuxt',
+	'@nuxtjs/i18n',
+	'@nuxtjs/seo',
+	'@nuxtjs/sitemap',
+	'@nuxtjs/supabase',
 	],
 
 	ssr: true,
 
 	components: {
 		dirs: [
-			'~/components',
+						'~/components',
 		],
 		global: true,
 	},
@@ -45,37 +46,37 @@ export default defineNuxtConfig({
 
 	nitro: {
 		prerender: {
-			autoSubfolderIndex: false,
-			crawlLinks: true,
-			routes: [
-				'/',
-			],
+						autoSubfolderIndex: false,
+						crawlLinks: true,
+						routes: [
+										'/',
+						],
 		},
 	},
 
 	eslint: {
 		config: {
-			tooling: true,
+						tooling: true,
 
-			stylistic: {
-				indent: 'tab',
-				semi: true,
-			},
+						stylistic: {
+										indent: 'tab',
+										semi: true,
+						},
 		},
 	},
 
 	i18n: {
 		locales: [
-			{
-				code: 'de',
-				name: 'Deutsch',
-				file: 'de.json',
-			},
-			{
-				code: 'en',
-				name: 'English',
-				file: 'en.json',
-			},
+						{
+										code: 'de',
+										name: 'Deutsch',
+										file: 'de.json',
+						},
+						{
+										code: 'en',
+										name: 'English',
+										file: 'en.json',
+						},
 		],
 
 		defaultLocale: 'en',
@@ -83,22 +84,33 @@ export default defineNuxtConfig({
 		strategy: 'prefix_except_default',
 
 		detectBrowserLanguage: {
-			useCookie: true,
-			cookieKey: 'i18n_redirected',
-			alwaysRedirect: false,
-			fallbackLocale: 'en',
+						useCookie: true,
+						cookieKey: 'i18n_redirected',
+						alwaysRedirect: false,
+						fallbackLocale: 'en',
 		},
 
 		experimental: {
-			localeDetector: 'localeDetector.ts',
-		},
+						localeDetector: 'localeDetector.ts',
+					},
 	},
 
 	icon: {
 		customCollections: [{
-			prefix: 'custom',
-			dir: './app/assets/icons',
-		}],
+						prefix: 'custom',
+						dir: './app/assets/icons',
+					},
+		],
 	},
-
+	supabase: {
+		url: process.env.SUPABASE_URL,
+		key: process.env.SUPABASE_KEY,
+		redirectOptions: {
+		login: '/login',
+		callback: '/confirm',
+		include: ['/mythemes', '/publicthemes', '/mythemes/:id', '/publicthemes/:id'],
+		exclude: undefined,
+		saveRedirectToCookie: false,
+	}
+	},
 });
