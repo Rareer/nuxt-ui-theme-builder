@@ -205,11 +205,35 @@
       "send": "Absenden"
     },
     "footer": {
-      "copyright": "© {year} Nuxtify. Alle Rechte vorbehalten.",
+      "copyright": " Nuxtify. Alle Rechte vorbehalten.",
       "nuxt3": "Nuxt 3",
       "tailwind": "Tailwind CSS",
       "nuxtui": "Nuxt UI",
       "composable": "Composable Design"
     }
+  },
+  "auth": {
+    "loginTitle": "Anmelden",
+    "signupTitle": "Registrieren",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "confirmPassword": "Passwort bestätigen",
+    "login": "Einloggen",
+    "signup": "Registrieren",
+    "noAccount": "Noch kein Konto?",
+    "haveAccount": "Schon ein Konto?",
+    "github": "GitHub",
+    "nickname": "Nickname",
+    "nicknameHelp": "3–20 Zeichen, Buchstaben, Zahlen, Bindestrich oder Unterstrich",
+    "nicknameChecking": "Verfügbarkeit wird geprüft…",
+    "nicknameAvailable": "Nickname ist verfügbar",
+    "nicknameTaken": "Dieser Nickname ist bereits vergeben",
+    "emailRequired": "E-Mail ist erforderlich",
+    "emailInvalid": "Ungültige E-Mail",
+    "passwordRequired": "Passwort ist erforderlich",
+    "passwordMin": "Mindestens 6 Zeichen",
+    "confirmRequired": "Bitte wiederholen",
+    "passwordsMismatch": "Passwörter stimmen nicht überein",
+    "waitAvailability": "Bitte Verfügbarkeit abwarten"
   }
 }

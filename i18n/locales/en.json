@@ -211,5 +211,31 @@
       "nuxtui": "Nuxt UI",
       "composable": "Composable Design"
     }
+  },
+  "auth": {
+    "loginTitle": "Login",
+    "signupTitle": "Signup",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "login": "Log in",
+    "signup": "Sign up",
+    "noAccount": "No account yet?",
+    "haveAccount": "Already have an account?",
+    "github": "GitHub",
+    "nickname": "Nickname",
+    "nicknameHelp": "3–20 characters, letters, numbers, hyphen or underscore",
+    "nicknameChecking": "Checking availability…",
+    "nicknameAvailable": "Nickname is available",
+    "nicknameTaken": "This nickname is already taken",
+    "nicknameRequired": "Nickname is required",
+    "nicknameInvalid": "Invalid nickname format",
+    "emailRequired": "Email is required",
+    "emailInvalid": "Invalid email address",
+    "passwordRequired": "Password is required",
+    "passwordMin": "At least 6 characters",
+    "confirmRequired": "Please repeat password",
+    "passwordsMismatch": "Passwords do not match",
+    "waitAvailability": "Please wait for availability check"
   }
 }
