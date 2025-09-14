@@ -132,6 +132,11 @@ async function onSubmit() {
     const { data, error: authError } = await client.auth.signUp({
       email: state.email.trim(),
       password: state.password,
+      options: {
+        data: {
+          display_name: state.nickname.trim(),
+        },
+      },
     });
     if (authError) throw authError;
 

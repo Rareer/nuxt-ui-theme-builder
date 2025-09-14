@@ -19,7 +19,7 @@
           <div class="flex items-center justify-between w-full">
             <div class="flex flex-col">
               <span class="font-medium">{{ t.name }}</span>
-              <span class="text-xs text-gray-500">von {{ (t as any).owner_name || 'Unbekannt' }} · Aktualisiert: {{ formatDate(t.updated_at || t.created_at) }}</span>
+              <span class="text-xs text-gray-500">von {{ (t as any).display_name || 'Unbekannt' }} · Aktualisiert: {{ formatDate(t.updated_at || t.created_at) }}</span>
             </div>
             <UBadge color="primary">Öffentlich</UBadge>
           </div>

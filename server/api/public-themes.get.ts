@@ -14,38 +14,43 @@ export default defineEventHandler(async (event) => {
 
     if (error) return { ok: false, error: error.message };
     const items = data || [];
-    // Lookup owner display names (prefer profiles.nickname, then auth.users.email)
+    // Resolve owner display names exclusively via Admin API to avoid API schema exposure issues
     const ownerIds = Array.from(new Set(items.map(i => i.owner).filter(Boolean))) as string[];
-    let ownerMap: Record<string, string> = {};
+    console.log('ownerIds', ownerIds);
+    const ownerMap: Record<string, string> = {};
     if (ownerIds.length > 0) {
-      // 1) Try profiles.nickname
-      const { data: profiles, error: profilesError } = await supabase
-        .from('profiles' as any)
-        .select('id, nickname')
-        .in('id', ownerIds);
-      if (!profilesError && Array.isArray(profiles)) {
-        for (const p of profiles as any[]) {
-          if (p?.id && p?.nickname) ownerMap[p.id] = p.nickname as string;
+      const admin = (supabase as any)?.auth?.admin;
+      if (!admin?.getUserById) {
+        console.warn('Supabase admin API not available');
+      } else {
+        const results = await Promise.all(
+          ownerIds.map(async (id) => {
+            try {
+              const { data: userData, error: adminErr } = await admin.getUserById(id);
+              if (adminErr) return { id, display: undefined };
+              const userAny = (userData?.user as any);
+              const metaUser = userAny?.user_metadata as any;
+              const metaRaw = userAny?.raw_user_meta_data as any;
+              const display = (
+                metaRaw?.display_name ?? metaUser?.display_name ??
+                metaRaw?.nickname ?? metaUser?.nickname ??
+                metaRaw?.name ?? metaUser?.name ??
+                metaRaw?.full_name ?? metaUser?.full_name
+              ) as string | undefined;
+              return { id, display };
+            } catch {
+              return { id, display: undefined };
+            }
+          })
+        );
+        for (const r of results) {
+          if (r?.id && r.display) ownerMap[r.id] = r.display;
         }
-      }
-      // 2) Fill missing with auth.users.email
-      const missingIds = ownerIds.filter(id => !ownerMap[id]);
-      if (missingIds.length > 0) {
-        const { data: users, error: usersError } = await (supabase as any)
-          .from('auth.users' as any)
-          .select('id, email, user_metadata')
-          .in('id', missingIds);
-        if (!usersError && Array.isArray(users)) {
-          for (const u of users as any[]) {
-            const meta = (u.user_metadata || {}) as any;
-            const display = meta?.full_name || meta?.name || u.email || undefined;
-            if (u?.id) ownerMap[u.id] = display || 'Unbekannt';
-          }
-        }
+        console.log('admin resolved owners', Object.keys(ownerMap).length);
       }
     }
-
-    const enriched = items.map(i => ({ ...i, owner_name: ownerMap[i.owner] || 'Unbekannt' }));
+    console.log('ownermap', ownerMap);
+    const enriched = items.map(i => ({ ...i, display_name: ownerMap[i.owner] || 'Unbekannt' }));
     return { ok: true, items: enriched };
   } catch (e: any) {
     return { ok: false, error: e?.message || 'Unexpected error' };
