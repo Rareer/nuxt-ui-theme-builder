@@ -41,6 +41,19 @@ const items = computed<NavigationMenuItem[][]>(() => [
 				to: localePath(`/components/${component.value}`),
 			})),
 		},
+		// Authenticated-only links
+		...(useSupabaseUser().value ? [
+			{
+				label: 'Meine Themes',
+				icon: 'i-lucide-user',
+				to: localePath('/mythemes'),
+			},
+			{
+				label: 'Öffentliche Themes',
+				icon: 'i-lucide-globe-2',
+				to: localePath('/publicthemes'),
+			},
+		] : []),
 		{
 			label: t('nav.follow'),
 			type: 'label',

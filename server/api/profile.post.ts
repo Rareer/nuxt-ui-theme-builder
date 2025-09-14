@@ -25,6 +25,26 @@ export default defineEventHandler(async (event) => {
       .upsert({ id: userId, nickname: normalized }, { onConflict: 'id' });
 
     if (error) return { ok: false, error: error.message };
+
+    // Also update auth user's display name (user_metadata)
+    try {
+      const admin = (supabase as any).auth?.admin;
+      if (admin?.updateUserById) {
+        const { error: adminError } = await admin.updateUserById(userId, {
+          user_metadata: {
+            full_name: normalized,
+            name: normalized,
+            nickname: normalized,
+          },
+        });
+        if (adminError) {
+          // Do not fail the whole request; just report partial failure
+          return { ok: true, warning: 'Profile saved, but failed to update auth display name.' };
+        }
+      }
+    } catch {
+      // ignore admin update errors; profile is still saved
+    }
     return { ok: true };
   } catch (e: any) {
     return { ok: false, error: e?.message || 'Unexpected error' };

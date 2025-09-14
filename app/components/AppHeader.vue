@@ -18,13 +18,17 @@ const {
 } = useThemeExport();
 
 const aiModal = ref<InstanceType<typeof AIGenerateThemeModal> | null>(null);
+const toast = useToast();
+const router = useRouter();
 
-// Save/Load state
+// Save state
 const isSaveModalOpen = ref(false);
-const isLoadModalOpen = ref(false);
 const saveName = ref('');
+const saveDescription = ref('');
+const saveAsNew = ref(true); // if false and currentConfigId exists -> overwrite
 const savedThemesStore = useSavedThemesStore();
 const savedNames = computed(() => savedThemesStore.listNames);
+const hasLoadedConfig = computed(() => !!savedThemesStore.currentConfigId);
 
 const { t, availableLocales, setLocale } = useI18n();
 
@@ -40,8 +44,18 @@ const localeItems = computed(() => (
 // Dropdown items with onSelect handlers and keys
 const actionItems = computed(() => ([
 	[
-		{ label: t('actions.save'), icon: 'i-lucide-bookmark', key: 'save', onSelect: () => { isSaveModalOpen.value = true; } },
-		{ label: t('actions.load'), icon: 'i-lucide-folder-open', key: 'load', onSelect: () => { isLoadModalOpen.value = true; } },
+		{ label: t('actions.save'), icon: 'i-lucide-bookmark', key: 'save', onSelect: () => {
+			// Prefill modal state
+			if (hasLoadedConfig.value && savedThemesStore.currentThemeName) {
+				saveAsNew.value = false;
+				saveName.value = savedThemesStore.currentThemeName || '';
+			} else {
+				saveAsNew.value = true;
+				saveName.value = '';
+			}
+			isSaveModalOpen.value = true;
+		} },
+		{ label: t('actions.load'), icon: 'i-lucide-folder-open', key: 'load', onSelect: () => { router.push('/mythemes'); } },
 		{ label: t('actions.export'), icon: 'i-lucide-download', key: 'export', onSelect: () => { exportTheme(); } },
 	],
 	[
@@ -60,7 +74,7 @@ function onActionSelect(item: any) {
 			isSaveModalOpen.value = true;
 			break;
 		case 'load':
-			isLoadModalOpen.value = true;
+			router.push('/mythemes');
 			break;
 		case 'export':
 			exportTheme();
@@ -78,25 +92,26 @@ function openAIModal() {
 	aiModal.value?.show();
 }
 
-function handleSaveTheme() {
-	const name = saveName.value.trim();
-	if (!name) return;
-	if (savedThemesStore.themes[name]) {
-		if (!confirm(t('header.overwriteConfirm', { name }))) return;
-	}
-	savedThemesStore.saveTheme(name);
-	saveName.value = '';
-	isSaveModalOpen.value = false;
-}
-
-async function handleLoadTheme(name: string) {
-	await savedThemesStore.loadTheme(name);
-	isLoadModalOpen.value = false;
-}
-
-function handleDeleteTheme(name: string) {
-	if (!confirm(t('header.deleteConfirm', { name }))) return;
-	savedThemesStore.deleteTheme(name);
+async function handleSaveTheme() {
+    const raw = saveName.value ?? '';
+    const name = raw.trim();
+    if (saveAsNew.value && !name) return; // only required for new saves
+    try {
+        if (!saveAsNew.value && savedThemesStore.currentConfigId) {
+            await savedThemesStore.updateCurrentThemeInDatabase({ name: name || undefined, description: saveDescription.value || undefined });
+        } else {
+            await savedThemesStore.saveThemeToDatabase(name, { description: saveDescription.value || undefined });
+        }
+        saveName.value = '';
+        saveDescription.value = '';
+        saveAsNew.value = true;
+        isSaveModalOpen.value = false;
+        toast.add({ title: t('actions.save'), description: t('header.saveSuccess') as any, color: 'success', icon: 'i-lucide-check' });
+    }
+    catch (e: any) {
+        console.error('Saving theme failed', e);
+        toast.add({ title: t('actions.save'), description: (e?.message || 'Speichern fehlgeschlagen') as any, color: 'error', icon: 'i-lucide-alert-triangle' });
+    }
 }
 
 // Copy text to clipboard
@@ -225,7 +240,6 @@ const isNavigationOpen = ref(false);
 		<template #body>
 			<VariableConfigurator
 				@request-save="isSaveModalOpen = true"
-				@request-load="isLoadModalOpen = true"
 				@request-export="exportTheme"
 			/>
 		</template>
@@ -360,9 +374,22 @@ const isNavigationOpen = ref(false);
 				<UFormField :label="$t('actions.save')">
 					<UInput
 						v-model="saveName"
-						:placeholder="$t('actions.themeName')"
+						:disabled="hasLoadedConfig && !saveAsNew"
+						:placeholder="(hasLoadedConfig && !saveAsNew) ? $t('actions.currentName') : $t('actions.themeName')"
 					/>
 				</UFormField>
+				<UFormField :label="$t('actions.description')">
+					<UTextarea
+						v-model="saveDescription"
+						:placeholder="$t('actions.optionalDescription')"
+						:rows="3"
+					/>
+				</UFormField>
+				<div class="flex items-center gap-2">
+					<USwitch v-model="saveAsNew" />
+					<span class="text-sm">Als neues Theme speichern</span>
+					<span v-if="hasLoadedConfig && !saveAsNew" class="text-xs text-gray-500">(Aktuelles Theme wird überschrieben)</span>
+				</div>
 			</div>
 		</template>
 		<template #footer>
@@ -376,83 +403,10 @@ const isNavigationOpen = ref(false);
 				</UButton>
 				<UButton
 					color="primary"
-					:disabled="!saveName.trim()"
+					:disabled="saveAsNew ? !saveName.trim() : false"
 					@click="handleSaveTheme"
 				>
 					{{ $t('actions.save') }}
-				</UButton>
-			</div>
-		</template>
-	</UModal>
-
-	<!-- Load Theme Modal -->
-	<UModal
-		v-model:open="isLoadModalOpen"
-		size="md"
-	>
-		<template #header>
-			<div class="flex items-center justify-between w-full">
-				<h3 class="text-xl font-medium">
-					{{ $t('header.loadTitle') }}
-				</h3>
-				<UButton
-					color="neutral"
-					variant="ghost"
-					icon="i-lucide-x"
-					@click="isLoadModalOpen = false"
-				/>
-			</div>
-		</template>
-		<template #body>
-			<div class="p-2">
-				<div
-					v-if="savedNames.length === 0"
-					class="text-sm text-gray-500"
-				>
-					{{ $t('header.noThemes') }}
-				</div>
-				<ul
-					v-else
-					class="divide-y divide-gray-200 dark:divide-gray-800"
-				>
-					<li
-						v-for="name in savedNames"
-						:key="name"
-						class="flex items-center justify-between py-2"
-					>
-						<div class="flex flex-col">
-							<span class="font-medium">{{ name }}</span>
-							<span class="text-xs text-gray-500">{{ savedThemesStore.themes[name]?.updatedAt }}</span>
-						</div>
-						<div class="flex items-center gap-2">
-							<UButton
-								size="sm"
-								color="primary"
-								variant="soft"
-								icon="i-lucide-download"
-								@click="handleLoadTheme(name)"
-							>
-								{{ $t('actions.load') }}
-							</UButton>
-							<UButton
-								size="sm"
-								color="error"
-								variant="ghost"
-								icon="i-lucide-trash"
-								@click="handleDeleteTheme(name)"
-							/>
-						</div>
-					</li>
-				</ul>
-			</div>
-		</template>
-		<template #footer>
-			<div class="flex justify-end">
-				<UButton
-					color="neutral"
-					@click="isLoadModalOpen = false"
-				>
-					{{ $t('actions.close') }}
 				</UButton>
 			</div>
 		</template>
