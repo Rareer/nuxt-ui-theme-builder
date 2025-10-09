@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     const supabase = await serverSupabaseServiceRole<Database>(event);
     const { data, error } = await supabase
       .from('configurations')
-      .select('id, name, description, is_public, is_active, version, created_at, updated_at, owner')
+      .select('id, name, description, is_public, is_active, version, created_at, updated_at, owner, preview, preview_light, preview_dark')
       .eq('is_public', true)
       .eq('kind', 'theme')
       .order('updated_at', { ascending: false });

@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
     const supabase = await serverSupabaseServiceRole<Database>(event);
     const { data, error } = await supabase
       .from('configurations')
-      .select('id, owner, name, description, is_public, is_active, version, created_at, updated_at, data')
+      .select('id, owner, name, description, is_public, is_active, version, created_at, updated_at, data, preview')
       .eq('id', id)
       .single();
 

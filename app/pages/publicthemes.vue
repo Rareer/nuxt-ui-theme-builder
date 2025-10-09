@@ -24,6 +24,9 @@
             <UBadge color="primary">Öffentlich</UBadge>
           </div>
         </template>
+        <div class="mb-3">
+          <ThemePreview :data-url="(t as any).preview_light || (t as any).preview" :width="800" :height="420" :alt="`Vorschau von ${t.name}`" />
+        </div>
         <p class="text-sm text-gray-500">{{ t.description || 'Kein Beschreibungstext' }}</p>
         <template #footer>
           <div class="flex gap-2">

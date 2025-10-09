@@ -76,6 +76,19 @@ export const useSavedThemesStore = defineStore('savedThemes', {
       // Persist locally as well
       this.themes[name] = snapshot;
 
+      // Optionally create client-side previews (light & dark) to send to server
+      let preview_light: string | undefined;
+      let preview_dark: string | undefined;
+      if (process.client) {
+        try {
+          const mod = await import('@/utils/previewCapture.client')
+          preview_light = await mod.renderSnapshotToImage({ snapshot, mode: 'light' })
+          preview_dark = await mod.renderSnapshotToImage({ snapshot, mode: 'dark' })
+        } catch (e) {
+          console.warn('Client preview generation failed', e)
+        }
+      }
+
       // Send to server API which validates and stores in Supabase
       const res = await $fetch<{ ok: boolean; id?: string; error?: string; issues?: any[] }>(
         '/api/save-theme',
@@ -89,6 +102,9 @@ export const useSavedThemesStore = defineStore('savedThemes', {
             version: opts?.version ?? 1,
             kind: 'theme',
             snapshot,
+            // Provide client-generated previews when available
+            preview_light,
+            preview_dark,
           },
         },
       );
@@ -177,6 +193,19 @@ export const useSavedThemesStore = defineStore('savedThemes', {
         },
       };
 
+      // Optionally create client-side previews (light & dark) to send to server
+      let preview_light: string | undefined;
+      let preview_dark: string | undefined;
+      if (process.client) {
+        try {
+          const mod = await import('@/utils/previewCapture.client')
+          preview_light = await mod.renderSnapshotToImage({ snapshot, mode: 'light' })
+          preview_dark = await mod.renderSnapshotToImage({ snapshot, mode: 'dark' })
+        } catch (e) {
+          console.warn('Client preview generation failed', e)
+        }
+      }
+
       const res = await $fetch<{ ok: boolean; error?: string }>(`/api/theme/${this.currentConfigId}`, {
         method: 'PUT',
         body: {
@@ -184,6 +213,8 @@ export const useSavedThemesStore = defineStore('savedThemes', {
           description: typeof opts?.description === 'string' ? opts?.description : undefined,
           version: typeof opts?.version === 'number' ? opts?.version : undefined,
           snapshot,
+          preview_light,
+          preview_dark,
         },
       });
       if (!res?.ok) throw new Error(res?.error || 'Überschreiben fehlgeschlagen');

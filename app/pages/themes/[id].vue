@@ -24,8 +24,25 @@
             <UBadge :color="item.is_public ? 'primary' : 'neutral'">{{ item.is_public ? 'Öffentlich' : 'Privat' }}</UBadge>
           </div>
         </template>
-
         <div class="space-y-4">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-sm font-semibold">Vorschau</h3>
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-gray-500">Modus</span>
+                <USegmentedControl v-model="mode" :options="[{ label: 'Light', value: 'light' }, { label: 'Dark', value: 'dark' }]" />
+              </div>
+            </div>
+            <ThemePreview
+              :data-url="mode === 'light' ? ((item as any).preview_light || (item as any).preview) : undefined"
+              :snapshot="mode === 'dark' ? (item as any).data : undefined"
+              :mode="mode"
+              :width="800"
+              :height="420"
+              :alt="`Vorschau (${mode}) von ${item.name}`"
+              :client="mode === 'dark'"
+            />
+          </div>
           <p class="text-sm text-gray-600">{{ item.description || 'Kein Beschreibungstext' }}</p>
           <UDivider />
           <div>
@@ -69,7 +86,7 @@ const { data, pending, refresh } = await useFetch<{ ok: boolean; item?: (ThemeLi
   { key: () => `theme-${id.value}` },
 );
 
-const item = computed(() => data.value?.item as (ThemeListItem & { owner?: string; data?: any }) | undefined);
+const item = computed(() => data.value?.item as (ThemeListItem & { owner?: string; data?: any; preview?: string | null }) | undefined);
 const prettyData = computed(() => JSON.stringify(item.value?.data ?? {}, null, 2));
 
 function formatDate(iso?: string) {
@@ -88,6 +105,9 @@ const saved = useSavedThemesStore();
 const toast = useToast();
 const supaUser = useSupabaseUser();
 const isOwner = computed(() => !!(supaUser.value && item.value && item.value.owner && supaUser.value.id === item.value.owner));
+
+// Preview mode toggle
+const mode = ref<'light' | 'dark'>('light')
 
 async function loadIntoBuilder() {
   if (!id.value) return;

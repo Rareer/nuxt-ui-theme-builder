@@ -2,6 +2,7 @@ import { defineEventHandler, readBody, createError } from 'h3';
 import { z } from 'zod';
 import { serverSupabaseServiceRole, serverSupabaseUser } from '#supabase/server';
 import type { Database, TablesInsert } from '../../supabase/types/supabase';
+import { buildThemePreviewDataUrl } from '../utils/themePreview';
 
 // Generic JSON schema (recursive)
 const JsonSchema: z.ZodType<unknown> = z.lazy(() =>
@@ -46,6 +47,8 @@ const ConfigurationsInsertSchema = z.object({
   owner: z.string(), // user id
   updated_at: z.string().optional(),
   version: z.number().int().optional().default(1),
+  // Not present in generated TS types but exists in DB
+  preview: z.string().nullable().optional(),
 });
 
 // Request payload accepted by this endpoint
@@ -56,6 +59,10 @@ const SaveThemeRequestSchema = z.object({
   kind: z.string().optional().default('theme'),
   version: z.number().int().optional().default(1),
   snapshot: SavedThemeSnapshotSchema,
+  // Optional client-provided previews (data URLs)
+  preview: z.string().optional(),
+  preview_light: z.string().optional(),
+  preview_dark: z.string().optional(),
 });
 
 export default defineEventHandler(async (event) => {
@@ -75,6 +82,22 @@ export default defineEventHandler(async (event) => {
 
   // Normalize fields
   const owner = user.id;
+  // Build server-side previews as data URLs (SVG base64) unless provided by client
+  let preview: string | undefined;
+  let preview_light: string | undefined;
+  let preview_dark: string | undefined;
+  if (typeof (parsed.data as any).preview_light === 'string') preview_light = (parsed.data as any).preview_light
+  if (typeof (parsed.data as any).preview_dark === 'string') preview_dark = (parsed.data as any).preview_dark
+  if (typeof (parsed.data as any).preview === 'string') preview = (parsed.data as any).preview
+  if (!preview_light) {
+    try { preview_light = buildThemePreviewDataUrl(snapshot as any, { mode: 'light' }); } catch (e) { console.warn('Failed to build light preview', e); }
+  }
+  if (!preview_dark) {
+    try { preview_dark = buildThemePreviewDataUrl(snapshot as any, { mode: 'dark' }); } catch (e) { console.warn('Failed to build dark preview', e); }
+  }
+  // Keep backward-compatible single preview (light by default)
+  preview = preview_light || preview_dark;
+
   const insertCandidate = {
     name,
     description: description ?? null,
@@ -84,6 +107,9 @@ export default defineEventHandler(async (event) => {
     owner,
     version: version ?? 1,
     data: snapshot as unknown,
+    preview: preview ?? null,
+    preview_light: preview_light ?? null,
+    preview_dark: preview_dark ?? null,
   };
 
   const insertParsed = ConfigurationsInsertSchema.safeParse(insertCandidate);
@@ -94,7 +120,8 @@ export default defineEventHandler(async (event) => {
   try {
     const supabase = await serverSupabaseServiceRole<Database>(event);
     const payload = insertParsed.data as TablesInsert<'configurations'>;
-    const { data, error } = await supabase
+    // Cast to any to allow preview field which may not be in generated types
+    const { data, error } = await (supabase as any)
       .from('configurations')
       .insert(payload)
       .select('id, created_at, updated_at')

@@ -31,6 +31,7 @@
     "@vercel/analytics": "^1.5.0",
     "ai": "^5.0.15",
     "cheerio": "^1.0.0-rc.12",
+    "html-to-image": "^1.11.13",
     "nuxt": "^4.0.3",
     "pinia": "^3.0.3",
     "shiki": "^3.9.2",

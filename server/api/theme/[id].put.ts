@@ -2,6 +2,7 @@ import { defineEventHandler, readBody, createError } from 'h3';
 import { serverSupabaseServiceRole, serverSupabaseUser } from '#supabase/server';
 import { z } from 'zod';
 import type { Database } from '../../../supabase/types/supabase';
+import { buildThemePreviewDataUrl } from '../../utils/themePreview';
 
 // Reuse a permissive Json schema
 const JsonSchema: z.ZodType<unknown> = z.lazy(() => z.union([
@@ -34,6 +35,10 @@ const UpdateSchema = z.object({
   description: z.string().nullable().optional(),
   version: z.number().int().optional(),
   snapshot: SavedThemeSnapshotSchema,
+  // Optional client-provided previews (data URLs)
+  preview: z.string().optional(),
+  preview_light: z.string().optional(),
+  preview_dark: z.string().optional(),
 });
 
 export default defineEventHandler(async (event) => {
@@ -66,7 +71,27 @@ export default defineEventHandler(async (event) => {
   if (typeof parsed.data.version === 'number') patch.version = parsed.data.version;
   if (typeof parsed.data.description !== 'undefined') patch.description = parsed.data.description;
 
-  const { error: updateError } = await supabase
+  // Prefer client-provided previews
+  const bodyAny = parsed.data as any
+  if (typeof bodyAny.preview_light === 'string') patch.preview_light = bodyAny.preview_light
+  if (typeof bodyAny.preview_dark === 'string') patch.preview_dark = bodyAny.preview_dark
+  if (typeof bodyAny.preview === 'string') patch.preview = bodyAny.preview
+
+  // If not provided, regenerate previews from snapshot
+  if (!patch.preview_light || !patch.preview_dark) {
+    try {
+      const light = patch.preview_light || buildThemePreviewDataUrl(parsed.data.snapshot as any, { mode: 'light' });
+      const dark = patch.preview_dark || buildThemePreviewDataUrl(parsed.data.snapshot as any, { mode: 'dark' });
+      patch.preview_light = light;
+      patch.preview_dark = dark;
+      // keep single preview for backward-compat
+      patch.preview = patch.preview || light || dark;
+    } catch (e) {
+      // Non-fatal; skip preview update if generation fails
+    }
+  }
+
+  const { error: updateError } = await (supabase as any)
     .from('configurations')
     .update(patch)
     .eq('id', id);

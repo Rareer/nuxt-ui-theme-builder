@@ -30,6 +30,17 @@
             </div>
           </div>
         </template>
+        <div class="mb-3">
+          <!-- Live test preview rendered client-side from snapshot to verify exact colors/UI -->
+          <div class="mb-2 text-xs text-gray-500">Live Test Preview</div>
+          <div class="rounded-md overflow-hidden border border-gray-200/50 dark:border-white/10 w-full">
+            <ThemePreviewStage :snapshot="(t as any).data" mode="light" :width="640" :height="336" />
+          </div>
+        </div>
+        <div class="mb-3">
+          <!-- Stored image preview from DB -->
+          <ThemePreview :data-url="(t as any).preview" :width="640" :height="336" :alt="`Vorschau von ${t.name}`" />
+        </div>
         <p class="text-sm text-gray-500">{{ t.description || 'Kein Beschreibungstext' }}</p>
         <template #footer>
           <div class="flex gap-2">

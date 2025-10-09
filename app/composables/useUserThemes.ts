@@ -9,6 +9,7 @@ export type ThemeListItem = {
   version: number;
   created_at: string;
   updated_at: string;
+  preview?: string | null;
 };
 
 export function useUserThemes() {
