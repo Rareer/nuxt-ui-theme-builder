@@ -19,7 +19,7 @@ const DEFAULT_FONT_WEIGHTS = {
 	black: '900',
 };
 
-// Definiere die zusätzlichen CSS-Variablen
+// Define the additional CSS variables
 export type CssVariableType = 'color-reference' | 'direct-value';
 
 export interface CssVariableMapping {
