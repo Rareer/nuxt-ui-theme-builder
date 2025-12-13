@@ -137,14 +137,14 @@ const faqItems = [
 						<AutoUi>
 							<UButton color="primary" variant="outline">Outline</UButton>
 						</AutoUi>
-							<AutoUi>
+						<AutoUi>
 							<UButton color="success" :icon="appIcon('checkCircle')">Success</UButton>
-							</AutoUi>
-							<AutoUi>
+						</AutoUi>
+						<AutoUi>
 							<UButton color="warning" :icon="appIcon('triangleAlert')">Warn</UButton>
-							</AutoUi>
-						</div>
-					</UCard>
+						</AutoUi>
+					</div>
+				</UCard>
 
 				<!-- Badges -->
 				<UCard>
