@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
+import { useAppIcons } from '@/composables/useAppIcons';
 
 const props = defineProps({
   uiSlots: { type: Array as PropType<string[]>, required: true },
@@ -7,6 +8,8 @@ const props = defineProps({
   resetDefault: { type: Function as PropType<() => void>, required: true },
   defaultUiModel: { type: Function as PropType<(slot: string) => { value: string[] }>, required: true },
 });
+
+const { icon: appIcon } = useAppIcons();
 </script>
 
 <template>
@@ -18,15 +21,15 @@ const props = defineProps({
         class="flex-1"
         variant="soft"
         :color="props.hasAnyDefault ? 'primary' : 'neutral'"
-        :leading-icon="props.hasAnyDefault ? 'i-lucide-dot' : undefined"
-        trailing-icon="i-lucide-chevron-down"
+        :leading-icon="props.hasAnyDefault ? appIcon('dot') : undefined"
+        :trailing-icon="appIcon('chevronDown')"
       />
       <UButton
         v-if="props.hasAnyDefault"
         variant="ghost"
         color="neutral"
         size="xs"
-        icon="i-lucide-rotate-ccw"
+        :icon="appIcon('rotateCcw')"
         @click.stop="props.resetDefault()"
       />
     </div>

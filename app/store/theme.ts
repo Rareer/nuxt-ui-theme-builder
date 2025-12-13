@@ -4,6 +4,21 @@ import type { ThemeVariable } from '../constants/theme';
 import { buildThemeCssVariables } from '../utils/themeCss';
 import { normalizeColorName } from '../utils/colors';
 
+const DEFAULT_SANS_FONT = `'Public Sans', sans-serif`;
+const DEFAULT_SERIF_FONT = `'Georgia', Cambria, 'Times New Roman', Times, serif`;
+const DEFAULT_MONO_FONT = `'SFMono-Regular', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace`;
+const DEFAULT_FONT_WEIGHTS = {
+	thin: '100',
+	extralight: '200',
+	light: '300',
+	normal: '400',
+	medium: '500',
+	semibold: '600',
+	bold: '700',
+	extrabold: '800',
+	black: '900',
+};
+
 // Definiere die zusätzlichen CSS-Variablen
 export type CssVariableType = 'color-reference' | 'direct-value';
 
@@ -43,6 +58,21 @@ export const predefinedCssVariables: CssVariableMapping[] = [
 
 	// Radius-Variablen
 	{ name: 'ui-radius', type: 'direct-value', value: '0.25rem', label: 'Radius', category: 'Radius' },
+	{ name: 'ui-corner-shape', type: 'direct-value', value: 'superellipse(1)', label: 'Corner shape', category: 'Radius' },
+
+	// Typografie
+	{ name: 'font-sans', type: 'direct-value', value: DEFAULT_SANS_FONT, label: 'Sans font', category: 'Typography' },
+	{ name: 'font-serif', type: 'direct-value', value: DEFAULT_SERIF_FONT, label: 'Serif font', category: 'Typography' },
+	{ name: 'font-mono', type: 'direct-value', value: DEFAULT_MONO_FONT, label: 'Mono font', category: 'Typography' },
+	{ name: 'font-weight-thin', type: 'direct-value', value: DEFAULT_FONT_WEIGHTS.thin, label: 'Font weight thin', category: 'Typography' },
+	{ name: 'font-weight-extralight', type: 'direct-value', value: DEFAULT_FONT_WEIGHTS.extralight, label: 'Font weight extra light', category: 'Typography' },
+	{ name: 'font-weight-light', type: 'direct-value', value: DEFAULT_FONT_WEIGHTS.light, label: 'Font weight light', category: 'Typography' },
+	{ name: 'font-weight-normal', type: 'direct-value', value: DEFAULT_FONT_WEIGHTS.normal, label: 'Font weight normal', category: 'Typography' },
+	{ name: 'font-weight-medium', type: 'direct-value', value: DEFAULT_FONT_WEIGHTS.medium, label: 'Font weight medium', category: 'Typography' },
+	{ name: 'font-weight-semibold', type: 'direct-value', value: DEFAULT_FONT_WEIGHTS.semibold, label: 'Font weight semibold', category: 'Typography' },
+	{ name: 'font-weight-bold', type: 'direct-value', value: DEFAULT_FONT_WEIGHTS.bold, label: 'Font weight bold', category: 'Typography' },
+	{ name: 'font-weight-extrabold', type: 'direct-value', value: DEFAULT_FONT_WEIGHTS.extrabold, label: 'Font weight extra bold', category: 'Typography' },
+	{ name: 'font-weight-black', type: 'direct-value', value: DEFAULT_FONT_WEIGHTS.black, label: 'Font weight black', category: 'Typography' },
 ];
 
 // Dark defaults derived from current darkOverrides in useThemeCss
@@ -100,12 +130,17 @@ export const useThemeStore = defineStore('theme', {
 	// Initialisiere den Store mit vordefinierten CSS-Variablen
 	hydrate(state) {
 		// Initialisiere die CSS-Variablen mit den vordefinierten Werten je Modus
-		buildPredefinedForMode('light').forEach((variable) => {
-			state.cssVariableMappings.light[variable.name] = { ...variable };
-		});
-		buildPredefinedForMode('dark').forEach((variable) => {
-			state.cssVariableMappings.dark[variable.name] = { ...variable };
-		});
+		const ensureDefaults = (mode: ThemeMode) => {
+			state.cssVariableMappings[mode] ||= {};
+			buildPredefinedForMode(mode).forEach((variable) => {
+				if (!state.cssVariableMappings[mode][variable.name]) {
+					state.cssVariableMappings[mode][variable.name] = { ...variable };
+				}
+			});
+		};
+
+		ensureDefaults('light');
+		ensureDefaults('dark');
 	},
 
 	getters: {
@@ -168,6 +203,11 @@ export const useThemeStore = defineStore('theme', {
 		getCssVariable: state => (name: string, mode?: ThemeMode): CssVariableMapping | null => {
 			const m = mode || state.editMode;
 			return state.cssVariableMappings[m]?.[name] || null;
+		},
+
+		getDefaultCssVariable: () => (name: string, mode?: ThemeMode): CssVariableMapping | null => {
+			const m = mode || 'light';
+			return buildPredefinedForMode(m).find(variable => variable.name === name) || null;
 		},
 
 		// Gibt die aktuelle Zuordnung für eine Theme-Variable zurück (optional Modus)
@@ -244,6 +284,33 @@ export const useThemeStore = defineStore('theme', {
 			const bucket = this.cssVariableMappings[m];
 			if (bucket && bucket[name]) {
 				bucket[name].type = type;
+			}
+		},
+
+		ensureCssVariableDefaults(mode?: ThemeMode) {
+			const apply = (m: ThemeMode) => {
+				this.cssVariableMappings[m] ||= {};
+				buildPredefinedForMode(m).forEach((variable) => {
+					if (!this.cssVariableMappings[m][variable.name]) {
+						this.cssVariableMappings[m][variable.name] = { ...variable };
+					}
+				});
+			};
+
+			if (mode) apply(mode);
+			else { apply('light'); apply('dark'); }
+		},
+
+		resetCssVariable(name: string, mode?: ThemeMode) {
+			const m = mode || this.editMode;
+			const defaults = buildPredefinedForMode(m);
+			const match = defaults.find(variable => variable.name === name);
+			if (match) {
+				this.cssVariableMappings[m] ||= {};
+				this.cssVariableMappings[m][name] = { ...match };
+			}
+			else if (this.cssVariableMappings[m]) {
+				delete this.cssVariableMappings[m][name];
 			}
 		},
 

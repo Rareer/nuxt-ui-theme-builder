@@ -5,6 +5,8 @@ import { useThemeStore } from './theme';
 import { useUiStore } from './ui';
 import type { UiConfigsState } from './componentUiConfig';
 import type { CssVariableMapping } from './theme';
+import { useIconsStore } from './icons';
+import type { IconMap } from './icons';
 
 export interface SavedThemeSnapshot {
 	name: string;
@@ -17,6 +19,7 @@ export interface SavedThemeSnapshot {
 		mappings: Record<string, string | null>;
 		cssVariableMappings: Record<string, CssVariableMapping>;
 	};
+	icons: IconMap;
 }
 
 export const useSavedThemesStore = defineStore('savedThemes', {
@@ -35,6 +38,7 @@ export const useSavedThemesStore = defineStore('savedThemes', {
 			const colors = useColorsStore();
 			const componentUi = useComponentUiConfigStore();
 			const theme = useThemeStore();
+			const icons = useIconsStore();
 
 			const now = new Date().toISOString();
 			const snapshot: SavedThemeSnapshot = {
@@ -47,6 +51,7 @@ export const useSavedThemesStore = defineStore('savedThemes', {
 					mappings: JSON.parse(JSON.stringify(theme.mappings)),
 					cssVariableMappings: JSON.parse(JSON.stringify(theme.cssVariableMappings)),
 				},
+				icons: JSON.parse(JSON.stringify(icons.icons)),
 			};
 
 			this.themes[name] = snapshot;
@@ -60,6 +65,7 @@ export const useSavedThemesStore = defineStore('savedThemes', {
 			const colors = useColorsStore();
 			const componentUi = useComponentUiConfigStore();
 			const theme = useThemeStore();
+			const icons = useIconsStore();
 
 			try {
 				ui.showLoading(`Lade Theme "${name}"...`);
@@ -71,6 +77,8 @@ export const useSavedThemesStore = defineStore('savedThemes', {
 				componentUi.importAll(snapshot.componentUiConfigs);
 				theme.mappings = JSON.parse(JSON.stringify(snapshot.theme.mappings));
 				theme.cssVariableMappings = JSON.parse(JSON.stringify(snapshot.theme.cssVariableMappings));
+				if (snapshot.icons) icons.$patch({ icons: JSON.parse(JSON.stringify(snapshot.icons)) });
+				else icons.resetIcons();
 			}
 			finally {
 				ui.hideLoading();

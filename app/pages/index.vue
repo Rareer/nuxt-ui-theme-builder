@@ -1,6 +1,9 @@
 <script setup lang="ts">
 // Set page meta
+import { useAppIcons } from '@/composables/useAppIcons';
+
 const { t } = useI18n();
+const { icon: appIcon } = useAppIcons();
 
 useHead(() => ({
 	title: t('index.headTitle'),
@@ -28,7 +31,7 @@ useHead(() => ({
 				<UButton
 					to="/colors"
 					size="lg"
-					icon="i-lucide-palette"
+					:icon="appIcon('navColors')"
 				>
 					{{ $t('index.btnManageColors') }}
 				</UButton>
@@ -37,7 +40,7 @@ useHead(() => ({
 					color="secondary"
 					variant="outline"
 					size="lg"
-					icon="i-lucide-square-code"
+					:icon="appIcon('navComponents')"
 				>
 					{{ $t('index.btnCustomizeComponents') }}
 				</UButton>
@@ -50,7 +53,7 @@ useHead(() => ({
 			<div class="p-6 border border-gray-200 dark:border-gray-800 rounded-lg">
 				<div class="flex items-center mb-4">
 					<UIcon
-						name="i-lucide-palette"
+						:name="appIcon('navColors')"
 						class="text-primary-500 text-2xl mr-3"
 					/>
 					<h3 class="text-xl font-semibold">
@@ -73,7 +76,7 @@ useHead(() => ({
 			<div class="p-6 border border-gray-200 dark:border-gray-800 rounded-lg">
 				<div class="flex items-center mb-4">
 					<UIcon
-						name="i-lucide-square-code"
+						:name="appIcon('navComponents')"
 						class="text-primary-500 text-2xl mr-3"
 					/>
 					<h3 class="text-xl font-semibold">
@@ -96,7 +99,7 @@ useHead(() => ({
 			<div class="p-6 border border-gray-200 dark:border-gray-800 rounded-lg">
 				<div class="flex items-center mb-4">
 					<UIcon
-						name="i-lucide-eye"
+						:name="appIcon('navPreview')"
 						class="text-primary-500 text-2xl mr-3"
 					/>
 					<h3 class="text-xl font-semibold">
@@ -127,21 +130,21 @@ useHead(() => ({
 			<div class="flex gap-4 justify-center flex-wrap">
 				<div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
 					<UIcon
-						name="i-lucide-check-circle"
+						:name="appIcon('checkCircle')"
 						class="text-green-500"
 					/>
 					<span>{{ $t('index.bulletUnlimitedColors') }}</span>
 				</div>
 				<div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
 					<UIcon
-						name="i-lucide-check-circle"
+						:name="appIcon('checkCircle')"
 						class="text-green-500"
 					/>
 					<span>{{ $t('index.bulletAllComponents') }}</span>
 				</div>
 				<div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
 					<UIcon
-						name="i-lucide-check-circle"
+						:name="appIcon('checkCircle')"
 						class="text-green-500"
 					/>
 					<span>{{ $t('index.bulletLivePreview') }}</span>

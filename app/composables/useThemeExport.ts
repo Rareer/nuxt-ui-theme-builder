@@ -2,10 +2,12 @@ import { useThemeStore } from '../store/theme';
 import { useColorsStore } from '../store/colors';
 import { useComponentUiConfigStore } from '@/store/componentUiConfig';
 import { useCodeHighlighter } from './useCodeHighlighter';
+import { useIconsStore } from '@/store/icons';
 
 export function useThemeExport() {
 	const themeStore = useThemeStore();
 	const colorsStore = useColorsStore();
+	const iconsStore = useIconsStore();
 	const isExporting = ref(false);
 	const exportError = ref<string | null>(null);
 	const isExportModalOpen = ref(false);
@@ -48,6 +50,8 @@ export function useThemeExport() {
 			// Collect component UI configs for app.config.ts export
 			const componentUiConfigs = useComponentUiConfigStore().exportAll();
 
+			const icons = iconsStore.icons;
+
 			// Call the server API to get the theme content
 			const response = await $fetch<{
 				success: boolean;
@@ -68,6 +72,7 @@ export function useThemeExport() {
 					themeMappings,
 					exportMode: themeStore.getEditMode,
 					componentUiConfigs,
+					icons,
 				},
 			});
 

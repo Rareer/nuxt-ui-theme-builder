@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
+import { useAppIcons } from '@/composables/useAppIcons';
 
 const props = defineProps({
   configPropNames: { type: Array as PropType<string[]>, required: true },
@@ -9,6 +10,8 @@ const props = defineProps({
   resetOption: { type: Function as PropType<(propName: string, opt: string) => void>, required: true },
   uiModel: { type: Function as PropType<(propName: string, opt: string, slot: string) => { value: string[] }>, required: true },
 });
+
+const { icon: appIcon } = useAppIcons();
 </script>
 
 <template>
@@ -30,15 +33,15 @@ const props = defineProps({
                 class="flex-1"
                 variant="soft"
                 :color="props.hasAnyForOption((item as any).label, opt) ? 'primary' : 'neutral'"
-                :leading-icon="props.hasAnyForOption((item as any).label, opt) ? 'i-lucide-sparkles' : undefined"
-                trailing-icon="i-lucide-chevron-down"
+                :leading-icon="props.hasAnyForOption((item as any).label, opt) ? appIcon('sparkles') : undefined"
+                :trailing-icon="appIcon('chevronDown')"
               />
               <UButton
                 v-if="props.hasAnyForOption((item as any).label, opt)"
                 variant="ghost"
                 color="neutral"
                 size="xs"
-                icon="i-lucide-rotate-ccw"
+                :icon="appIcon('rotateCcw')"
                 @click.stop="props.resetOption((item as any).label, opt)"
               />
             </div>

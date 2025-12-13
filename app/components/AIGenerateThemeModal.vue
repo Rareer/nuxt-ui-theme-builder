@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useAppIcons } from '@/composables/useAppIcons';
+
 const props = defineProps<{ model?: string }>();
 const emit = defineEmits<{ (e: 'close'): void; (e: 'imported'): void }>();
 
@@ -8,6 +10,7 @@ const error = ref<string | null>(null);
 const { t } = useI18n();
 const prompt = ref(t('ai.defaultPrompt'));
 const apiKey = ref('');
+const { icon: appIcon } = useAppIcons();
 
 const { generateThemeFromPrompt } = useAIDesigner();
 const { importTheme } = useThemeImport();
@@ -82,7 +85,7 @@ defineExpose({ show, hide });
 					{{ $t('ai.title') }}
 				</h3>
 				<UButton
-					icon="i-lucide-x"
+					:icon="appIcon('close')"
 					color="neutral"
 					variant="ghost"
 					@click="hide"
@@ -135,7 +138,7 @@ defineExpose({ show, hide });
 				</UButton>
 				<UButton
 					:loading="loading"
-					icon="i-lucide-sparkles"
+					:icon="appIcon('sparkles')"
 					@click="onGenerate"
 				>
 					{{ $t('ai.btnGenerate') }}

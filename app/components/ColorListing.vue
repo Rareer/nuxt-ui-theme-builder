@@ -2,12 +2,14 @@
 import { z } from 'zod';
 import { useColorsStore } from '../store/colors';
 import type { Color } from '../types/color';
+import { useAppIcons } from '@/composables/useAppIcons';
 
 // i18n
 const { t } = useI18n();
 
 // Store
 const colorStore = useColorsStore();
+const { icon: appIcon } = useAppIcons();
 
 // Modal states
 const isAddModalOpen = ref(false);
@@ -153,7 +155,7 @@ function deleteColor() {
 	<div class="color-listing">
 		<div class="flex justify-end items-center mb-6">
 			<UButton
-				icon="i-lucide-plus"
+				:icon="appIcon('plus')"
 				color="primary"
 				@click="isAddModalOpen = true"
 			>
@@ -197,13 +199,13 @@ function deleteColor() {
 				<!-- Actions -->
 				<div class="flex gap-2">
 					<UButton
-						icon="i-lucide-pencil"
+						:icon="appIcon('pencil')"
 						color="neutral"
 						variant="ghost"
 						@click="editColor(color)"
 					/>
 					<UButton
-						icon="i-lucide-trash"
+						:icon="appIcon('trash')"
 						color="error"
 						variant="ghost"
 						@click="confirmDelete(color.name)"
@@ -218,7 +220,7 @@ function deleteColor() {
 			class="text-center py-10 ring ring-gray-200 rounded-lg"
 		>
 			<UIcon
-				name="i-lucide-palette"
+				:name="appIcon('navColors')"
 				class="text-4xl text-gray-400 mx-auto mb-2"
 			/>
 			<p class="text-gray-500">
