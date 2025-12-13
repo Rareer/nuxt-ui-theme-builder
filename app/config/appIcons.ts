@@ -182,6 +182,7 @@ export const APP_ICON_PRESETS: Partial<Record<AppIconPack, Partial<Record<AppIco
 		dot: 'carbon:point',
 		plus: 'carbon:add',
 		check: 'carbon:checkmark',
+		dice5: 'carbon:dice-5',
 	},
 	ph: {
 		navHome: 'ph:house',
