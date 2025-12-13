@@ -93,7 +93,9 @@ function setMode(mode: 'light' | 'dark') {
 	try {
 		colorMode.preference = mode as any;
 	}
-	catch { }
+	catch (error) {
+		console.error('Failed to set color mode preference:', error);
+	}
 }
 
 function hydrateSelectedColorsFromMode(mode: 'light' | 'dark') {
