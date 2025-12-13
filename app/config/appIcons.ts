@@ -288,5 +288,6 @@ export const APP_ICON_PRESETS: Partial<Record<AppIconPack, Partial<Record<AppIco
 		dot: 'lucide:dot',
 		plus: 'mynaui:plus',
 		check: 'mynaui:check',
+		triangleAlert: 'mynaui:alert-triangle',
 	},
 };
