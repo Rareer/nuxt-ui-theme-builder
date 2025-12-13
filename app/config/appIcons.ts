@@ -110,6 +110,7 @@ export const APP_ICON_PRESETS: Partial<Record<AppIconPack, Partial<Record<AppIco
 		dot: 'mingcute:newdot-line',
 		plus: 'mingcute:plus-line',
 		check: 'mingcute:check-line',
+		dice5: 'mingcute:dice-line',
 	},
 	hugeicons: {
 		navHome: 'hugeicons:home-01',
