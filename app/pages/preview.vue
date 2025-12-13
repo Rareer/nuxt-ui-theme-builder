@@ -182,16 +182,16 @@ const faqItems = [
 							Alert
 						</div>
 					</template>
-						<AutoUi>
-							<UAlert
-								color="info"
-								variant="soft"
-								:icon="appIcon('info')"
-								:title="$t('preview.themingPreviewTitle')"
-								:description="$t('preview.themingPreviewDesc')"
-							/>
-						</AutoUi>
-					</UCard>
+                    <AutoUi>
+                        <UAlert
+                            color="info"
+                            variant="soft"
+                            :icon="appIcon('info')"
+                            :title="$t('preview.themingPreviewTitle')"
+                            :description="$t('preview.themingPreviewDesc')"
+                        />
+                    </AutoUi>
+                </UCard>
 
 				<!-- Avatars -->
 				<UCard>
