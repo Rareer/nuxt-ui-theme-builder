@@ -31,10 +31,10 @@ if (import.meta.client) {
 		themeStore.setEditMode(val === 'dark' ? 'dark' : 'light');
 	}, { immediate: true });
 
-	watchEffect(() => {
+	watch(() => iconsStore.icons, (newIcons) => {
 		appConfig.ui ||= {};
-		appConfig.ui.icons = { ...iconsStore.icons };
-	});
+		appConfig.ui.icons = { ...newIcons };
+	}, { immediate: true });
 }
 </script>
 
