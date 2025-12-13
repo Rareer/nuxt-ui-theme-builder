@@ -61,7 +61,7 @@ export function useThemeCss() {
 				.map(([key, value]) => `  ${key}: ${value};`)
 				.join('\n');
 
-			const baseAppStyles = `\nhtml, body {\n  background-color: var(--ui-bg);\n  color: var(--ui-text);\n  font-family: var(--font-sans, ui-sans-serif);\n  font-weight: var(--font-weight-normal, 400);\n}\ncode, pre, kbd, samp {\n  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace);\n}\n* {\n  corner-shape: var(--ui-corner-shape, superellipse(1));\n}\n`;
+			const baseAppStyles = `\nhtml, body {\n  background-color: var(--ui-bg);\n  color: var(--ui-text);\n  font-family: var(--font-sans, ui-sans-serif);\n  font-weight: var(--font-weight-normal, 400);\n}\ncode, pre, kbd, samp {\n  font-family: var(--font-mono, ui-monospace, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace);\n}\n* {\n  corner-shape: var(--ui-corner-shape, superellipse(1));\n}\n`;
 
 			const cssContent = `:root {\n${lightString}\n}\n\n.dark {\n${darkString}\n}\n${baseAppStyles}`;
 
