@@ -208,17 +208,19 @@ function generateCssContent(params: {
 	}
 
 	// Apply the global text and code fonts so the export mirrors the preview
-	cssContent += '\nhtml, body {\n'
-    + '  background-color: var(--ui-bg);\n'
-    + '  color: var(--ui-text);\n'
-    + '  font-family: var(--font-sans, ui-sans-serif);\n'
-    + '}\n'
-    + 'code, pre, kbd, samp {\n'
-    + '  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);\n'
-    + '}\n'
-    + '* {\n'
-    + '  corner-shape: var(--ui-corner-shape, superellipse(1));\n'
-    + '}\n';
+	cssContent += `
+html, body {
+  background-color: var(--ui-bg);
+  color: var(--ui-text);
+  font-family: var(--font-sans, ui-sans-serif);
+}
+code, pre, kbd, samp {
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
+}
+* {
+  corner-shape: var(--ui-corner-shape, superellipse(1));
+}
+`;
 
 	return cssContent;
 }
