@@ -494,17 +494,17 @@ watch(selectedColors, (newValues) => {
 		<!-- Mode Toggle -->
 		<div class="flex flex-col gap-4">
 			<div class="flex items-center gap-2">
-					<UButtonGroup>
-						<UButton :color="currentMode === 'light' ? 'primary' : 'neutral'" variant="soft" size="sm"
-							@click="setMode('light')" :icon="appIcon('sun')">
-							Light
-						</UButton>
-						<UButton :color="currentMode === 'dark' ? 'primary' : 'neutral'" variant="soft" size="sm"
-							@click="setMode('dark')" :icon="appIcon('moon')">
-							Dark
-						</UButton>
-					</UButtonGroup>
-				</div>
+                <UButtonGroup>
+                    <UButton :color="currentMode === 'light' ? 'primary' : 'neutral'" variant="soft" size="sm"
+                        @click="setMode('light')" :icon="appIcon('sun')">
+                        Light
+                    </UButton>
+                    <UButton :color="currentMode === 'dark' ? 'primary' : 'neutral'" variant="soft" size="sm"
+                        @click="setMode('dark')" :icon="appIcon('moon')">
+                        Dark
+                    </UButton>
+                </UButtonGroup>
+            </div>
 				<!-- Actions: Save, Load, Export -->
 				<div class="flex items-center gap-2">
 					<UButton :icon="appIcon('bookmark')" color="neutral" variant="soft" size="sm" @click="$emit('request-save')">
