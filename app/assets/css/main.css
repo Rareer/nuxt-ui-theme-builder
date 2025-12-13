@@ -50,4 +50,3 @@ samp {
 .font-bold { font-weight: var(--font-weight-bold, 700); }
 .font-extrabold { font-weight: var(--font-weight-extrabold, 800); }
 .font-black { font-weight: var(--font-weight-black, 900); }
-.font-heavy { font-weight: var(--font-weight-black, 900); }
