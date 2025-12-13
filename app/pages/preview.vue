@@ -314,7 +314,7 @@ const faqItems = [
 					</template>
 					<AutoUi>
 						<UAccordion :items="accordionDemo" />
-					</AutoUi>ph:arrow-down
+					</AutoUi>
 				</UCard>
 
 				<!-- Modal -->
