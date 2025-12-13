@@ -6,7 +6,7 @@ import { normalizeColorName } from '../utils/colors';
 
 const DEFAULT_SANS_FONT = `'Public Sans', sans-serif`;
 const DEFAULT_SERIF_FONT = `'Georgia', Cambria, 'Times New Roman', Times, serif`;
-const DEFAULT_MONO_FONT = `'SFMono-Regular', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace`;
+const DEFAULT_MONO_FONT = `'SFMono-Regular', ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace`;
 const DEFAULT_FONT_WEIGHTS = {
 	thin: '100',
 	extralight: '200',
