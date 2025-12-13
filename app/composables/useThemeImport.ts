@@ -128,16 +128,16 @@ function buildThemeMappingsFromCssVars(vars: Record<string, string>): Partial<Re
 }
 
 function buildExtraCssVariableMappings(vars: Record<string, string>): CssVariableMapping[] {
-	// Consider any "ui-*" that is NOT a color shade var and NOT a theme base var as extra CSS variable
+	// Consider any "ui-*" (except color shades/theme bases) and "font-*" variables as extra CSS variables
 	const excludedRe = /^(ui-color-[a-z0-9-]+-(50|100|200|300|400|500|600|700|800|900|950)|ui-(primary|secondary|success|info|warning|error)(-.+)?)$/;
 	const colorRefRe = /^var\(--ui-color-([a-z0-9-]+)-(50|100|200|300|400|500|600|700|800|900|950)\)$/;
+	const allowedPrefixes = ['ui-', 'font-'];
 
 	const results: CssVariableMapping[] = [];
 
 	Object.entries(vars).forEach(([key, value]) => {
-		if (excludedRe.test(key)) return;
-		// Only consider variables starting with ui-
-		if (!key.startsWith('ui-')) return;
+		if (!allowedPrefixes.some(prefix => key.startsWith(prefix))) return;
+		if (key.startsWith('ui-') && excludedRe.test(key)) return;
 
 		const match = colorRefRe.exec(value);
 		if (match) {
@@ -321,6 +321,9 @@ export function useThemeImport() {
 			summary.imported.cssVariables += res.extraVarNames.length;
 			summary.details.cssVariables.push(...res.extraVarNames);
 		}
+
+		// Ensure newly added default variables (e.g., fonts) exist after importing older exports
+		themeStore.ensureCssVariableDefaults();
 
 		return summary;
 	}

@@ -4,6 +4,17 @@
 
 @theme static {
   --font-sans: 'Public Sans', sans-serif;
+  --font-serif: 'Georgia', Cambria, 'Times New Roman', Times, serif;
+  --font-mono: 'SFMono-Regular', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --font-weight-thin: 100;
+  --font-weight-extralight: 200;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --font-weight-black: 900;
 
   --color-green-50: #effdf5;
   --color-green-100: #d9fbe8;
@@ -17,3 +28,25 @@
   --color-green-900: #0a5331;
   --color-green-950: #052e16;
 }
+
+:root {
+  font-family: var(--font-sans, 'Public Sans', sans-serif);
+  font-weight: var(--font-weight-normal, 400);
+}
+
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--font-mono, 'SFMono-Regular', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace);
+}
+
+.font-thin { font-weight: var(--font-weight-thin, 100); }
+.font-extralight { font-weight: var(--font-weight-extralight, 200); }
+.font-light { font-weight: var(--font-weight-light, 300); }
+.font-normal { font-weight: var(--font-weight-normal, 400); }
+.font-medium { font-weight: var(--font-weight-medium, 500); }
+.font-semibold { font-weight: var(--font-weight-semibold, 600); }
+.font-bold { font-weight: var(--font-weight-bold, 700); }
+.font-extrabold { font-weight: var(--font-weight-extrabold, 800); }
+.font-black { font-weight: var(--font-weight-black, 900); }

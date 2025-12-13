@@ -3,6 +3,7 @@ import * as locales from '@nuxt/ui/locale';
 
 import { Analytics } from '@vercel/analytics/nuxt';
 import { useThemeStore } from './store/theme';
+import { useIconsStore } from './store/icons';
 
 const { locale } = useI18n();
 
@@ -15,6 +16,8 @@ useThemeCss();
 // Keep theme store's editMode in sync with global color mode
 const themeStore = useThemeStore();
 const colorMode = useColorMode();
+const iconsStore = useIconsStore();
+const appConfig = useAppConfig();
 
 useHead({
 	htmlAttrs: {
@@ -26,6 +29,11 @@ useHead({
 if (import.meta.client) {
 	watch(() => colorMode.value, (val) => {
 		themeStore.setEditMode(val === 'dark' ? 'dark' : 'light');
+	}, { immediate: true });
+
+	watch(() => iconsStore.icons, (newIcons) => {
+		appConfig.ui ||= {};
+		appConfig.ui.icons = { ...newIcons };
 	}, { immediate: true });
 }
 </script>

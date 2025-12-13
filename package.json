@@ -16,7 +16,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "extract:nuxt-ui": "node scripts/extract-nuxt-ui-types.mjs",
-    "scrape:nuxt-ui-props": "node scripts/scrape-nuxt-ui-props.mjs app/config/nuxt-ui-docs.targets.json --outDir app/generated/nuxt-ui-docs"
+    "scrape:nuxt-ui-props": "node scripts/scrape-nuxt-ui-props.mjs app/config/nuxt-ui-docs.targets.json --outDir app/generated/nuxt-ui-docs",
+    "check:icons": "node scripts/check-icon-packs.mjs"
   },
   "dependencies": {
     "@ai-sdk/openai": "^2.0.15",
@@ -37,6 +38,11 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@iconify-json/carbon": "^1.2.15",
+    "@iconify-json/hugeicons": "^1.2.20",
+    "@iconify-json/mingcute": "^1.2.5",
+    "@iconify-json/mynaui": "^1.2.16",
+    "@iconify-json/ph": "^1.2.2",
     "@nuxt/eslint": "^1.8.0",
     "@types/archiver": "^6.0.3",
     "eslint": "^9.33.0",

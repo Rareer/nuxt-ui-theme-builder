@@ -3,7 +3,7 @@ import { defineEventHandler, readBody } from 'h3';
 export default defineEventHandler(async (event) => {
 	try {
 		// Get theme variables, custom colors, and theme mappings from request body
-		const { themeVariables, themeVariablesByMode, customColors, themeMappings, exportMode, componentUiConfigs } = await readBody<{
+		const { themeVariables, themeVariablesByMode, customColors, themeMappings, exportMode, componentUiConfigs, icons } = await readBody<{
 			themeVariables?: Record<string, string>;
 			themeVariablesByMode?: { light?: Record<string, string>; dark?: Record<string, string> };
 			customColors?: Array<{ name: string; values: Record<string, string> }>;
@@ -13,6 +13,7 @@ export default defineEventHandler(async (event) => {
 			exportMode?: 'light' | 'dark';
 			// Optional component UI configs from client
 			componentUiConfigs?: { byComponent?: Record<string, any> };
+			icons?: Record<string, string>;
 		}>(event);
 
 		if (!themeVariables && !themeVariablesByMode) {
@@ -26,7 +27,7 @@ export default defineEventHandler(async (event) => {
 		const cssContent = generateCssContent({ themeVariables, themeVariablesByMode, customColors });
 
 		// Generate app.config.ts content
-		const appConfigContent = generateAppConfigContent(themeMappings, exportMode, componentUiConfigs?.byComponent || {});
+		const appConfigContent = generateAppConfigContent(themeMappings, exportMode, componentUiConfigs?.byComponent || {}, icons || {});
 
 		return {
 			success: true,
@@ -47,6 +48,7 @@ function generateAppConfigContent(
 	themeMappings?: Record<string, string | null> | { light?: Record<string, string | null>; dark?: Record<string, string | null> },
 	exportMode?: 'light' | 'dark',
 	byComponent: Record<string, any> = {},
+	icons: Record<string, string> = {},
 ): string {
 	// Start with the basic structure
 	let configContent = `export default defineAppConfig({
@@ -78,6 +80,15 @@ function generateAppConfigContent(
 
 	configContent += `    },
 `;
+
+	if (icons && Object.keys(icons).length) {
+		configContent += `    icons: {\n`;
+		Object.entries(icons).forEach(([key, value]) => {
+			configContent += `      ${key}: '${value}',\n`;
+		});
+		configContent += `    },
+`;
+	}
 
 	// Helper: map component name like "UButton" -> "button"
 	const mapComponentKey = (name: string) => {
@@ -195,6 +206,21 @@ function generateCssContent(params: {
 		});
 		cssContent += '}\n';
 	}
+
+	// Apply the global text and code fonts so the export mirrors the preview
+	cssContent += `
+html, body {
+  background-color: var(--ui-bg);
+  color: var(--ui-text);
+  font-family: var(--font-sans, ui-sans-serif);
+}
+code, pre, kbd, samp {
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
+}
+* {
+  corner-shape: var(--ui-corner-shape, superellipse(1));
+}
+`;
 
 	return cssContent;
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { fa } from 'zod/v4/locales';
+import { useAppIcons } from '@/composables/useAppIcons';
 
 const props = defineProps<{
 	modelValue: string[];
@@ -7,6 +7,7 @@ const props = defineProps<{
 
 const emit = defineEmits(['update:modelValue']);
 const { getAllClasses } = useTailwindClasses();
+const { icon: appIcon } = useAppIcons();
 const currentInput = ref('');
 const label = ref('');
 const suggestions = computed(() => getAllClasses().map(s => ({ label: s.value })));
@@ -50,7 +51,7 @@ const updateSearchTerm = (val: string) => {
 			:content="{ side: 'bottom', align: 'start' }"
 		>
 			<UButton
-				icon="i-lucide-plus"
+				:icon="appIcon('plus')"
 				color="primary"
 				variant="soft"
 				size="xs"
@@ -94,7 +95,7 @@ const updateSearchTerm = (val: string) => {
 
 					<div class="mt-2 flex justify-end">
 						<UButton
-							icon="i-lucide-check"
+							:icon="appIcon('check')"
 							size="sm"
 							color="neutral"
 							variant="soft"

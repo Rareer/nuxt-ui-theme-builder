@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useAppIcons } from '@/composables/useAppIcons';
+
 const form = reactive({
 	name: '',
 	email: '',
@@ -36,15 +38,17 @@ const accordionDemo = [
 ];
 
 // Extra Komponenten: Dropdown, Pagination, Table, Progress, Slider
-const dropdownItems = [
+const { icon: appIcon } = useAppIcons();
+
+const dropdownItems = computed(() => [
 	[
-		{ label: 'Bearbeiten', icon: 'i-lucide-pencil' },
-		{ label: 'Teilen', icon: 'i-lucide-share' },
+		{ label: 'Bearbeiten', icon: appIcon('pencil') },
+		{ label: 'Teilen', icon: appIcon('share') },
 	],
 	[
-		{ label: 'Löschen', icon: 'i-lucide-trash', color: 'error' },
+		{ label: 'Löschen', icon: appIcon('trash'), color: 'error' },
 	],
-];
+]);
 
 const page = ref(1);
 
@@ -66,28 +70,27 @@ const slider = ref(25);
 // Toast notifications
 const toast = useToast();
 function notify(title: string, description: string, color: 'info' | 'success' | 'error' | 'warning' | 'primary' | 'neutral' = 'info') {
-	const icon
-    = color === 'success'
-    	? 'i-lucide-check-circle'
-    	: color === 'error'
-    		? 'i-lucide-triangle-alert'
-    		: 'i-lucide-info';
+	const icon = color === 'success'
+		? appIcon('checkCircle')
+		: color === 'error'
+			? appIcon('triangleAlert')
+			: appIcon('info');
 	toast.add({ title, description, color, icon });
 }
 
 // Breadcrumbs
-const breadcrumbLinks = ref([
+const breadcrumbLinks = computed(() => [
 	{
 		label: 'Home',
-		icon: 'i-lucide-house',
+		icon: appIcon('navHome'),
 	},
 	{
 		label: 'Components',
-		icon: 'i-lucide-box',
+		icon: appIcon('box'),
 	},
 	{
 		label: 'Breadcrumb',
-		icon: 'i-lucide-link',
+		icon: appIcon('link'),
 		to: '/components/UBreadcrumb',
 	},
 ]);
@@ -135,10 +138,10 @@ const faqItems = [
 							<UButton color="primary" variant="outline">Outline</UButton>
 						</AutoUi>
 						<AutoUi>
-							<UButton color="success" icon="i-lucide-check-circle">Success</UButton>
+							<UButton color="success" :icon="appIcon('checkCircle')">Success</UButton>
 						</AutoUi>
 						<AutoUi>
-							<UButton color="warning" icon="i-lucide-triangle-alert">Warn</UButton>
+							<UButton color="warning" :icon="appIcon('triangleAlert')">Warn</UButton>
 						</AutoUi>
 					</div>
 				</UCard>
@@ -179,16 +182,16 @@ const faqItems = [
 							Alert
 						</div>
 					</template>
-					<AutoUi>
-						<UAlert
-							color="info"
-							variant="soft"
-							icon="i-lucide-info"
-							:title="$t('preview.themingPreviewTitle')"
-							:description="$t('preview.themingPreviewDesc')"
-						/>
-					</AutoUi>
-				</UCard>
+                    <AutoUi>
+                        <UAlert
+                            color="info"
+                            variant="soft"
+                            :icon="appIcon('info')"
+                            :title="$t('preview.themingPreviewTitle')"
+                            :description="$t('preview.themingPreviewDesc')"
+                        />
+                    </AutoUi>
+                </UCard>
 
 				<!-- Avatars -->
 				<UCard>
@@ -323,23 +326,23 @@ const faqItems = [
 					</template>
 					<div class="flex items-center gap-3">
 						<AutoUi>
-							<UButton
-								icon="i-lucide-layers"
-								@click="isModalOpen = true"
-							>
-								{{ $t('preview.open') }}
-							</UButton>
-						</AutoUi>
+								<UButton
+									:icon="appIcon('layers')"
+									@click="isModalOpen = true"
+								>
+									{{ $t('preview.open') }}
+								</UButton>
+							</AutoUi>
 						<span class="text-sm">{{ $t('preview.dialogWithStyles') }}</span>
 					</div>
 					<AutoUi>
 						<UModal v-model:open="isModalOpen">
 						<template #header>
-							<div class="flex items-center gap-2">
-								<UIcon name="i-lucide-sparkles" />
-								<span>{{ $t('preview.exampleModal') }}</span>
-							</div>
-						</template>
+								<div class="flex items-center gap-2">
+									<UIcon :name="appIcon('sparkles')" />
+									<span>{{ $t('preview.exampleModal') }}</span>
+								</div>
+							</template>
 						<template #body>
 							<p class="text-sm">
 								{{ $t('preview.modalBodyText') }}
@@ -401,12 +404,12 @@ const faqItems = [
 						<AutoUi>
 							<UTooltip :text="$t('preview.moreInfo')">
 								<AutoUi>
-									<UButton
-										variant="outline"
-										icon="i-lucide-circle-help"
-									>
-										{{ $t('preview.hover') }}
-									</UButton>
+										<UButton
+											variant="outline"
+											:icon="appIcon('circleHelp')"
+										>
+											{{ $t('preview.hover') }}
+										</UButton>
 								</AutoUi>
 							</UTooltip>
 						</AutoUi>
@@ -423,12 +426,12 @@ const faqItems = [
 					<AutoUi>
 						<UPopover>
 							<AutoUi>
-								<UButton
-									variant="soft"
-									icon="i-lucide-chevron-down"
-								>
-									{{ $t('preview.open') }}
-								</UButton>
+									<UButton
+										variant="soft"
+										:icon="appIcon('chevronDown')"
+									>
+										{{ $t('preview.open') }}
+									</UButton>
 							</AutoUi>
 							<template #content>
 								<div class="p-3 text-sm w-56">
@@ -447,13 +450,13 @@ const faqItems = [
 						</div>
 					</template>
 					<AutoUi>
-						<UDropdownMenu :items="dropdownItems">
-							<AutoUi>
-								<UButton
-									icon="i-lucide-ellipsis-vertical"
-									variant="outline"
-								>
-									{{ $t('actions.actions') }}
+							<UDropdownMenu :items="dropdownItems">
+								<AutoUi>
+									<UButton
+										:icon="appIcon('ellipsisVertical')"
+										variant="outline"
+									>
+										{{ $t('actions.actions') }}
 								</UButton>
 							</AutoUi>
 						</UDropdownMenu>

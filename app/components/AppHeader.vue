@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AIGenerateThemeModal from './AIGenerateThemeModal.vue';
 import { useSavedThemesStore } from '../store/savedThemes';
+import { useAppIcons } from '@/composables/useAppIcons';
 
 const colorMode = useColorMode();
 // Composable for Theme Config open state (non-persistent)
@@ -27,6 +28,7 @@ const savedThemesStore = useSavedThemesStore();
 const savedNames = computed(() => savedThemesStore.listNames);
 
 const { t, availableLocales, setLocale } = useI18n();
+const { icon: appIcon } = useAppIcons();
 
 // Locale switch items: set the locale directly to ensure immediate update
 const localeItems = computed(() => (
@@ -40,12 +42,12 @@ const localeItems = computed(() => (
 // Dropdown items with onSelect handlers and keys
 const actionItems = computed(() => ([
 	[
-		{ label: t('actions.save'), icon: 'i-lucide-bookmark', key: 'save', onSelect: () => { isSaveModalOpen.value = true; } },
-		{ label: t('actions.load'), icon: 'i-lucide-folder-open', key: 'load', onSelect: () => { isLoadModalOpen.value = true; } },
-		{ label: t('actions.export'), icon: 'i-lucide-download', key: 'export', onSelect: () => { exportTheme(); } },
+		{ label: t('actions.save'), icon: appIcon('bookmark'), key: 'save', onSelect: () => { isSaveModalOpen.value = true; } },
+		{ label: t('actions.load'), icon: appIcon('folderOpen'), key: 'load', onSelect: () => { isLoadModalOpen.value = true; } },
+		{ label: t('actions.export'), icon: appIcon('download'), key: 'export', onSelect: () => { exportTheme(); } },
 	],
 	[
-		{ label: t('locale.language'), icon: 'i-lucide-globe', disabled: true },
+		{ label: t('locale.language'), icon: appIcon('globe'), disabled: true },
 		...localeItems.value,
 	],
 ]));
@@ -120,7 +122,7 @@ const isNavigationOpen = ref(false);
 		<div class="flex items-center" />
 		<div class="flex items-center">
 			<UButton
-				icon="i-lucide-menu"
+				:icon="appIcon('menu')"
 				color="neutral"
 				variant="soft"
 				class="md:hidden"
@@ -136,7 +138,7 @@ const isNavigationOpen = ref(false);
 							{{ $t('app.name') }}
 						</h3>
 						<UButton
-							icon="i-lucide-x"
+							:icon="appIcon('close')"
 							color="neutral"
 							variant="ghost"
 							size="sm"
@@ -152,7 +154,7 @@ const isNavigationOpen = ref(false);
 		<div class="flex items-center gap-4 ml-auto relative z-40">
 			<!-- Generate Theme with AI Button -->
 			<UButton
-				icon="i-lucide-sparkles"
+				:icon="appIcon('sparkles')"
 				color="primary"
 				variant="outline"
 				:title="$t('header.generateWithAI')"
@@ -160,7 +162,7 @@ const isNavigationOpen = ref(false);
 			/>
 			<!-- Theme Configuration Button -->
 			<UButton
-				icon="i-lucide-brush"
+				:icon="appIcon('navCss')"
 				color="primary"
 				variant="solid"
 				:title="$t('header.themeConfig')"
@@ -168,7 +170,7 @@ const isNavigationOpen = ref(false);
 			/>
 			<!-- Dark Mode Toggle -->
 			<UButton
-				:icon="colorMode.value === 'dark' ? 'i-lucide-sun' : 'i-lucide-moon'"
+				:icon="colorMode.value === 'dark' ? appIcon('sun') : appIcon('moon')"
 				color="neutral"
 				variant="outline"
 				:title="$t('header.toggleDark')"
@@ -191,7 +193,7 @@ const isNavigationOpen = ref(false);
 			>
 				<UButton
 					class="z-50"
-					icon="i-lucide-ellipsis-vertical"
+					:icon="appIcon('ellipsisVertical')"
 					color="neutral"
 					variant="soft"
 					:title="$t('actions.actions')"
@@ -213,7 +215,7 @@ const isNavigationOpen = ref(false);
 					{{ $t('header.themeConfig') }}
 				</h3>
 				<UButton
-					icon="i-lucide-x"
+					:icon="appIcon('close')"
 					color="neutral"
 					variant="ghost"
 					size="sm"
@@ -245,7 +247,7 @@ const isNavigationOpen = ref(false);
 				<UButton
 					color="neutral"
 					variant="ghost"
-					icon="i-lucide-x"
+					:icon="appIcon('close')"
 					@click="closeExportModal"
 				/>
 			</div>
@@ -261,7 +263,7 @@ const isNavigationOpen = ref(false);
 							class="block text-sm font-medium"
 						>{{ $t('header.appConfig') }}</label>
 						<UButton
-							icon="i-lucide-clipboard"
+							:icon="appIcon('clipboard')"
 							color="primary"
 							variant="soft"
 							size="sm"
@@ -296,7 +298,7 @@ const isNavigationOpen = ref(false);
 							class="block text-sm font-medium"
 						>{{ $t('header.mainCss') }}</label>
 						<UButton
-							icon="i-lucide-clipboard"
+							:icon="appIcon('clipboard')"
 							color="primary"
 							variant="soft"
 							size="sm"
@@ -350,7 +352,7 @@ const isNavigationOpen = ref(false);
 				<UButton
 					color="neutral"
 					variant="ghost"
-					icon="i-lucide-x"
+					:icon="appIcon('close')"
 					@click="isSaveModalOpen = false"
 				/>
 			</div>
@@ -398,7 +400,7 @@ const isNavigationOpen = ref(false);
 				<UButton
 					color="neutral"
 					variant="ghost"
-					icon="i-lucide-x"
+					:icon="appIcon('close')"
 					@click="isLoadModalOpen = false"
 				/>
 			</div>
@@ -429,7 +431,7 @@ const isNavigationOpen = ref(false);
 								size="sm"
 								color="primary"
 								variant="soft"
-								icon="i-lucide-download"
+								:icon="appIcon('download')"
 								@click="handleLoadTheme(name)"
 							>
 								{{ $t('actions.load') }}
@@ -438,7 +440,7 @@ const isNavigationOpen = ref(false);
 								size="sm"
 								color="error"
 								variant="ghost"
-								icon="i-lucide-trash"
+								:icon="appIcon('trash')"
 								@click="handleDeleteTheme(name)"
 							/>
 						</div>
